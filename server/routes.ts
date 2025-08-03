@@ -405,10 +405,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Disabled inbound flights endpoint as per requirements
-  // app.get("/api/flights/inbound", async (req, res) => {
-  //   return res.status(404).json({ error: "Inbound flights endpoint has been disabled" });
-  // });
+  // Completely removed - inbound flights endpoint disabled as per requirements
 
   // Enhanced flight tracking routes
   app.get("/api/flights/:flightNumber", async (req, res) => {
@@ -451,10 +448,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Disabled inbound flights by aircraft endpoint as per requirements
-  // app.get("/api/flights/aircraft/:tailNumber/inbound", async (req, res) => {
-  //   return res.status(404).json({ error: "Inbound flights by aircraft endpoint has been disabled" });
-  // });
+  // Completely removed - inbound flights by aircraft endpoint disabled as per requirements
 
   app.get("/api/flights/position/:flightId", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
