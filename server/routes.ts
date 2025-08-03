@@ -421,6 +421,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Enhanced flight tracking routes
+  app.get("/api/flights/:flightNumber", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { flightNumber } = req.params;
+      
+      const { flightRadarService } = await import("./flightRadar");
+      const flight = await flightRadarService.searchFlight(flightNumber);
+      
+      if (!flight) {
+        return res.status(404).json({ error: "Flight not found" });
+      }
+
+      res.json(flight);
+    } catch (error) {
+      console.error("Error fetching flight details:", error);
+      res.status(500).json({ error: "Failed to fetch flight details" });
+    }
+  });
+
+  app.get("/api/flights/aircraft/:tailNumber", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { tailNumber } = req.params;
+      
+      const { flightRadarService } = await import("./flightRadar");
+      const aircraftData = await flightRadarService.getAircraftInfo(tailNumber);
+      
+      if (!aircraftData) {
+        return res.status(404).json({ error: "Aircraft not found" });
+      }
+
+      res.json(aircraftData);
+    } catch (error) {
+      console.error("Error fetching aircraft data:", error);
+      res.status(500).json({ error: "Failed to fetch aircraft data" });
+    }
+  });
+
+  app.get("/api/flights/aircraft/:tailNumber/inbound", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { tailNumber } = req.params;
+      
+      const { flightRadarService } = await import("./flightRadar");
+      const inboundFlights = await flightRadarService.getInboundFlightsByTailNumber(tailNumber);
+      
+      res.json(inboundFlights);
+    } catch (error) {
+      console.error("Error fetching inbound flights for aircraft:", error);
+      res.status(500).json({ error: "Failed to fetch inbound flights" });
+    }
+  });
+
   app.get("/api/flights/position/:flightId", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
     

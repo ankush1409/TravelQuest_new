@@ -1,0 +1,99 @@
+Objective:
+Build a robust FlightRadar24 API integration for TravelQuest that provides detailed, real-time flight data, including:
+
+Current flight status (scheduled, en route, delayed, landed, cancelled, etc.)
+
+Aircraft details including tail number (registration)
+
+Inbound flights using the same aircraft (tail number) with their latest status
+
+Nicely formatted, user-friendly UI to display all this information
+
+Backend Requirements:
+Flight Data Fetching:
+
+Connect securely to FlightRadar24 API using appropriate endpoints for:
+
+Flight tracking by flight number or tail number
+
+Retrieving detailed flight status, location, altitudes, speeds, and estimated times
+
+Fetch all inbound flights currently assigned to the same aircraft tail number
+
+Design API endpoints for your frontend such as:
+
+/api/flights/:flightNumber — returns detailed current status, including tail number
+
+/api/flights/aircraft/:tailNumber/inbound — returns inbound flights for the same aircraft
+
+Data Processing & Caching:
+
+Parse and normalize flight data to include:
+
+Flight status (with clear status codes)
+
+Departure/arrival airports and times
+
+Current position on map coordinates
+
+Aircraft info (tail number, type, airline)
+
+Inbound flight details (flight numbers, status, ETA)
+
+Cache results for performance and rate limiting—refresh every 1-2 minutes
+
+Error Handling & Validation:
+
+Gracefully handle unavailable flights or API errors
+
+Validate flight and tail numbers with proper error messages in responses
+
+Frontend (React + Tailwind CSS) Requirements:
+Flight Detail Presentation:
+
+Show flight overview card including:
+
+Flight number and airline logo
+
+Tail number prominently displayed with aircraft type
+
+Current flight status with colored indicators (green = on time, orange = delayed, red = cancelled)
+
+Departure and arrival airports with scheduled and actual times
+
+Estimated time to arrival or delay minutes
+
+Include a live map or embedded map snippet showing current flight position and route
+
+Inbound Flight Section:
+
+Display a list/card view of inbound flights currently assigned to the same tail number
+
+Each inbound flight shows flight number, origin, current status, ETA, and any delays
+
+Interactive & Responsive UI:
+
+Use CRED-inspired dark theme with neon-highlighted statuses and clean typography
+
+Employ chunked cards for each section for clarity and hierarchy
+
+Add smooth hover effects, tooltips explaining statuses, and subtle animations for status changes
+
+User Actions & Feedback:
+
+Search input for entering flight number or tail number to fetch data
+
+Loading spinners or skeleton placeholders while fetching
+
+Clear error messages for invalid or missing flight info
+
+Optional “Track This Flight” button for notifications (future scope)
+
+Testing & Documentation:
+Write unit tests for backend API routes and flight data parsing
+
+Create tests for React components displaying flight and inbound info
+
+Comment code thoroughly, especially around API integration and data transformations
+
+Document environment variables/API key usage and setup instructions
