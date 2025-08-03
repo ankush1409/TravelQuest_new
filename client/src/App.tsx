@@ -12,6 +12,7 @@ import ChallengesPage from "@/pages/challenges-page";
 import MapPage from "@/pages/map-page";
 import SettingsPage from "@/pages/settings-page";
 import EnhancedFlightsPage from "@/pages/enhanced-flights-page";
+import ReferralsPage from "@/pages/referrals-page";
 import NotFound from "@/pages/not-found";
 
 // UI/UX Enhancement Components
@@ -51,6 +52,7 @@ function AppContent() {
           <ProtectedRoute path="/challenges" component={() => <ChallengesPage />} />
           <ProtectedRoute path="/map" component={() => <MapPage />} />
           <ProtectedRoute path="/flights" component={() => <EnhancedFlightsPage />} />
+          <ProtectedRoute path="/referrals" component={() => <ReferralsPage />} />
           <ProtectedRoute path="/settings" component={() => <SettingsPage />} />
           <Route path="/auth" component={() => <AuthPage />} />
           <Route component={() => <NotFound />} />

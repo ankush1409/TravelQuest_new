@@ -1,0 +1,54 @@
+Replit Agent Prompt: Referral Concept & XP Integration for TravelQuest
+Objective:
+Add a fully integrated referral feature to TravelQuest where users can invite others, earn 500 XP per successful referral (when the new user joins and completes onboarding), and highlight referral XP as a way to fuel or “fulfill your travels.” Present referral progress clearly in the UI, and lay the groundwork for future XP-based travel rewards.
+
+Requirements
+Backend:
+
+Generate unique referral codes or links for every user.
+
+Track each referred signup:
+
+Credit 500 XP to the referrer’s account when a new user joins via their referral and completes onboarding (email verification/profile setup).
+
+Prevent abuse (e.g., self-referral, duplicate accounts).
+
+Store and update each user’s number of successful referrals and XP earned by referrals.
+
+Prepare for tiered or future goals (e.g., milestones for 5, 10, 50 referrals).
+
+Frontend/UI:
+
+Add “Invite Friends”/“Referral” section to the user dashboard:
+
+Show a user’s unique referral link/code and easy share options (copy, WhatsApp, SMS, social).
+
+Display referral progress: “You’ve earned 1,500 XP from 3 friends!”
+
+Add visual cues like a progress bar, celebratory popups when XP is earned, and milestones badges.
+
+Simple onboarding explainer: “Refer friends to TravelQuest. Get 500 XP for each new traveler who joins with your link. The more XP you earn, the closer you get to rewarding your next adventure!”
+
+Highlight how referral XP contributes to “fulfill your travels”:
+
+On the XP breakdown and landing/dashboard, show referral XP as a distinct source.
+
+(For the future) Mention: “Soon, use XP to unlock exclusive travel perks and discounts.”
+
+Experience/Design:
+
+Use visually bold, chunked cards and eye-catching share buttons (matching CRED/NeoPOP style).
+
+Show a “Level Up!” popup or animation when new referral XP is added.
+
+Include brief, friendly copy explaining the benefits of referring (“Earn more XP, unlock travel rewards, help friends start their journey”).
+
+Testing & Documentation:
+
+Unit test referral XP logic and abuse prevention.
+
+Comment code for extension to future XP redemption features.
+
+Prompt Instruction:
+
+Integrate a full-featured referral system in TravelQuest. Each user receives a unique referral code/link to share. When a new user joins using this, credit the referrer with 500 XP. Show referral XP earned and progress in the dashboard with animated feedback and bold CRED-style cards. Promote referral XP as a path to “fulfill your travels” and tease XP-based travel rewards for the future. Prevent referral abuse, and make inviting/sharing seamless and motivational.

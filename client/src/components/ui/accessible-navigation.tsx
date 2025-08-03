@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Map, Trophy, User, Menu, X, Settings, Bell, Plane } from "lucide-react";
+import { Home, Map, Trophy, User, Users, Menu, X, Settings, Bell, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
@@ -58,6 +58,13 @@ const navigationItems: NavigationItem[] = [
     href: "/flights",
     icon: <Plane className="w-5 h-5" />,
     description: "Track flights and monitor arrivals in real-time"
+  },
+  {
+    id: "referrals",
+    label: "Referrals",
+    href: "/referrals",
+    icon: <Users className="w-5 h-5" />,
+    description: "Invite friends and earn 500 XP per referral"
   },
   {
     id: "profile",
