@@ -381,6 +381,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Flight tracking routes
+  app.get("/api/flights/search", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { query } = req.query as { query: string };
+      if (!query) {
+        return res.status(400).json({ error: "Flight number required" });
+      }
+
+      const { flightRadarService } = await import("./flightRadar");
+      const flight = await flightRadarService.searchFlight(query);
+      
+      if (!flight) {
+        return res.status(404).json({ error: "Flight not found" });
+      }
+
+      res.json(flight);
+    } catch (error) {
+      console.error("Error searching flight:", error);
+      res.status(500).json({ error: "Failed to search flight" });
+    }
+  });
+
+  app.get("/api/flights/inbound", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { airport = "LAX" } = req.query as { airport?: string };
+      
+      const { flightRadarService } = await import("./flightRadar");
+      const flights = await flightRadarService.getInboundFlights(airport);
+      
+      res.json(flights);
+    } catch (error) {
+      console.error("Error fetching inbound flights:", error);
+      res.status(500).json({ error: "Failed to fetch inbound flights" });
+    }
+  });
+
+  app.get("/api/flights/position/:flightId", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { flightId } = req.params;
+      
+      const { flightRadarService } = await import("./flightRadar");
+      const position = await flightRadarService.getFlightPosition(flightId);
+      
+      if (!position) {
+        return res.status(404).json({ error: "Flight position not found" });
+      }
+
+      res.json(position);
+    } catch (error) {
+      console.error("Error fetching flight position:", error);
+      res.status(500).json({ error: "Failed to fetch flight position" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

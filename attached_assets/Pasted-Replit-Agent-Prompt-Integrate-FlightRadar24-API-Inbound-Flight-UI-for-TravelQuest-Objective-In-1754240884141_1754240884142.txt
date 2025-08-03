@@ -1,0 +1,56 @@
+Replit Agent Prompt: Integrate FlightRadar24 API & Inbound Flight UI for TravelQuest
+Objective:
+Integrate the Flightradar24 API into TravelQuest, allowing users to track flights and view inbound flight statuses. Create an intuitive, real-time UI panel for this feature, styled to match the app’s modern, bold, NeoPOP-inspired design.
+
+Features & Implementation Requirements
+1. API Integration:
+
+Secure an API token and connect to the official FlightRadar24 API.
+
+Use endpoints for real-time flight tracking, status, arrival/departure, and airport information.
+
+Let users:
+
+Search for flights by flight number, departure/arrival airport, or airline.
+
+View live flight position on a map.
+
+Access detailed inbound status: scheduled/actual arrival time, current location, remaining time to landing, and any delay info.
+
+For prototyping or testing, support the use of a sandbox or demo API key if available.
+
+2. UI & UX:
+
+Add a dedicated “Flight Tracker” section on the user dashboard/landing page.
+
+Visualize selected flights with:
+
+A live map showing flight path and real-time aircraft position.
+
+A summary card: airline, flight number, origination/destination, aircraft type, estimated/actual arrival time, flight status (en route, delayed, landed, etc.).
+
+Bold, large icons and color-coded status (e.g., on-time = green, delayed = orange/red).
+
+For inbound flights (flights arriving at the user’s current or selected airport/hub):
+
+List inbound flights sorted by arrival time.
+
+Allow one-tap details for each flight, including current distance, altitude, status, expected arrival gate, etc.
+
+Send push notifications or visual alerts for watched/flavorited flights (arrival soon, landed, or status change).
+
+3. Style & Performance:
+
+Match app’s CRED/NeoPOP aesthetic: dark theme, modern chunked cards, high-contrast icons, smooth loading/map interactions.
+
+Ensure UI is mobile-first, responsive, and all data updates in real-time.
+
+Add hover/tooltips for flight details; show skeleton loader while loading status.
+
+4. Developer Details:
+
+Clearly document all API keys/endpoints and data models.
+
+Add code comments for scalability.
+
+Unit test core UI components and API handling.
