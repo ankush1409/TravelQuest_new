@@ -44,7 +44,7 @@ interface ReferralLink {
 
 interface ReferralCardProps {
   stats: ReferralStats;
-  referralLink: ReferralLink;
+  referralLink?: ReferralLink;
   onGenerateLink: () => void;
   isGenerating: boolean;
 }
@@ -75,16 +75,19 @@ export function ReferralCard({ stats, referralLink, onGenerateLink, isGenerating
   };
 
   const shareViaWhatsApp = () => {
+    if (!referralLink) return;
     const message = encodeURIComponent(referralLink.shareMessage);
     window.open(`https://wa.me/?text=${message}`, '_blank');
   };
 
   const shareViaSMS = () => {
+    if (!referralLink) return;
     const message = encodeURIComponent(referralLink.shareMessage);
     window.open(`sms:?body=${message}`, '_blank');
   };
 
   const shareViaEmail = () => {
+    if (!referralLink) return;
     const subject = encodeURIComponent("Join TravelQuest with me!");
     const body = encodeURIComponent(referralLink.shareMessage);
     window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
