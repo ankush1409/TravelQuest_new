@@ -86,23 +86,24 @@ export default function FlightsPage() {
       console.log("📡 Raw API response:", data);
       return data;
     },
-    onSuccess: (data: FlightData) => {
-      console.log("✅ Flight data received in onSuccess:", data);
-      console.log("🔄 Setting selectedFlight state to:", data);
+    onSuccess: (data) => {
+      console.log("Flight data received:", data);
       
-      // Force state update with explicit type casting
-      const flightData = data as FlightData;
-      setSelectedFlight(flightData);
-      
-      // Add a small delay to ensure state update
-      setTimeout(() => {
-        console.log("⏰ State should be updated now");
-      }, 100);
-      
-      toast({
-        title: "Flight Found",
-        description: `Found ${data.flightNumber} - ${data.airline}`,
-      });
+      // Validate the data structure
+      if (data && data.flightNumber && data.airline) {
+        setSelectedFlight(data);
+        toast({
+          title: "Flight Found",
+          description: `Found ${data.flightNumber} - ${data.airline}`,
+        });
+      } else {
+        console.error("Invalid flight data structure:", data);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Invalid flight data received",
+        });
+      }
     },
     onError: (error: Error) => {
       toast({
@@ -346,11 +347,21 @@ export default function FlightsPage() {
           </div>
         )}
 
+        {/* Force render test */}
+        {selectedFlight && (
+          <div className="mt-4 p-4 bg-green-900/20 border border-green-500/30 rounded text-sm text-green-300">
+            <div>Flight Data Found:</div>
+            <div>Flight: {selectedFlight.flightNumber}</div>
+            <div>Airline: {selectedFlight.airline}</div>
+            <div>Status: {selectedFlight.status}</div>
+          </div>
+        )}
+
         {/* Debug info - Always visible */}
         <div className="mt-4 p-4 bg-gray-800 rounded text-xs text-gray-400">
           <div>Debug State:</div>
           <div>• selectedFlight: {selectedFlight ? `${selectedFlight.flightNumber} (${selectedFlight.airline})` : 'null'}</div>
-          <div>• searchQuery: &quot;{searchQuery}&quot;</div>
+          <div>• searchQuery: "{searchQuery}"</div>
           <div>• isLoading: {searchFlightMutation.isPending ? 'true' : 'false'}</div>
           <div>• hasError: {searchFlightMutation.error ? 'true' : 'false'}</div>
         </div>
