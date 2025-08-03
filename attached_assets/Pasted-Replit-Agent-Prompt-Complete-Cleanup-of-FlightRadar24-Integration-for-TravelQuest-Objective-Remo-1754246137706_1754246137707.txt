@@ -1,0 +1,72 @@
+Replit Agent Prompt: Complete Cleanup of FlightRadar24 Integration for TravelQuest
+Objective:
+Remove all code, dependencies, UI components, API endpoints, and test cases related to the FlightRadar24 integration from the entire TravelQuest project, ensuring no residual flight tracking functionality remains and that the app remains stable and functional.
+
+Scope of Cleanup
+Backend:
+
+Remove all FlightRadar24 API integration code, including:
+
+API client libraries, keys, authentication setups.
+
+Routes/endpoints related to flight lookup, status, tail number, inbound flights, or flight tracking.
+
+Database models, tables, or schemas storing flight-related data.
+
+Logic for caching, data processing, or caching flight info.
+
+Remove any cron jobs, background jobs, or schedulers fetching or refreshing flight data.
+
+Remove related tests (unit or integration) covering flight API calls, endpoints, or data processing.
+
+Clean up package dependencies related to FlightRadar24 or mapping if unused elsewhere.
+
+Verify no references to flight tracking remain in backend code, configs, or environment variables.
+
+Frontend:
+
+Remove all UI components, pages, or sections related to:
+
+Flight search, flight status display, flight maps, inbound flights listing, or flight notifications.
+
+Any flight-related buttons, navigation tabs, popups, or settings.
+
+Remove related API calls from frontend code fetching flight data.
+
+Remove associated frontend tests related to flight tracking UI.
+
+Clean styling, dependencies (maps libraries if only used for flights), and state management related to flights.
+
+Update navigation and menus to remove flight-related entries.
+
+Ensure no orphaned routes or links to flight pages exist.
+
+General:
+
+Remove mentions in documentation or README about flight tracking or FlightRadar24 integration.
+
+Clean related environment variables (e.g., API keys, urls) from deployment/config files.
+
+Ensure project builds and runs without flight-related features.
+
+Verify that after cleanup, all user flows (login, dashboard, gamification, referrals, etc.) function unaffected.
+
+Acceptance Criteria
+No FlightRadar24 or flight tracking-related source code remains anywhere.
+
+No FlightRadar24 or flight tracking-related dependencies remain in package manifests (package.json, etc.).
+
+No FlightRadar24 or flight tracking UI components or navigation entries present.
+
+No backend API endpoints related to flights are accessible.
+
+Application runs without errors, and all non-flight features remain intact.
+
+Tests unrelated to flight features pass; flight-related tests removed.
+
+Deployment configs no longer carry flight API keys or secrets.
+
+README/docs updated to remove any reference to flight features.
+
+Agent Instruction (direct to Replit Agent):
+Thoroughly remove all FlightRadar24 integration from TravelQuest project, both backend and frontend, including all code, UI, APIs, database models, tests, dependencies, configs, environment variables, and documentation that pertain to flight tracking, flight status, tail numbers, inbound flights, or any related features. Ensure the app continues to build, runs cleanly, and the rest of the platform is stable and functional after the cleanup. Remove UI pages/components, navigation elements, API routes, and background jobs linked to flight data. Remove all references in code comments and README. Provide a summary report of files and code removed or changed.
