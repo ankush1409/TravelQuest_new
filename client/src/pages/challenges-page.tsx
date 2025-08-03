@@ -29,13 +29,13 @@ export default function ChallengesPage() {
   // Fetch all challenges
   const { data: allChallenges = [], isLoading: challengesLoading } = useQuery<Challenge[]>({
     queryKey: ["/api/challenges"],
-    queryFn: getQueryFn(),
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   // Fetch user challenges
   const { data: userChallenges = [], isLoading: userChallengesLoading } = useQuery<(UserChallenge & { challenge: Challenge })[]>({
     queryKey: ["/api/user/challenges"],
-    queryFn: getQueryFn(),
+    queryFn: getQueryFn({ on401: "returnNull" }),
     enabled: !!user,
   });
 

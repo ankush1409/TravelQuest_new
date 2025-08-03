@@ -36,14 +36,14 @@ export default function ProfilePage() {
   // Fetch user badges
   const { data: userBadges = [], isLoading: badgesLoading } = useQuery<(UserBadge & { badge: BadgeType })[]>({
     queryKey: ["/api/user/badges"],
-    queryFn: getQueryFn(),
+    queryFn: getQueryFn({ on401: "returnNull" }),
     enabled: !!user,
   });
 
   // Fetch all badges to show unearned ones
   const { data: allBadges = [] } = useQuery<BadgeType[]>({
     queryKey: ["/api/badges"],
-    queryFn: getQueryFn(),
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   if (!user) return null;
