@@ -111,3 +111,52 @@ export class LocalGuidesService {
 }
 
 export const localGuidesService = new LocalGuidesService();
+
+// XP Conversion Formula for Local Guides achievements
+export const LOCAL_GUIDES_XP_MULTIPLIERS = {
+  points: 1,      // 1 XP per Local Guides point
+  reviews: 10,    // 10 XP per review
+  photos: 5,      // 5 XP per photo
+  videos: 15,     // 15 XP per video
+  edits: 8,       // 8 XP per edit
+  questions: 12,  // 12 XP per question answered
+  facts: 6,       // 6 XP per fact added
+  roads: 20,      // 20 XP per road added
+  lists: 25,      // 25 XP per list created
+  levelBonus: 500 // 500 XP bonus per Local Guides level
+};
+
+export function calculateLocalGuidesXP(data: any) {
+  const baseXP = 
+    (data.localGuidesPoints || 0) * LOCAL_GUIDES_XP_MULTIPLIERS.points +
+    (data.localGuidesReviews || 0) * LOCAL_GUIDES_XP_MULTIPLIERS.reviews +
+    (data.localGuidesPhotos || 0) * LOCAL_GUIDES_XP_MULTIPLIERS.photos +
+    (data.localGuidesVideos || 0) * LOCAL_GUIDES_XP_MULTIPLIERS.videos +
+    (data.localGuidesEdits || 0) * LOCAL_GUIDES_XP_MULTIPLIERS.edits +
+    (data.localGuidesQuestions || 0) * LOCAL_GUIDES_XP_MULTIPLIERS.questions +
+    (data.localGuidesFacts || 0) * LOCAL_GUIDES_XP_MULTIPLIERS.facts +
+    (data.localGuidesRoads || 0) * LOCAL_GUIDES_XP_MULTIPLIERS.roads +
+    (data.localGuidesLists || 0) * LOCAL_GUIDES_XP_MULTIPLIERS.lists;
+  
+  const levelBonus = (data.localGuidesLevel || 0) * LOCAL_GUIDES_XP_MULTIPLIERS.levelBonus;
+  
+  return baseXP + levelBonus;
+}
+
+// Fallback function for demo purposes
+export async function fetchLocalGuidesData(profileUrl: string) {
+  const sampleData = {
+    localGuidesLevel: Math.floor(Math.random() * 10) + 1,
+    localGuidesPoints: Math.floor(Math.random() * 10000) + 100,
+    localGuidesReviews: Math.floor(Math.random() * 500) + 10,
+    localGuidesPhotos: Math.floor(Math.random() * 1000) + 50,
+    localGuidesVideos: Math.floor(Math.random() * 50) + 2,
+    localGuidesEdits: Math.floor(Math.random() * 200) + 5,
+    localGuidesQuestions: Math.floor(Math.random() * 100) + 3,
+    localGuidesFacts: Math.floor(Math.random() * 150) + 8,
+    localGuidesRoads: Math.floor(Math.random() * 50) + 1,
+    localGuidesLists: Math.floor(Math.random() * 25) + 2,
+  };
+
+  return sampleData;
+}
