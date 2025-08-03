@@ -142,37 +142,152 @@
   .gradient-animated {
     background: linear-gradient(-45deg, 
       var(--primary), 
-      var(--accent), 
-      var(--neon-cyan), 
-      var(--primary)
-    );
+      var(--accent),
+      var(--primary), 
+      var(--accent));
     background-size: 400% 400%;
-    animation: gradientShift 8s ease infinite;
+    animation: gradient 3s ease infinite;
   }
 
-  @keyframes gradientShift {
+  @keyframes gradient {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
+}
 
-  /* Progress Bar NeoPOP Style */
-  .neopop-progress {
-    @apply relative overflow-hidden rounded-full h-3;
-    background: var(--surface);
-    border: 1px solid var(--border);
-  }
+/* Enhanced NeoPOP UI Styles for Accessibility and User Friendliness */
 
-  /* Celebration Animations */
-  @keyframes confetti {
-    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
-  }
+/* Screen Reader Only Content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
-  @keyframes levelUpPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Safe Area Support for Mobile */
+.safe-area-pt {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-pl {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-area-pr {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Enhanced Focus Styles for Accessibility */
+*:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .neopop-card {
+    border-width: 3px;
   }
+  
+  .neopop-button {
+    border-width: 2px;
+  }
+  
+  .text-muted-foreground {
+    color: hsl(var(--foreground));
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Enhanced Touch Targets for Mobile */
+@media (max-width: 768px) {
+  button, 
+  [role="button"], 
+  input, 
+  select, 
+  textarea,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Loading States */
+.loading-shimmer {
+  background: linear-gradient(90deg, 
+    hsl(var(--muted)) 0%, 
+    hsl(var(--muted-foreground) / 0.1) 50%, 
+    hsl(var(--muted)) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Gamification Enhancement Styles */
+.achievement-glow {
+  animation: achievement-pulse 2s infinite;
+}
+
+@keyframes achievement-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.6);
+  }
+}
+
+/* Enhanced Card Hover Effects */
+.neopop-card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-out;
+}
+
+/* Improved Button States */
+.neopop-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.neopop-button:active {
+  transform: translateY(1px);
+}
 
   @keyframes xpGain {
     0% { transform: translateY(0) scale(1); opacity: 0; }
@@ -232,4 +347,3 @@
   ::-webkit-scrollbar-thumb:hover {
     background: var(--muted-foreground);
   }
-}
