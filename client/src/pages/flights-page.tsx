@@ -70,13 +70,20 @@ export default function FlightsPage() {
   // Search for specific flight
   const searchFlightMutation = useMutation({
     mutationFn: async (flightNumber: string) => {
+      console.log("Making API request for flight:", flightNumber);
       const res = await apiRequest("GET", `/api/flights/search?q=${flightNumber}`);
-      return await res.json();
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
+      const data = await res.json();
+      console.log("Raw API response:", data);
+      return data;
     },
     onSuccess: (data: FlightData) => {
-      console.log("Flight data received:", data);
-      console.log("Setting selectedFlight state");
+      console.log("Flight data received in onSuccess:", data);
+      console.log("Setting selectedFlight state to:", data);
       setSelectedFlight(data);
+      console.log("selectedFlight state should now be:", data);
       toast({
         title: "Flight Found",
         description: `Found ${data.flightNumber} - ${data.airline}`,
