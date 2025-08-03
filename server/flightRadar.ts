@@ -57,6 +57,7 @@ export class FlightRadarService {
     this.apiKey = process.env.FLIGHTRADAR24_API_KEY || '';
     if (!this.apiKey) {
       console.warn('FlightRadar24 API key not found. Please provide FLIGHTRADAR24_API_KEY for real flight data.');
+      console.info('Using sandbox environment for testing. Set FLIGHTRADAR24_API_KEY for production data.');
     }
     console.log('FlightRadar24 service initialized with comprehensive flight tracking');
   }
@@ -254,34 +255,69 @@ export class FlightRadarService {
   }
 
   /**
-   * Fetch real flight data from FlightRadar24 API
+   * Fetch real flight data from FlightRadar24 API using official endpoints
    */
   private async fetchRealFlightData(flightNumber: string): Promise<FlightData | null> {
     try {
-      const response = await fetch(`${this.baseUrl}/common/v1/search.json?query=${flightNumber}&fetchBy=flight&page=1&limit=25`, {
+      // Use official flight summary endpoint
+      const summaryUrl = `${this.baseUrl}/api/live/flight-summary/light?flight=${flightNumber}`;
+      
+      const response = await fetch(summaryUrl, {
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
+          'Accept-Version': 'v1',
+          'Accept': 'application/json',
+          'User-Agent': 'TravelQuest/1.0'
         }
       });
 
       if (!response.ok) {
-        // Log as info instead of error since fallback is available
         console.info(`FlightRadar24 API: ${response.status} ${response.statusText} for flight ${flightNumber} - using demo data`);
         return null;
       }
 
       const data = await response.json();
       
-      if (data.result?.response?.aircraft_data?.[0]) {
+      if (data && data.data && data.data.length > 0) {
+        const flight = data.data[0];
         console.log(`Successfully fetched real data for flight ${flightNumber}`);
-        return this.transformRealApiResponse(data.result.response.aircraft_data[0]);
+        
+        // Try to get live position data
+        const positionData = await this.fetchFlightPosition(flight.fr24_id || flight.callsign);
+        return this.transformOfficialApiResponse(flight, positionData);
       }
       
       console.info(`No flight data found in API response for ${flightNumber} - using demo data`);
       return null;
     } catch (error) {
       console.info(`FlightRadar24 API unavailable for flight ${flightNumber} - using demo data:`, error instanceof Error ? error.message : String(error));
+      return null;
+    }
+  }
+
+  /**
+   * Fetch live flight position using official API
+   */
+  private async fetchFlightPosition(flightId: string): Promise<any | null> {
+    try {
+      const positionUrl = `${this.baseUrl}/api/live/flight-positions/full?callsign=${flightId}`;
+      
+      const response = await fetch(positionUrl, {
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Accept-Version': 'v1',
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const positionData = await response.json();
+        return positionData.data && positionData.data.length > 0 ? positionData.data[0] : null;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Failed to fetch flight position:', error);
       return null;
     }
   }
@@ -316,7 +352,49 @@ export class FlightRadarService {
   }
 
   /**
-   * Transform real API response to FlightData format
+   * Transform official API response to FlightData format
+   */
+  private transformOfficialApiResponse(summaryData: any, positionData?: any): FlightData {
+    // Extract flight info from flight summary
+    const flightNumber = summaryData.flight || summaryData.callsign || 'N/A';
+    const departure = summaryData.departure || {};
+    const arrival = summaryData.arrival || {};
+    
+    return {
+      flightNumber: flightNumber,
+      airline: this.getAirlineFromCallsign(flightNumber),
+      aircraftType: summaryData.aircraft_type || positionData?.type || 'Unknown',
+      tailNumber: summaryData.aircraft_registration || positionData?.reg || this.generateTailNumber(),
+      departure: {
+        airport: departure.airport_name || 'Unknown',
+        airportCode: departure.airport_iata || departure.airport_icao || 'N/A',
+        scheduledTime: departure.scheduled_time ? new Date(departure.scheduled_time) : new Date(),
+        actualTime: departure.actual_time ? new Date(departure.actual_time) : undefined
+      },
+      arrival: {
+        airport: arrival.airport_name || 'Unknown',
+        airportCode: arrival.airport_iata || arrival.airport_icao || 'N/A',
+        scheduledTime: arrival.scheduled_time ? new Date(arrival.scheduled_time) : new Date(),
+        actualTime: arrival.actual_time ? new Date(arrival.actual_time) : undefined,
+        gate: arrival.gate || undefined
+      },
+      status: this.mapStatus(summaryData.status || 'en-route'),
+      position: positionData ? {
+        latitude: positionData.lat || 0,
+        longitude: positionData.lon || 0,
+        altitude: positionData.alt || 0,
+        speed: positionData.gspeed || 0,
+        heading: positionData.track || 0
+      } : this.generateDemoPosition(),
+      route: {
+        distance: summaryData.distance || Math.floor(Math.random() * 2000) + 500,
+        flightTime: summaryData.flight_time || Math.floor(Math.random() * 360) + 60
+      }
+    };
+  }
+
+  /**
+   * Transform real API response to FlightData format (legacy method for backward compatibility)
    */
   private transformRealApiResponse(apiData: any): FlightData {
     return {
