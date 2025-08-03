@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { UnifiedXPDisplay } from "@/components/ui/unified-xp-display";
 import { 
   GripVertical, 
   Eye, 
@@ -18,10 +19,12 @@ import {
   Target,
   Zap,
   Plus,
-  X
+  X,
+  Globe
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedProgressBar } from "./gamification-feedback";
+import { useAuth } from "@/hooks/use-auth";
 
 interface DashboardWidget {
   id: string;
@@ -155,6 +158,7 @@ const defaultQuickActions: QuickAction[] = [
  * Customizable dashboard with drag-and-drop widgets
  */
 export function CustomizableDashboard() {
+  const { user } = useAuth();
   const [widgets, setWidgets] = useState<DashboardWidget[]>(defaultWidgets);
   const [quickActions, setQuickActions] = useState<QuickAction[]>(defaultQuickActions);
   const [isCustomizing, setIsCustomizing] = useState(false);
@@ -377,23 +381,17 @@ interface DashboardWidgetProps {
 }
 
 function DashboardWidget({ widget, isCustomizing, dragHandleProps }: DashboardWidgetProps) {
+  const { user } = useAuth();
+  
   const renderWidgetContent = () => {
     switch (widget.type) {
       case 'stats':
-        return (
-          <div className="grid grid-cols-3 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-black text-yellow-500">1,250</div>
-              <div className="text-sm text-muted-foreground">Total XP</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-black text-purple-500">8</div>
-              <div className="text-sm text-muted-foreground">Level</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-black text-cyan-500">15</div>
-              <div className="text-sm text-muted-foreground">Badges</div>
-            </div>
+        return user ? (
+          <UnifiedXPDisplay user={user} />
+        ) : (
+          <div className="text-center py-8">
+            <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
+            <p className="text-muted-foreground mt-2">Loading your travel stats...</p>
           </div>
         );
       

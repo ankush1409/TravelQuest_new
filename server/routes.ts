@@ -243,20 +243,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Could not extract profile ID from URL" });
       }
 
-      // Store the profile URL and sample data for demonstration
+      // Fetch Local Guides data and calculate XP gain
+      const { fetchLocalGuidesData, calculateLocalGuidesXP } = await import("./localGuides");
+      const localGuidesData = await fetchLocalGuidesData(profileUrl);
+      
+      // Calculate XP from Local Guides achievements
+      const currentUser = await storage.getUser(req.user.id);
+      const localGuidesXP = calculateLocalGuidesXP(localGuidesData);
+      const previousLocalGuidesXP = currentUser?.localGuidesUrl ? calculateLocalGuidesXP(currentUser) : 0;
+      const xpGain = localGuidesXP - previousLocalGuidesXP;
+
       const sampleData = {
         localGuidesUrl: profileUrl,
-        localGuidesLevel: Math.floor(Math.random() * 10) + 1,
-        localGuidesPoints: Math.floor(Math.random() * 10000) + 100,
-        localGuidesReviews: Math.floor(Math.random() * 500) + 10,
-        localGuidesPhotos: Math.floor(Math.random() * 1000) + 50,
-        localGuidesVideos: Math.floor(Math.random() * 50) + 1,
-        localGuidesEdits: Math.floor(Math.random() * 100) + 5,
-        localGuidesQuestions: Math.floor(Math.random() * 200) + 10,
-        localGuidesFacts: Math.floor(Math.random() * 50) + 1,
-        localGuidesRoads: Math.floor(Math.random() * 20) + 1,
-        localGuidesLists: Math.floor(Math.random() * 30) + 2,
+        ...localGuidesData,
         localGuidesLastUpdate: new Date(),
+        totalXP: (currentUser?.totalXP || 0) + xpGain, // Add Local Guides XP to total
       };
 
       const user = await storage.updateUserLocalGuides(req.user.id, sampleData);
@@ -319,13 +320,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Fetch fresh data from Local Guides
-      const { fetchLocalGuidesData } = await import("./localGuides");
+      const { fetchLocalGuidesData, calculateLocalGuidesXP } = await import("./localGuides");
       const localGuidesData = await fetchLocalGuidesData(user.localGuidesUrl);
+      
+      // Calculate new XP from Local Guides data
+      const localGuidesXP = calculateLocalGuidesXP(localGuidesData);
+      const previousLocalGuidesXP = calculateLocalGuidesXP(user);
+      const xpGain = localGuidesXP - previousLocalGuidesXP;
       
       const updatedUser = await storage.updateUserLocalGuides(user.id, {
         ...localGuidesData,
         localGuidesUrl: user.localGuidesUrl,
         localGuidesLastUpdate: new Date(),
+        totalXP: user.totalXP + xpGain, // Add the XP difference
       });
 
       res.json({
