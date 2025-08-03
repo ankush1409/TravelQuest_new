@@ -17,6 +17,7 @@ import {
   Gauge,
   BarChart3
 } from "lucide-react";
+import { FlightDetailCard } from "@/components/ui/flight-detail-card";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -60,7 +61,7 @@ export default function FlightsPage() {
   // Search for specific flight
   const searchFlightMutation = useMutation({
     mutationFn: async (flightNumber: string) => {
-      const res = await apiRequest("GET", `/api/flights/search?query=${flightNumber}`);
+      const res = await apiRequest("GET", `/api/flights/search?q=${flightNumber}`);
       return await res.json();
     },
     onSuccess: (data: FlightData) => {
@@ -87,42 +88,7 @@ export default function FlightsPage() {
     }
   };
 
-  const getStatusColor = (status: FlightData['status']) => {
-    switch (status) {
-      case 'scheduled': return 'text-blue-400 bg-blue-500/10';
-      case 'boarding': return 'text-yellow-400 bg-yellow-500/10';
-      case 'departed': 
-      case 'en-route': return 'text-green-400 bg-green-500/10';
-      case 'delayed': return 'text-orange-400 bg-orange-500/10';
-      case 'landed': return 'text-emerald-400 bg-emerald-500/10';
-      case 'cancelled': return 'text-red-400 bg-red-500/10';
-      default: return 'text-gray-400 bg-gray-500/10';
-    }
-  };
-
-  const getStatusIcon = (status: FlightData['status']) => {
-    switch (status) {
-      case 'scheduled': return <Clock className="w-4 h-4" />;
-      case 'boarding': return <AlertCircle className="w-4 h-4" />;
-      case 'departed':
-      case 'en-route': return <Plane className="w-4 h-4" />;
-      case 'delayed': return <AlertCircle className="w-4 h-4" />;
-      case 'landed': return <CheckCircle className="w-4 h-4" />;
-      case 'cancelled': return <XCircle className="w-4 h-4" />;
-      default: return <Clock className="w-4 h-4" />;
-    }
-  };
-
-  const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
-  };
+  // Removed redundant formatting functions as they are now in FlightDetailCard
 
   return (
     <div className="min-h-screen bg-background pt-20 pb-32 px-4">
@@ -185,140 +151,10 @@ export default function FlightsPage() {
           </Card>
         </motion.div>
 
-        {/* Selected Flight Details */}
+        {/* Enhanced Flight Details with New Card */}
         <AnimatePresence>
           {selectedFlight && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="space-y-4"
-            >
-              <Card className="neopop-card">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center">
-                      <Plane className="w-5 h-5 mr-2 text-primary" />
-                      {selectedFlight.flightNumber} - {selectedFlight.airline}
-                    </CardTitle>
-                    <Badge className={`${getStatusColor(selectedFlight.status)} border-0`}>
-                      {getStatusIcon(selectedFlight.status)}
-                      <span className="ml-1 capitalize">{selectedFlight.status}</span>
-                    </Badge>
-                  </div>
-                  <CardDescription>
-                    {selectedFlight.aircraftType}
-                    {selectedFlight.tailNumber && (
-                      <span className="ml-2 text-primary font-medium">• {selectedFlight.tailNumber}</span>
-                    )}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {/* Departure Info */}
-                    <div className="space-y-3">
-                      <h3 className="font-semibold text-foreground flex items-center">
-                        <MapPin className="w-4 h-4 mr-2 text-green-400" />
-                        Departure
-                      </h3>
-                      <div className="bg-muted/30 rounded-lg p-4 space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Airport:</span>
-                          <span className="font-medium">{selectedFlight.departure.airport}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Code:</span>
-                          <span className="font-bold text-primary">{selectedFlight.departure.airportCode}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Scheduled:</span>
-                          <span>{formatTime(selectedFlight.departure.scheduledTime)}</span>
-                        </div>
-                        {selectedFlight.departure.actualTime && (
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Actual:</span>
-                            <span className="text-green-400">{formatTime(selectedFlight.departure.actualTime)}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Arrival Info */}
-                    <div className="space-y-3">
-                      <h3 className="font-semibold text-foreground flex items-center">
-                        <MapPin className="w-4 h-4 mr-2 text-red-400" />
-                        Arrival
-                      </h3>
-                      <div className="bg-muted/30 rounded-lg p-4 space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Airport:</span>
-                          <span className="font-medium">{selectedFlight.arrival.airport}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Code:</span>
-                          <span className="font-bold text-primary">{selectedFlight.arrival.airportCode}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Scheduled:</span>
-                          <span>{formatTime(selectedFlight.arrival.scheduledTime)}</span>
-                        </div>
-                        {selectedFlight.arrival.actualTime && (
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Actual:</span>
-                            <span className="text-green-400">{formatTime(selectedFlight.arrival.actualTime)}</span>
-                          </div>
-                        )}
-                        {selectedFlight.arrival.gate && (
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Gate:</span>
-                            <span className="font-bold text-yellow-400">{selectedFlight.arrival.gate}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Flight Progress & Position */}
-                  {selectedFlight.position && (
-                    <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="text-center p-3 bg-blue-500/10 rounded-lg">
-                        <BarChart3 className="w-6 h-6 text-blue-400 mx-auto mb-1" />
-                        <p className="text-lg font-bold text-blue-400">{selectedFlight.position.altitude?.toLocaleString()} ft</p>
-                        <p className="text-xs text-muted-foreground">Altitude</p>
-                      </div>
-                      <div className="text-center p-3 bg-green-500/10 rounded-lg">
-                        <Gauge className="w-6 h-6 text-green-400 mx-auto mb-1" />
-                        <p className="text-lg font-bold text-green-400">{selectedFlight.position.speed} mph</p>
-                        <p className="text-xs text-muted-foreground">Speed</p>
-                      </div>
-                      <div className="text-center p-3 bg-purple-500/10 rounded-lg">
-                        <Navigation className="w-6 h-6 text-purple-400 mx-auto mb-1" />
-                        <p className="text-lg font-bold text-purple-400">{selectedFlight.position.heading}°</p>
-                        <p className="text-xs text-muted-foreground">Heading</p>
-                      </div>
-                      {selectedFlight.progress && (
-                        <div className="text-center p-3 bg-orange-500/10 rounded-lg">
-                          <Clock className="w-6 h-6 text-orange-400 mx-auto mb-1" />
-                          <p className="text-lg font-bold text-orange-400">{selectedFlight.progress}%</p>
-                          <p className="text-xs text-muted-foreground">Progress</p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {selectedFlight.delay && selectedFlight.delay > 0 && (
-                    <div className="mt-4 p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
-                      <div className="flex items-center">
-                        <AlertCircle className="w-5 h-5 text-orange-400 mr-2" />
-                        <span className="text-orange-400 font-medium">
-                          Flight delayed by {selectedFlight.delay} minutes
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
+            <FlightDetailCard flight={selectedFlight} />
           )}
         </AnimatePresence>
 
