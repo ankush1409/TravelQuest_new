@@ -11,7 +11,7 @@ import ProfilePage from "@/pages/profile-page";
 import ChallengesPage from "@/pages/challenges-page";
 import MapPage from "@/pages/map-page";
 import SettingsPage from "@/pages/settings-page";
-import EnhancedFlightsPage from "@/pages/enhanced-flights-page";
+import FlightsPage from "@/pages/flights-page";
 import ReferralsPage from "@/pages/referrals-page";
 import NotFound from "@/pages/not-found";
 
@@ -51,7 +51,7 @@ function AppContent() {
           <ProtectedRoute path="/profile" component={() => <ProfilePage />} />
           <ProtectedRoute path="/challenges" component={() => <ChallengesPage />} />
           <ProtectedRoute path="/map" component={() => <MapPage />} />
-          <ProtectedRoute path="/flights" component={() => <EnhancedFlightsPage />} />
+          <ProtectedRoute path="/flights" component={() => <FlightsPage />} />
           <ProtectedRoute path="/referrals" component={() => <ReferralsPage />} />
           <ProtectedRoute path="/settings" component={() => <SettingsPage />} />
           <Route path="/auth" component={() => <AuthPage />} />
