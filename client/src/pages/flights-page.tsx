@@ -163,7 +163,7 @@ export default function FlightsPage() {
         </motion.div>
 
         {/* Enhanced Flight Details with New Card */}
-        {selectedFlight && (
+        {selectedFlight ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -317,11 +317,19 @@ export default function FlightsPage() {
               </CardContent>
             </Card>
           </motion.div>
+        ) : (
+          <div className="mt-6 p-4 border border-dashed border-gray-600 rounded text-center text-gray-500">
+            No flight selected. Search for a flight to see details.
+          </div>
         )}
 
-        {/* Debug info */}
+        {/* Debug info - Always visible */}
         <div className="mt-4 p-4 bg-gray-800 rounded text-xs text-gray-400">
-          Debug: selectedFlight = {selectedFlight ? `${selectedFlight.flightNumber} (${selectedFlight.airline})` : 'null'}
+          <div>Debug State:</div>
+          <div>• selectedFlight: {selectedFlight ? `${selectedFlight.flightNumber} (${selectedFlight.airline})` : 'null'}</div>
+          <div>• searchQuery: &quot;{searchQuery}&quot;</div>
+          <div>• isLoading: {searchFlightMutation.isPending ? 'true' : 'false'}</div>
+          <div>• hasError: {searchFlightMutation.error ? 'true' : 'false'}</div>
         </div>
 
         {/* Removed Inbound Flights section as per requirements */}
