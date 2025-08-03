@@ -131,6 +131,9 @@ export default function HomePage() {
               <Link href="/challenges" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
                 Challenges
               </Link>
+              <Link href="/map" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                Map & Check-ins
+              </Link>
             </nav>
 
             {/* User Menu */}
@@ -179,6 +182,9 @@ export default function HomePage() {
               </Link>
               <Link href="/challenges" className="block px-3 py-2 text-gray-700 hover:text-primary rounded-md text-base font-medium">
                 Challenges
+              </Link>
+              <Link href="/map" className="block px-3 py-2 text-gray-700 hover:text-primary rounded-md text-base font-medium">
+                Map & Check-ins
               </Link>
             </div>
           </div>
