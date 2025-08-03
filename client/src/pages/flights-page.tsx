@@ -170,16 +170,159 @@ export default function FlightsPage() {
             transition={{ duration: 0.4 }}
             className="mt-6"
           >
-            <FlightDetailCard flight={selectedFlight} />
+            <Card className="neopop-card bg-gradient-to-br from-blue-900/20 to-cyan-900/20 border-blue-500/30">
+              <CardHeader className="pb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="text-3xl">🇺🇸</div>
+                    <div>
+                      <CardTitle className="text-white text-xl flex items-center gap-2">
+                        {selectedFlight.airline} 
+                        <span className="text-cyan-400 font-mono">{selectedFlight.flightNumber}</span>
+                      </CardTitle>
+                      <p className="text-gray-400 text-sm">
+                        {selectedFlight.aircraftType}
+                        {selectedFlight.tailNumber && (
+                          <span className="text-cyan-300 font-mono ml-2">• {selectedFlight.tailNumber}</span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <Badge className="bg-green-500/20 text-green-300 border-green-500/30 font-semibold flex items-center gap-1 px-3 py-1">
+                    <CheckCircle className="h-4 w-4" />
+                    {selectedFlight.status.replace('-', ' ').toUpperCase()}
+                  </Badge>
+                </div>
+              </CardHeader>
+
+              <CardContent className="space-y-6">
+                {/* Route Information */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Departure */}
+                  <div className="text-center p-4 rounded-lg bg-gray-800/30 border border-gray-600/30">
+                    <div className="text-2xl font-bold text-cyan-400 font-mono">
+                      {selectedFlight.departure.airportCode}
+                    </div>
+                    <div className="text-sm text-gray-300 mb-2">{selectedFlight.departure.airport}</div>
+                    <div className="space-y-1">
+                      <div className="text-sm text-white">
+                        {new Date(selectedFlight.departure.scheduledTime).toLocaleTimeString('en-US', {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          hour12: true
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Flight Progress */}
+                  <div className="flex flex-col items-center justify-center p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 rounded-full bg-cyan-500"></div>
+                      <div className="flex-1 h-0.5 bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+                      <Plane className="h-4 w-4 text-blue-400 transform rotate-90" />
+                      <div className="flex-1 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+                    </div>
+                    {selectedFlight.progress && (
+                      <div className="w-full space-y-1">
+                        <div className="w-full bg-gray-700 rounded-full h-2">
+                          <div 
+                            className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${selectedFlight.progress}%` }}
+                          ></div>
+                        </div>
+                        <div className="text-xs text-center text-gray-400">
+                          {selectedFlight.progress}% Complete
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Arrival */}
+                  <div className="text-center p-4 rounded-lg bg-gray-800/30 border border-gray-600/30">
+                    <div className="text-2xl font-bold text-purple-400 font-mono">
+                      {selectedFlight.arrival.airportCode}
+                    </div>
+                    <div className="text-sm text-gray-300 mb-2">{selectedFlight.arrival.airport}</div>
+                    <div className="space-y-1">
+                      <div className="text-sm text-white">
+                        {new Date(selectedFlight.arrival.scheduledTime).toLocaleTimeString('en-US', {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          hour12: true
+                        })}
+                      </div>
+                      {selectedFlight.arrival.gate && (
+                        <div className="text-xs text-purple-400">
+                          Gate {selectedFlight.arrival.gate}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Live Position Data */}
+                {selectedFlight.position && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="text-center p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                      <div className="text-lg font-bold text-green-400">
+                        {selectedFlight.position.altitude.toLocaleString()}
+                      </div>
+                      <div className="text-xs text-green-300">Altitude (ft)</div>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                      <div className="text-lg font-bold text-blue-400">
+                        {Math.round(selectedFlight.position.speed)}
+                      </div>
+                      <div className="text-xs text-blue-300">Speed (kts)</div>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                      <div className="text-lg font-bold text-purple-400 flex items-center justify-center gap-1">
+                        <Navigation className="h-4 w-4" style={{transform: `rotate(${selectedFlight.position.heading}deg)`}} />
+                        {Math.round(selectedFlight.position.heading)}°
+                      </div>
+                      <div className="text-xs text-purple-300">Heading</div>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+                      <div className="text-lg font-bold text-cyan-400">
+                        <MapPin className="h-4 w-4 mx-auto mb-1" />
+                      </div>
+                      <div className="text-xs text-cyan-300">
+                        {selectedFlight.position.latitude.toFixed(2)}°, {selectedFlight.position.longitude.toFixed(2)}°
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Map Placeholder */}
+                <div className="p-6 rounded-lg bg-gray-800/30 border border-gray-600/30">
+                  <div className="text-center space-y-3">
+                    <div className="text-gray-400 text-sm flex items-center justify-center gap-2">
+                      <MapPin className="h-4 w-4" />
+                      Live Flight Map
+                    </div>
+                    <div className="h-32 bg-gray-900/50 rounded-lg flex items-center justify-center border border-gray-700/50">
+                      <div className="text-gray-500 text-sm">
+                        Interactive flight path visualization
+                        <br />
+                        <span className="text-xs">Current position: {selectedFlight.position?.latitude.toFixed(4)}°, {selectedFlight.position?.longitude.toFixed(4)}°</span>
+                      </div>
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Map shows real-time aircraft position and planned route
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
         )}
 
         {/* Debug info */}
-        {process.env.NODE_ENV === 'development' && selectedFlight && (
-          <div className="mt-4 p-4 bg-gray-800 rounded text-xs text-gray-400">
-            Debug: Flight {selectedFlight.flightNumber} loaded
-          </div>
-        )}
+        <div className="mt-4 p-4 bg-gray-800 rounded text-xs text-gray-400">
+          Debug: selectedFlight = {selectedFlight ? `${selectedFlight.flightNumber} (${selectedFlight.airline})` : 'null'}
+        </div>
 
         {/* Removed Inbound Flights section as per requirements */}
       </div>
