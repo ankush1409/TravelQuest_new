@@ -112,18 +112,18 @@ export class LocalGuidesService {
 
 export const localGuidesService = new LocalGuidesService();
 
-// XP Conversion Formula for Local Guides achievements
+// XP Conversion Formula for Local Guides achievements - BALANCED VERSION
 export const LOCAL_GUIDES_XP_MULTIPLIERS = {
-  points: 1,      // 1 XP per Local Guides point
-  reviews: 10,    // 10 XP per review
-  photos: 5,      // 5 XP per photo
-  videos: 15,     // 15 XP per video
-  edits: 8,       // 8 XP per edit
-  questions: 12,  // 12 XP per question answered
-  facts: 6,       // 6 XP per fact added
-  roads: 20,      // 20 XP per road added
-  lists: 25,      // 25 XP per list created
-  levelBonus: 500 // 500 XP bonus per Local Guides level
+  points: 0.1,    // 0.1 XP per Local Guides point (1000 points = 100 XP)
+  reviews: 3,     // 3 XP per review (50 reviews = 150 XP)
+  photos: 1,      // 1 XP per photo (100 photos = 100 XP)
+  videos: 5,      // 5 XP per video (5 videos = 25 XP)
+  edits: 2,       // 2 XP per edit (20 edits = 40 XP)
+  questions: 3,   // 3 XP per question answered (10 questions = 30 XP)
+  facts: 2,       // 2 XP per fact added (15 facts = 30 XP)
+  roads: 10,      // 10 XP per road added (rare achievement)
+  lists: 8,       // 8 XP per list created (5 lists = 40 XP)
+  levelBonus: 200 // 200 XP bonus per Local Guides level (Level 5 = 1000 XP bonus)
 };
 
 export function calculateLocalGuidesXP(data: any) {

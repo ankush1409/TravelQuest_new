@@ -45,30 +45,51 @@ interface UnifiedXPDisplayProps {
   recentXpGain?: number;
 }
 
-// XP calculation function (matching server-side)
+// XP calculation function (matching server-side) - BALANCED VERSION
 const calculateLocalGuidesXP = (user: User) => {
   const baseXP = 
-    (user.localGuidesPoints || 0) * 1 +
-    (user.localGuidesReviews || 0) * 10 +
-    (user.localGuidesPhotos || 0) * 5 +
-    (user.localGuidesVideos || 0) * 15 +
-    (user.localGuidesEdits || 0) * 8 +
-    (user.localGuidesQuestions || 0) * 12 +
-    (user.localGuidesFacts || 0) * 6 +
-    (user.localGuidesRoads || 0) * 20 +
-    (user.localGuidesLists || 0) * 25;
+    (user.localGuidesPoints || 0) * 0.1 +
+    (user.localGuidesReviews || 0) * 3 +
+    (user.localGuidesPhotos || 0) * 1 +
+    (user.localGuidesVideos || 0) * 5 +
+    (user.localGuidesEdits || 0) * 2 +
+    (user.localGuidesQuestions || 0) * 3 +
+    (user.localGuidesFacts || 0) * 2 +
+    (user.localGuidesRoads || 0) * 10 +
+    (user.localGuidesLists || 0) * 8;
   
-  const levelBonus = (user.localGuidesLevel || 0) * 500;
+  const levelBonus = (user.localGuidesLevel || 0) * 200;
   return baseXP + levelBonus;
 };
 
-// Calculate level from total XP
+// Calculate level from total XP - more realistic progression
 const calculateLevelFromXP = (xp: number) => {
-  return Math.floor(xp / 1000) + 1;
+  if (xp < 100) return 1;
+  if (xp < 300) return 2;
+  if (xp < 600) return 3;
+  if (xp < 1000) return 4;
+  if (xp < 1500) return 5;
+  if (xp < 2100) return 6;
+  if (xp < 2800) return 7;
+  if (xp < 3600) return 8;
+  if (xp < 4500) return 9;
+  // Level 10+: every 1000 XP
+  return Math.floor((xp - 4500) / 1000) + 10;
 };
 
 const getXPForLevel = (level: number) => {
-  return (level - 1) * 1000;
+  if (level <= 1) return 0;
+  if (level === 2) return 100;
+  if (level === 3) return 300;
+  if (level === 4) return 600;
+  if (level === 5) return 1000;
+  if (level === 6) return 1500;
+  if (level === 7) return 2100;
+  if (level === 8) return 2800;
+  if (level === 9) return 3600;
+  if (level === 10) return 4500;
+  // Level 10+: every 1000 XP
+  return 4500 + ((level - 10) * 1000);
 };
 
 export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayProps) {

@@ -257,7 +257,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         localGuidesUrl: profileUrl,
         ...localGuidesData,
         localGuidesLastUpdate: new Date(),
-        totalXP: Math.max(1000, (currentUser?.totalXP || 1000) + xpGain), // Ensure user has at least 1000 XP base
+        totalXP: Math.max(100, (currentUser?.totalXP || 100) + xpGain), // Add Local Guides XP to base
       };
 
       const user = await storage.updateUserLocalGuides(req.user.id, sampleData);
@@ -332,7 +332,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...localGuidesData,
         localGuidesUrl: user.localGuidesUrl,
         localGuidesLastUpdate: new Date(),
-        totalXP: Math.max(1000, (user.totalXP || 1000) + xpGain), // Ensure user has at least 1000 XP base
+        totalXP: Math.max(100, (user.totalXP || 100) + xpGain), // Add Local Guides XP to base
       });
 
       res.json({
