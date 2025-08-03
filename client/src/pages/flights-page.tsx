@@ -62,6 +62,11 @@ export default function FlightsPage() {
   const [selectedFlight, setSelectedFlight] = useState<FlightData | null>(null);
   const { toast } = useToast();
 
+  // Debug effect to track selectedFlight changes
+  useEffect(() => {
+    console.log("selectedFlight state changed:", selectedFlight);
+  }, [selectedFlight]);
+
   // Search for specific flight
   const searchFlightMutation = useMutation({
     mutationFn: async (flightNumber: string) => {
@@ -70,6 +75,7 @@ export default function FlightsPage() {
     },
     onSuccess: (data: FlightData) => {
       console.log("Flight data received:", data);
+      console.log("Setting selectedFlight state");
       setSelectedFlight(data);
       toast({
         title: "Flight Found",
@@ -157,18 +163,23 @@ export default function FlightsPage() {
         </motion.div>
 
         {/* Enhanced Flight Details with New Card */}
-        <AnimatePresence>
-          {selectedFlight && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-            >
-              <FlightDetailCard flight={selectedFlight} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {selectedFlight && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="mt-6"
+          >
+            <FlightDetailCard flight={selectedFlight} />
+          </motion.div>
+        )}
+
+        {/* Debug info */}
+        {process.env.NODE_ENV === 'development' && selectedFlight && (
+          <div className="mt-4 p-4 bg-gray-800 rounded text-xs text-gray-400">
+            Debug: Flight {selectedFlight.flightNumber} loaded
+          </div>
+        )}
 
         {/* Removed Inbound Flights section as per requirements */}
       </div>
