@@ -21,17 +21,17 @@ import {
   Plus,
   X,
   Globe,
-  Plane
+
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedProgressBar } from "./gamification-feedback";
-import { FlightDashboard } from "./flight-dashboard";
+
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
 
 interface DashboardWidget {
   id: string;
-  type: 'stats' | 'progress' | 'activity' | 'challenges' | 'locations' | 'social' | 'calendar' | 'flights';
+  type: 'stats' | 'progress' | 'activity' | 'challenges' | 'locations' | 'social' | 'calendar';
   title: string;
   description: string;
   icon: React.ReactNode;
@@ -120,16 +120,7 @@ const defaultWidgets: DashboardWidget[] = [
     size: 'medium',
     position: 6
   },
-  {
-    id: 'flight-tracker',
-    type: 'flights',
-    title: 'Flight Tracker',
-    description: 'Track flights and monitor real-time arrivals',
-    icon: <Plane className="w-5 h-5" />,
-    visible: true,
-    size: 'medium',
-    position: 7
-  }
+
 ];
 
 const defaultQuickActions: QuickAction[] = [
@@ -176,12 +167,7 @@ export function CustomizableDashboard() {
   const [quickActions, setQuickActions] = useState<QuickAction[]>(defaultQuickActions);
   const [isCustomizing, setIsCustomizing] = useState(false);
 
-  // Flight data query for dashboard widget
-  const { data: inboundFlights = [], isLoading: flightsLoading } = useQuery({
-    queryKey: ['/api/flights/inbound', 'LAX'],
-    enabled: !!user && widgets.some(w => w.id === 'flight-tracker' && w.visible),
-    refetchInterval: 30000, // Refresh every 30 seconds for real-time data
-  });
+
 
   const handleDragEnd = useCallback((result: DropResult) => {
     if (!result.destination) return;
@@ -376,7 +362,7 @@ export function CustomizableDashboard() {
                           widget={widget} 
                           isCustomizing={isCustomizing}
                           dragHandleProps={provided.dragHandleProps}
-                          flightData={{ inboundFlights, isLoading: flightsLoading }}
+
                         />
                       </motion.div>
                     )}
@@ -399,13 +385,10 @@ interface DashboardWidgetProps {
   widget: DashboardWidget;
   isCustomizing: boolean;
   dragHandleProps?: any;
-  flightData?: {
-    inboundFlights: any[];
-    isLoading: boolean;
-  };
+
 }
 
-function DashboardWidget({ widget, isCustomizing, dragHandleProps, flightData }: DashboardWidgetProps) {
+function DashboardWidget({ widget, isCustomizing, dragHandleProps }: DashboardWidgetProps) {
   const { user } = useAuth();
   
   const renderWidgetContent = () => {
@@ -464,15 +447,7 @@ function DashboardWidget({ widget, isCustomizing, dragHandleProps, flightData }:
           </div>
         );
       
-      case 'flights':
-        return (
-          <div className="space-y-0">
-            <FlightDashboard 
-              inboundFlights={flightData?.inboundFlights || []}
-              isLoading={flightData?.isLoading || false}
-            />
-          </div>
-        );
+
       
       default:
         return (
