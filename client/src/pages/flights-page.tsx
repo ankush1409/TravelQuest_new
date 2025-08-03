@@ -51,6 +51,10 @@ interface FlightData {
   };
   delay?: number;
   progress?: number;
+  route?: {
+    distance: number;
+    flightTime: number;
+  };
 }
 
 export default function FlightsPage() {
@@ -65,6 +69,7 @@ export default function FlightsPage() {
       return await res.json();
     },
     onSuccess: (data: FlightData) => {
+      console.log("Flight data received:", data);
       setSelectedFlight(data);
       toast({
         title: "Flight Found",
@@ -154,7 +159,14 @@ export default function FlightsPage() {
         {/* Enhanced Flight Details with New Card */}
         <AnimatePresence>
           {selectedFlight && (
-            <FlightDetailCard flight={selectedFlight} />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+            >
+              <FlightDetailCard flight={selectedFlight} />
+            </motion.div>
           )}
         </AnimatePresence>
 
