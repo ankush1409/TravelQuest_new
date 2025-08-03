@@ -69,6 +69,11 @@ export const users = pgTable("users", {
   localGuidesRoads: integer("local_guides_roads"),
   localGuidesLists: integer("local_guides_lists"),
   localGuidesLastUpdate: timestamp("local_guides_last_update"),
+  // Referral System
+  referralCode: text("referral_code").unique(),
+  referredBy: text("referred_by"),
+  referralCount: integer("referral_count").default(0),
+  referralXp: integer("referral_xp").default(0),
   // User preferences for enhanced UX
   onboardingCompleted: boolean("onboarding_completed").default(false),
   preferredTheme: text("preferred_theme").default("dark"),
@@ -78,6 +83,17 @@ export const users = pgTable("users", {
   dashboardLayout: jsonb("dashboard_layout"),
   createdAt: timestamp("created_at").notNull().default(sql`now()`),
   updatedAt: timestamp("updated_at").notNull().default(sql`now()`),
+});
+
+// Referrals tracking table
+export const referrals = pgTable("referrals", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  referrerId: text("referrer_id").notNull(),
+  referredUserId: text("referred_user_id").notNull(),
+  xpAwarded: integer("xp_awarded").default(500),
+  status: text("status").default("pending"), // pending, completed, cancelled
+  createdAt: timestamp("created_at").notNull().default(sql`now()`),
+  completedAt: timestamp("completed_at"),
 });
 
 export const badges = pgTable("badges", {
@@ -327,6 +343,8 @@ export type InsertBadge = z.infer<typeof insertBadgeSchema>;
 export type InsertChallenge = z.infer<typeof insertChallengeSchema>;
 export type InsertUserChallenge = z.infer<typeof insertUserChallengeSchema>;
 export type InsertLocation = z.infer<typeof insertLocationSchema>;
+export type Referral = typeof referrals.$inferSelect;
+export type InsertReferral = typeof referrals.$inferInsert;
 export type InsertCheckIn = z.infer<typeof insertCheckInSchema>;
 export type InsertDiscovery = z.infer<typeof insertDiscoverySchema>;
 

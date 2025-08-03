@@ -498,6 +498,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Referral system routes
+  app.get("/api/referrals/stats", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      // Import referralService here to avoid circular dependencies
+      const { referralService } = await import('./referralService');
+      const stats = await referralService.getReferralStats(req.user!.id);
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching referral stats:", error);
+      res.status(500).json({ message: "Failed to fetch referral stats" });
+    }
+  });
+
+  app.post("/api/referrals/generate-link", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { referralService } = await import('./referralService');
+      const referralCode = await referralService.ensureReferralCode(req.user!.id);
+      const referralLink = referralService.generateReferralLink(referralCode, req.get('origin'));
+      
+      res.json({
+        referralCode,
+        referralLink,
+        shareMessage: `Join me on TravelQuest and start earning XP for your travels! Use my referral code: ${referralCode}`
+      });
+    } catch (error) {
+      console.error("Error generating referral link:", error);
+      res.status(500).json({ message: "Failed to generate referral link" });
+    }
+  });
+
+  app.post("/api/referrals/process", async (req, res) => {
+    const { referralCode, newUserId } = req.body;
+    
+    if (!referralCode || !newUserId) {
+      return res.status(400).json({ message: "Missing referral code or user ID" });
+    }
+    
+    try {
+      const { referralService } = await import('./referralService');
+      await referralService.processReferral(newUserId, referralCode);
+      res.json({ success: true, message: "Referral processed successfully" });
+    } catch (error) {
+      console.error("Error processing referral:", error);
+      res.status(400).json({ message: error instanceof Error ? error.message : "Failed to process referral" });
+    }
+  });
+
+  app.post("/api/referrals/complete", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { referralService } = await import('./referralService');
+      await referralService.completeReferral(req.user!.id);
+      res.json({ success: true, message: "Referral completed successfully" });
+    } catch (error) {
+      console.error("Error completing referral:", error);
+      res.status(500).json({ message: "Failed to complete referral" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

@@ -7,6 +7,7 @@ import {
   locations,
   checkIns,
   discoveries,
+  referrals,
   type User, 
   type InsertUser,
   type InsertGoogleUser,
@@ -17,6 +18,8 @@ import {
   type Location,
   type CheckIn,
   type Discovery,
+  type Referral,
+  type InsertReferral,
   type InsertBadge,
   type InsertChallenge,
   type InsertUserChallenge,
@@ -76,6 +79,13 @@ export interface IStorage {
   seedLocations(): Promise<void>;
   
   sessionStore: session.Store;
+  
+  // Referral methods
+  getUserByReferralCode(referralCode: string): Promise<User | undefined>;
+  createReferral(referral: InsertReferral): Promise<Referral>;
+  getPendingReferral(referrerId: string, referredUserId: string): Promise<Referral | undefined>;
+  completeReferral(referralId: string): Promise<void>;
+  getUserReferrals(userId: string): Promise<Array<Referral & { referredUser: User | null }>>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -641,6 +651,60 @@ export class DatabaseStorage implements IStorage {
     ];
 
     await db.insert(locations).values(locationsToSeed);
+  }
+
+  // Referral methods implementation
+  async getUserByReferralCode(referralCode: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.referralCode, referralCode));
+    return user || undefined;
+  }
+
+  async createReferral(insertReferral: InsertReferral): Promise<Referral> {
+    const [referral] = await db
+      .insert(referrals)
+      .values(insertReferral)
+      .returning();
+    return referral;
+  }
+
+  async getPendingReferral(referrerId: string, referredUserId: string): Promise<Referral | undefined> {
+    const [referral] = await db
+      .select()
+      .from(referrals)
+      .where(and(
+        eq(referrals.referrerId, referrerId),
+        eq(referrals.referredUserId, referredUserId),
+        eq(referrals.status, 'pending')
+      ));
+    return referral || undefined;
+  }
+
+  async completeReferral(referralId: string): Promise<void> {
+    await db
+      .update(referrals)
+      .set({ 
+        status: 'completed',
+        completedAt: new Date()
+      })
+      .where(eq(referrals.id, referralId));
+  }
+
+  async getUserReferrals(userId: string): Promise<Array<Referral & { referredUser: User | null }>> {
+    const results = await db
+      .select({
+        referral: referrals,
+        referredUser: users
+      })
+      .from(referrals)
+      .leftJoin(users, eq(referrals.referredUserId, users.id))
+      .where(eq(referrals.referrerId, userId))
+      .orderBy(desc(referrals.createdAt))
+      .limit(10);
+
+    return results.map(r => ({
+      ...r.referral,
+      referredUser: r.referredUser
+    }));
   }
 }
 
