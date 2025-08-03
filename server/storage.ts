@@ -4,15 +4,24 @@ import {
   challenges,
   userBadges,
   userChallenges,
+  locations,
+  checkIns,
+  discoveries,
   type User, 
   type InsertUser,
   type Badge,
   type Challenge,
   type UserBadge,
   type UserChallenge,
+  type Location,
+  type CheckIn,
+  type Discovery,
   type InsertBadge,
   type InsertChallenge,
-  type InsertUserChallenge
+  type InsertUserChallenge,
+  type InsertLocation,
+  type InsertCheckIn,
+  type InsertDiscovery
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, lte, gte } from "drizzle-orm";
@@ -43,9 +52,24 @@ export interface IStorage {
   joinChallenge(userId: string, challengeId: string): Promise<UserChallenge>;
   completeChallenge(userId: string, challengeId: string, progress?: number): Promise<UserChallenge | undefined>;
   
+  // Location methods
+  getAllLocations(): Promise<Location[]>;
+  getLocationsNearby(latitude: number, longitude: number, radiusKm?: number): Promise<Location[]>;
+  createLocation(location: InsertLocation): Promise<Location>;
+  
+  // Check-in methods
+  createCheckIn(checkIn: InsertCheckIn): Promise<CheckIn>;
+  getUserCheckIns(userId: string): Promise<(CheckIn & { location: Location })[]>;
+  getLocationCheckIns(locationId: string): Promise<(CheckIn & { user: User })[]>;
+  
+  // Discovery methods
+  createDiscovery(userId: string, locationId: string): Promise<Discovery>;
+  getUserDiscoveries(userId: string): Promise<(Discovery & { location: Location })[]>;
+  
   // Seeding methods
   seedBadges(): Promise<void>;
   seedChallenges(): Promise<void>;
+  seedLocations(): Promise<void>;
   
   sessionStore: session.Store;
 }
@@ -362,6 +386,197 @@ export class DatabaseStorage implements IStorage {
     ];
 
     await db.insert(challenges).values(challengesToSeed);
+  }
+
+  // Location methods
+  async getAllLocations(): Promise<Location[]> {
+    return await db.select().from(locations).orderBy(locations.name);
+  }
+
+  async getLocationsNearby(latitude: number, longitude: number, radiusKm = 5): Promise<Location[]> {
+    // Simple distance calculation using Haversine formula approximation
+    // For production, consider using PostGIS for more accurate geospatial queries
+    const allLocations = await db.select().from(locations);
+    
+    return allLocations.filter(location => {
+      if (!location.latitude || !location.longitude) return false;
+      
+      const R = 6371; // Earth's radius in km
+      const dLat = this.toRadians(location.latitude - latitude);
+      const dLon = this.toRadians(location.longitude - longitude);
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(this.toRadians(latitude)) * Math.cos(this.toRadians(location.latitude)) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distance = R * c;
+      
+      return distance <= radiusKm;
+    });
+  }
+
+  private toRadians(degrees: number): number {
+    return degrees * (Math.PI/180);
+  }
+
+  async createLocation(location: InsertLocation): Promise<Location> {
+    const [newLocation] = await db.insert(locations).values(location).returning();
+    return newLocation;
+  }
+
+  // Check-in methods
+  async createCheckIn(checkIn: InsertCheckIn): Promise<CheckIn> {
+    // Calculate XP reward based on location
+    const location = await db.select().from(locations).where(eq(locations.id, checkIn.locationId)).limit(1);
+    const xpEarned = location.length > 0 ? location[0].xpReward : 50;
+    
+    const [newCheckIn] = await db.insert(checkIns).values({
+      ...checkIn,
+      xpEarned
+    }).returning();
+
+    // Award XP to user
+    await this.updateUserXP(checkIn.userId, xpEarned);
+
+    // Check for discoveries
+    if (location.length > 0 && location[0].isDiscovery) {
+      const existingDiscovery = await db.select().from(discoveries)
+        .where(and(eq(discoveries.userId, checkIn.userId), eq(discoveries.locationId, checkIn.locationId)))
+        .limit(1);
+      
+      if (existingDiscovery.length === 0) {
+        await this.createDiscovery(checkIn.userId, checkIn.locationId);
+      }
+    }
+
+    return newCheckIn;
+  }
+
+  async getUserCheckIns(userId: string): Promise<(CheckIn & { location: Location })[]> {
+    return await db
+      .select({
+        id: checkIns.id,
+        userId: checkIns.userId,
+        locationId: checkIns.locationId,
+        latitude: checkIns.latitude,
+        longitude: checkIns.longitude,
+        notes: checkIns.notes,
+        photo: checkIns.photo,
+        xpEarned: checkIns.xpEarned,
+        checkedInAt: checkIns.checkedInAt,
+        location: locations,
+      })
+      .from(checkIns)
+      .innerJoin(locations, eq(checkIns.locationId, locations.id))
+      .where(eq(checkIns.userId, userId))
+      .orderBy(desc(checkIns.checkedInAt));
+  }
+
+  async getLocationCheckIns(locationId: string): Promise<(CheckIn & { user: User })[]> {
+    return await db
+      .select({
+        id: checkIns.id,
+        userId: checkIns.userId,
+        locationId: checkIns.locationId,
+        latitude: checkIns.latitude,
+        longitude: checkIns.longitude,
+        notes: checkIns.notes,
+        photo: checkIns.photo,
+        xpEarned: checkIns.xpEarned,
+        checkedInAt: checkIns.checkedInAt,
+        user: users,
+      })
+      .from(checkIns)
+      .innerJoin(users, eq(checkIns.userId, users.id))
+      .where(eq(checkIns.locationId, locationId))
+      .orderBy(desc(checkIns.checkedInAt));
+  }
+
+  // Discovery methods
+  async createDiscovery(userId: string, locationId: string): Promise<Discovery> {
+    const [discovery] = await db.insert(discoveries).values({
+      userId,
+      locationId
+    }).returning();
+
+    // Award bonus XP for discovery
+    await this.updateUserXP(userId, 100);
+
+    return discovery;
+  }
+
+  async getUserDiscoveries(userId: string): Promise<(Discovery & { location: Location })[]> {
+    return await db
+      .select({
+        id: discoveries.id,
+        userId: discoveries.userId,
+        locationId: discoveries.locationId,
+        discoveredAt: discoveries.discoveredAt,
+        location: locations,
+      })
+      .from(discoveries)
+      .innerJoin(locations, eq(discoveries.locationId, locations.id))
+      .where(eq(discoveries.userId, userId))
+      .orderBy(desc(discoveries.discoveredAt));
+  }
+
+  async seedLocations(): Promise<void> {
+    const existingLocations = await db.select().from(locations).limit(1);
+    if (existingLocations.length > 0) return; // Already seeded
+
+    const locationsToSeed: InsertLocation[] = [
+      {
+        name: "Central Park",
+        description: "A massive urban park in the heart of Manhattan, perfect for morning runs and peaceful walks.",
+        latitude: 40.785091,
+        longitude: -73.968285,
+        category: "park",
+        address: "Central Park, New York, NY",
+        xpReward: 75,
+        isDiscovery: false,
+      },
+      {
+        name: "Times Square",
+        description: "The bustling crossroads of the world, famous for its bright lights and energy.",
+        latitude: 40.758896,
+        longitude: -73.985130,
+        category: "landmark",
+        address: "Times Square, New York, NY",
+        xpReward: 100,
+        isDiscovery: false,
+      },
+      {
+        name: "Hidden Speakeasy",
+        description: "A secret cocktail bar behind an unmarked door. Only true explorers find this place!",
+        latitude: 40.722210,
+        longitude: -73.987677,
+        category: "bar",
+        address: "Secret Location, New York, NY",
+        xpReward: 200,
+        isDiscovery: true,
+      },
+      {
+        name: "Brooklyn Bridge",
+        description: "An iconic suspension bridge connecting Manhattan and Brooklyn with stunning views.",
+        latitude: 40.706086,
+        longitude: -73.996864,
+        category: "landmark",
+        address: "Brooklyn Bridge, New York, NY",
+        xpReward: 125,
+        isDiscovery: false,
+      },
+      {
+        name: "The High Line",
+        description: "An elevated linear park built on a former rail line, offering unique urban views.",
+        latitude: 40.748817,
+        longitude: -74.004934,
+        category: "park",
+        address: "High Line, New York, NY",
+        xpReward: 90,
+        isDiscovery: false,
+      },
+    ];
+
+    await db.insert(locations).values(locationsToSeed);
   }
 }
 

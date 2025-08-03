@@ -30,9 +30,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Location API routes
+  app.get("/api/locations", async (req, res) => {
+    try {
+      const locations = await storage.getAllLocations();
+      res.json(locations);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch locations" });
+    }
+  });
+
+  app.get("/api/locations/nearby", async (req, res) => {
+    try {
+      const { lat, lng, radius } = req.query;
+      if (!lat || !lng) {
+        return res.status(400).json({ message: "Latitude and longitude are required" });
+      }
+      
+      const locations = await storage.getLocationsNearby(
+        parseFloat(lat as string),
+        parseFloat(lng as string),
+        radius ? parseFloat(radius as string) : undefined
+      );
+      res.json(locations);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch nearby locations" });
+    }
+  });
+
+  // Check-in API routes
+  app.post("/api/checkins", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const checkIn = await storage.createCheckIn({
+        ...req.body,
+        userId: req.user!.id
+      });
+      res.json(checkIn);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create check-in" });
+    }
+  });
+
+  app.get("/api/user/checkins", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const checkIns = await storage.getUserCheckIns(req.user!.id);
+      res.json(checkIns);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch check-ins" });
+    }
+  });
+
+  // Discovery API routes
+  app.get("/api/user/discoveries", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const discoveries = await storage.getUserDiscoveries(req.user!.id);
+      res.json(discoveries);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch discoveries" });
+    }
+  });
+
   // Seed data on startup
   await storage.seedBadges();
   await storage.seedChallenges();
+  await storage.seedLocations();
 
   // XP and Badge routes
   app.get("/api/badges", async (req, res) => {

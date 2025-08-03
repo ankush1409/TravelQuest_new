@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, boolean, timestamp, pgEnum, uuid, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, boolean, timestamp, pgEnum, uuid, primaryKey, real } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -78,6 +78,12 @@ export const challenges = pgTable("challenges", {
   xpReward: integer("xp_reward").notNull().default(0),
   badgeReward: varchar("badge_reward"),
   status: challengeStatusEnum("status").notNull().default("ACTIVE"),
+  // Location-based fields
+  latitude: real("latitude"),
+  longitude: real("longitude"),
+  radius: integer("radius"), // in meters
+  locationName: text("location_name"),
+  isLocationBased: boolean("is_location_based").notNull().default(false),
   createdAt: timestamp("created_at").notNull().default(sql`now()`),
 });
 
@@ -98,10 +104,72 @@ export const userChallenges = pgTable("user_challenges", {
   completedAt: timestamp("completed_at"),
 });
 
+// New tables for location-based features
+export const locations = pgTable("locations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  latitude: real("latitude").notNull(),
+  longitude: real("longitude").notNull(),
+  category: text("category").notNull(), // landmark, restaurant, attraction, etc.
+  address: text("address"),
+  xpReward: integer("xp_reward").notNull().default(50),
+  isDiscovery: boolean("is_discovery").notNull().default(false),
+  createdAt: timestamp("created_at").notNull().default(sql`now()`),
+});
+
+export const checkIns = pgTable("check_ins", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  locationId: varchar("location_id").notNull().references(() => locations.id, { onDelete: "cascade" }),
+  latitude: real("latitude").notNull(),
+  longitude: real("longitude").notNull(),
+  notes: text("notes"),
+  photo: text("photo"), // URL to uploaded photo
+  xpEarned: integer("xp_earned").notNull().default(0),
+  checkedInAt: timestamp("checked_in_at").notNull().default(sql`now()`),
+});
+
+export const discoveries = pgTable("discoveries", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  locationId: varchar("location_id").notNull().references(() => locations.id, { onDelete: "cascade" }),
+  discoveredAt: timestamp("discovered_at").notNull().default(sql`now()`),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   badges: many(userBadges),
   challenges: many(userChallenges),
+  checkIns: many(checkIns),
+  discoveries: many(discoveries),
+}));
+
+export const locationsRelations = relations(locations, ({ many }) => ({
+  checkIns: many(checkIns),
+  discoveries: many(discoveries),
+}));
+
+export const checkInsRelations = relations(checkIns, ({ one }) => ({
+  user: one(users, {
+    fields: [checkIns.userId],
+    references: [users.id],
+  }),
+  location: one(locations, {
+    fields: [checkIns.locationId],
+    references: [locations.id],
+  }),
+}));
+
+export const discoveriesRelations = relations(discoveries, ({ one }) => ({
+  user: one(users, {
+    fields: [discoveries.userId],
+    references: [users.id],
+  }),
+  location: one(locations, {
+    fields: [discoveries.locationId],
+    references: [locations.id],
+  }),
 }));
 
 export const badgesRelations = relations(badges, ({ many }) => ({
@@ -150,6 +218,11 @@ export const insertBadgeSchema = createInsertSchema(badges).omit({
 export const insertChallengeSchema = createInsertSchema(challenges).omit({
   id: true,
   createdAt: true,
+  latitude: true,
+  longitude: true,
+  radius: true,
+  locationName: true,
+  isLocationBased: true,
 });
 
 export const insertUserChallengeSchema = createInsertSchema(userChallenges).omit({
@@ -179,6 +252,30 @@ export const completeChallengeSchema = z.object({
   progress: z.number().optional(),
 });
 
+// New insert schemas for location features
+export const insertLocationSchema = createInsertSchema(locations).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertCheckInSchema = createInsertSchema(checkIns).omit({
+  id: true,
+  checkedInAt: true,
+});
+
+export const insertDiscoverySchema = createInsertSchema(discoveries).omit({
+  id: true,
+  discoveredAt: true,
+});
+
+export const checkInSchema = z.object({
+  locationId: z.string(),
+  latitude: z.number(),
+  longitude: z.number(),
+  notes: z.string().optional(),
+  photo: z.string().optional(),
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -186,12 +283,19 @@ export type Badge = typeof badges.$inferSelect;
 export type Challenge = typeof challenges.$inferSelect;
 export type UserBadge = typeof userBadges.$inferSelect;
 export type UserChallenge = typeof userChallenges.$inferSelect;
+export type Location = typeof locations.$inferSelect;
+export type CheckIn = typeof checkIns.$inferSelect;
+export type Discovery = typeof discoveries.$inferSelect;
 
 export type InsertBadge = z.infer<typeof insertBadgeSchema>;
 export type InsertChallenge = z.infer<typeof insertChallengeSchema>;
 export type InsertUserChallenge = z.infer<typeof insertUserChallengeSchema>;
+export type InsertLocation = z.infer<typeof insertLocationSchema>;
+export type InsertCheckIn = z.infer<typeof insertCheckInSchema>;
+export type InsertDiscovery = z.infer<typeof insertDiscoverySchema>;
 
 export type LoginData = z.infer<typeof loginSchema>;
 export type UpdateProfile = z.infer<typeof updateProfileSchema>;
 export type JoinChallenge = z.infer<typeof joinChallengeSchema>;
 export type CompleteChallenge = z.infer<typeof completeChallengeSchema>;
+export type CheckInData = z.infer<typeof checkInSchema>;
