@@ -266,6 +266,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         totalXP: Math.max(100, (currentUser?.totalXP || 100) + xpGain),
       });
       
+      if (!updatedUser) {
+        return res.status(500).json({ error: "Failed to update user XP" });
+      }
+      
       // Check and award badges for new XP level
       const newBadges = await storage.checkAndAwardBadges(req.user.id, updatedUser.totalXP);
       

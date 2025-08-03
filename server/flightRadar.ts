@@ -71,31 +71,29 @@ export class FlightRadarService {
     const cacheKey = `flight_${flightNumber}`;
     const cached = this.getFromCache(cacheKey);
     if (cached) {
+      console.log(`Using cached data for flight ${flightNumber}`);
       return cached;
     }
 
     if (!this.apiKey) {
-      console.warn('API key missing - using realistic demo data');
+      console.info('API key missing - using realistic demo data');
       const result = this.generateFlightTrackingData(flightNumber);
       this.setCache(cacheKey, result);
       return result;
     }
 
-    try {
-      // Try real API call first
-      const result = await this.fetchRealFlightData(flightNumber);
-      if (result) {
-        this.setCache(cacheKey, result);
-        return result;
-      }
-    } catch (error) {
-      console.error('FlightRadar24 API error:', error);
+    // Try real API call first
+    const result = await this.fetchRealFlightData(flightNumber);
+    if (result) {
+      this.setCache(cacheKey, result);
+      return result;
     }
 
     // Fallback to realistic demo data
-    const result = this.generateFlightTrackingData(flightNumber);
-    this.setCache(cacheKey, result);
-    return result;
+    console.log(`Generating demo data for flight ${flightNumber}`);
+    const demoResult = this.generateFlightTrackingData(flightNumber);
+    this.setCache(cacheKey, demoResult);
+    return demoResult;
   }
 
   /**
@@ -268,18 +266,22 @@ export class FlightRadarService {
       });
 
       if (!response.ok) {
-        throw new Error(`API returned ${response.status}: ${response.statusText}`);
+        // Log as info instead of error since fallback is available
+        console.info(`FlightRadar24 API: ${response.status} ${response.statusText} for flight ${flightNumber} - using demo data`);
+        return null;
       }
 
       const data = await response.json();
       
       if (data.result?.response?.aircraft_data?.[0]) {
+        console.log(`Successfully fetched real data for flight ${flightNumber}`);
         return this.transformRealApiResponse(data.result.response.aircraft_data[0]);
       }
       
+      console.info(`No flight data found in API response for ${flightNumber} - using demo data`);
       return null;
     } catch (error) {
-      console.error('Error fetching real flight data:', error);
+      console.info(`FlightRadar24 API unavailable for flight ${flightNumber} - using demo data:`, error instanceof Error ? error.message : String(error));
       return null;
     }
   }
