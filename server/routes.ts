@@ -306,6 +306,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Refresh Google Local Guides data
+  app.post("/api/user/local-guides/refresh", async (req, res) => {
+    try {
+      if (!req.user?.id) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const user = await storage.getUser(req.user.id);
+      if (!user?.localGuidesUrl) {
+        return res.status(400).json({ error: "No Local Guides profile connected" });
+      }
+
+      // Fetch fresh data from Local Guides
+      const { fetchLocalGuidesData } = await import("./localGuides");
+      const localGuidesData = await fetchLocalGuidesData(user.localGuidesUrl);
+      
+      const updatedUser = await storage.updateUserLocalGuides(user.id, {
+        ...localGuidesData,
+        localGuidesUrl: user.localGuidesUrl,
+        localGuidesLastUpdate: new Date(),
+      });
+
+      res.json({
+        success: true,
+        user: updatedUser,
+        message: "Local Guides data refreshed successfully!"
+      });
+    } catch (error) {
+      console.error("Error refreshing Local Guides data:", error);
+      res.status(500).json({ error: "Failed to refresh Local Guides data" });
+    }
+  });
+
   // Onboarding completion endpoint
   app.post("/api/user/onboarding-complete", async (req, res) => {
     try {
