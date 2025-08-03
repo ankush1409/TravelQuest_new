@@ -50,12 +50,40 @@ export default function ProfilePage() {
 
   if (!user) return null;
 
-  const currentLevel = user.level;
-  const currentLevelXP = (currentLevel - 1) * 1000;
-  const nextLevelXP = currentLevel * 1000;
-  const xpInCurrentLevel = user.totalXP - currentLevelXP;
-  const xpToNextLevel = nextLevelXP - user.totalXP;
-  const progressPercentage = (xpInCurrentLevel / 1000) * 100;
+  // Use the same level calculation logic as unified XP display
+  const calculateLevelFromXP = (xp: number) => {
+    if (xp < 100) return 1;
+    if (xp < 300) return 2;
+    if (xp < 600) return 3;
+    if (xp < 1000) return 4;
+    if (xp < 1500) return 5;
+    if (xp < 2100) return 6;
+    if (xp < 2800) return 7;
+    if (xp < 3600) return 8;
+    if (xp < 4500) return 9;
+    return Math.floor((xp - 4500) / 1000) + 10;
+  };
+
+  const getXPForLevel = (level: number) => {
+    if (level <= 1) return 0;
+    if (level === 2) return 100;
+    if (level === 3) return 300;
+    if (level === 4) return 600;
+    if (level === 5) return 1000;
+    if (level === 6) return 1500;
+    if (level === 7) return 2100;
+    if (level === 8) return 2800;
+    if (level === 9) return 3600;
+    if (level === 10) return 4500;
+    return 4500 + ((level - 10) * 1000);
+  };
+
+  const currentLevel = calculateLevelFromXP(user.totalXP || 0);
+  const currentLevelXP = getXPForLevel(currentLevel);
+  const nextLevelXP = getXPForLevel(currentLevel + 1);
+  const xpInCurrentLevel = (user.totalXP || 0) - currentLevelXP;
+  const xpToNextLevel = nextLevelXP - (user.totalXP || 0);
+  const progressPercentage = ((user.totalXP || 0) - currentLevelXP) / (nextLevelXP - currentLevelXP) * 100;
 
   const earnedBadgeIds = new Set(userBadges.map(ub => ub.badgeId));
   const unearnedBadges = allBadges.filter(badge => !earnedBadgeIds.has(badge.id));
