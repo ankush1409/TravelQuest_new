@@ -5,9 +5,8 @@ import { Express } from "express";
 import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
-import jwt from "jsonwebtoken";
 import { storage } from "./storage";
-import { User as SelectUser, insertUserSchema, loginSchema, InsertGoogleUser } from "@shared/schema";
+import { User as SelectUser } from "@shared/schema";
 
 declare global {
   namespace Express {
@@ -32,13 +31,14 @@ async function comparePasswords(supplied: string, stored: string) {
 
 export function setupAuth(app: Express) {
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || "fallback-secret-key",
+    secret: process.env.JWT_SECRET!,
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      secure: false, // Set to true in production with HTTPS
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
   };
 
@@ -54,16 +54,15 @@ export function setupAuth(app: Express) {
         const user = await storage.getUserByUsername(username);
         if (!user || !user.password || !(await comparePasswords(password, user.password))) {
           return done(null, false);
-        } else {
-          return done(null, user);
         }
+        return done(null, user);
       } catch (error) {
         return done(error);
       }
     }),
   );
 
-  // Google OAuth Strategy
+  // Google Strategy
   passport.use(
     new GoogleStrategy(
       {
@@ -73,25 +72,27 @@ export function setupAuth(app: Express) {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          // Check if user exists by Google ID
+          // Check if user already exists with this Google ID
           let user = await storage.getUserByGoogleId(profile.id);
-          
+
           if (user) {
             return done(null, user);
           }
-          
-          // Check if user exists by email
-          user = await storage.getUserByEmail(profile.emails?.[0]?.value || "");
-          
-          if (user) {
-            // Link Google account to existing user
-            user = await storage.linkGoogleAccount(user.id, profile.id);
-            return done(null, user);
+
+          // Check if user exists with this email
+          const email = profile.emails?.[0]?.value;
+          if (email) {
+            user = await storage.getUserByEmail(email);
+            if (user) {
+              // Link Google account to existing user
+              user = await storage.linkGoogleAccount(user.id, profile.id);
+              return done(null, user);
+            }
           }
-          
-          // Create new user from Google profile
+
+          // Create new user
           const displayName = profile.displayName || `${profile.name?.givenName || ""} ${profile.name?.familyName || ""}`.trim();
-          const username = profile.emails?.[0]?.value?.split("@")[0] || `user_${profile.id.slice(-8)}`;
+          let username = email?.split('@')[0] || profile.displayName?.toLowerCase().replace(/\s+/g, '') || `user_${profile.id}`;
           
           // Ensure unique username
           let finalUsername = username;
@@ -100,18 +101,17 @@ export function setupAuth(app: Express) {
             finalUsername = `${username}_${counter}`;
             counter++;
           }
-          
-          const newUser: InsertGoogleUser = {
-            email: profile.emails?.[0]?.value || "",
-            username: finalUsername,
-            displayName,
-            profilePicture: profile.photos?.[0]?.value,
+
+          const newUser = await storage.createGoogleUser({
             googleId: profile.id,
+            email: email || "",
+            displayName: displayName,
+            username: finalUsername,
+            profilePicture: profile.photos?.[0]?.value || null,
             provider: "google",
-          };
-          
-          user = await storage.createGoogleUser(newUser);
-          return done(null, user);
+          });
+
+          return done(null, newUser);
         } catch (error) {
           return done(error);
         }
@@ -129,84 +129,35 @@ export function setupAuth(app: Express) {
     }
   });
 
-  // Google OAuth routes
-  app.get("/auth/google", 
-    passport.authenticate("google", { scope: ["profile", "email"] })
-  );
-
-  app.get("/auth/google/callback",
-    passport.authenticate("google", { failureRedirect: "/auth?error=google_auth_failed" }),
-    async (req, res) => {
-      // Generate JWT for mobile/API access
-      const token = jwt.sign(
-        { userId: req.user!.id },
-        process.env.JWT_SECRET || "fallback-jwt-secret",
-        { expiresIn: "7d" }
-      );
-      
-      // Set JWT as cookie for web access
-      res.cookie("auth_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-      });
-      
-      res.redirect("/?login=success");
-    }
-  );
-
+  // Local auth routes
   app.post("/api/register", async (req, res, next) => {
     try {
-      const validatedData = insertUserSchema.parse(req.body);
-      
-      if (!validatedData.password) {
-        return res.status(400).json({ message: "Password is required for local registration" });
-      }
-      
-      const existingUser = await storage.getUserByUsername(validatedData.username);
+      const existingUser = await storage.getUserByUsername(req.body.username);
       if (existingUser) {
-        return res.status(400).json({ message: "Username already exists" });
+        return res.status(400).send("Username already exists");
       }
 
-      const existingEmail = await storage.getUserByEmail(validatedData.email);
-      if (existingEmail) {
-        return res.status(400).json({ message: "Email already exists" });
+      const emailUser = await storage.getUserByEmail(req.body.email);
+      if (emailUser) {
+        return res.status(400).send("Email already exists");
       }
 
       const user = await storage.createUser({
-        ...validatedData,
-        password: await hashPassword(validatedData.password),
-        provider: "local",
+        ...req.body,
+        password: await hashPassword(req.body.password),
       });
 
       req.login(user, (err) => {
         if (err) return next(err);
         res.status(201).json(user);
       });
-    } catch (error: any) {
-      if (error.issues) {
-        return res.status(400).json({ message: "Validation error", errors: error.issues });
-      }
+    } catch (error) {
       next(error);
     }
   });
 
-  app.post("/api/login", (req, res, next) => {
-    try {
-      loginSchema.parse(req.body);
-    } catch (error) {
-      return res.status(400).json({ message: "Invalid credentials format" });
-    }
-
-    passport.authenticate("local", (err: any, user: any, info: any) => {
-      if (err) return next(err);
-      if (!user) return res.status(401).json({ message: "Invalid credentials" });
-      
-      req.login(user, (err) => {
-        if (err) return next(err);
-        res.status(200).json(user);
-      });
-    })(req, res, next);
+  app.post("/api/login", passport.authenticate("local"), (req, res) => {
+    res.status(200).json(req.user);
   });
 
   app.post("/api/logout", (req, res, next) => {
@@ -221,20 +172,20 @@ export function setupAuth(app: Express) {
     res.json(req.user);
   });
 
-  app.put("/api/profile", async (req, res, next) => {
-    if (!req.isAuthenticated()) return res.sendStatus(401);
-    
-    try {
-      const updates = req.body;
-      const updatedUser = await storage.updateUser(req.user!.id, updates);
-      
-      if (!updatedUser) {
-        return res.status(404).json({ message: "User not found" });
-      }
-      
-      res.json(updatedUser);
-    } catch (error) {
-      next(error);
+  // Google OAuth routes
+  app.get("/auth/google", 
+    passport.authenticate("google", { 
+      scope: ["profile", "email"] 
+    })
+  );
+
+  app.get("/auth/google/callback",
+    passport.authenticate("google", { 
+      failureRedirect: "/auth?error=oauth_failed" 
+    }),
+    (req, res) => {
+      // Successful authentication, redirect to home
+      res.redirect("/");
     }
-  });
+  );
 }
