@@ -23,6 +23,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Link } from "wouter";
 
+// Local Guides XP calculation function
+function calculateLocalGuidesXP(user: any) {
+  const baseXP = 
+    (user.localGuidesPoints || 0) * 0.1 +
+    (user.localGuidesReviews || 0) * 3 +
+    (user.localGuidesPhotos || 0) * 1 +
+    (user.localGuidesVideos || 0) * 5 +
+    (user.localGuidesEdits || 0) * 2 +
+    (user.localGuidesQuestions || 0) * 3 +
+    (user.localGuidesFacts || 0) * 2 +
+    (user.localGuidesRoads || 0) * 10 +
+    (user.localGuidesLists || 0) * 8;
+  
+  const levelBonus = (user.localGuidesLevel || 0) * 200;
+  
+  return Math.round(baseXP + levelBonus);
+}
+
 interface User {
   id: string;
   totalXP: number;
@@ -45,22 +63,7 @@ interface UnifiedXPDisplayProps {
   recentXpGain?: number;
 }
 
-// XP calculation function (matching server-side) - BALANCED VERSION
-const calculateLocalGuidesXP = (user: User) => {
-  const baseXP = 
-    (user.localGuidesPoints || 0) * 0.1 +
-    (user.localGuidesReviews || 0) * 3 +
-    (user.localGuidesPhotos || 0) * 1 +
-    (user.localGuidesVideos || 0) * 5 +
-    (user.localGuidesEdits || 0) * 2 +
-    (user.localGuidesQuestions || 0) * 3 +
-    (user.localGuidesFacts || 0) * 2 +
-    (user.localGuidesRoads || 0) * 10 +
-    (user.localGuidesLists || 0) * 8;
-  
-  const levelBonus = (user.localGuidesLevel || 0) * 200;
-  return baseXP + levelBonus;
-};
+
 
 // Calculate level from total XP - more realistic progression
 const calculateLevelFromXP = (xp: number) => {
@@ -285,7 +288,43 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-sm">
+            {/* Local Guides XP Summary */}
+            <div className="mt-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-500/20">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">Local Guides Total XP</span>
+                <span className="text-lg font-bold text-blue-400">
+                  +{calculateLocalGuidesXP(user).toLocaleString()} XP
+                </span>
+              </div>
+              <div className="text-xs text-muted-foreground space-y-1">
+                <div className="flex justify-between">
+                  <span>Contributions:</span>
+                  <span>+{(
+                    (user.localGuidesPoints || 0) * 0.1 +
+                    (user.localGuidesReviews || 0) * 3 +
+                    (user.localGuidesPhotos || 0) * 1 +
+                    (user.localGuidesVideos || 0) * 5 +
+                    (user.localGuidesEdits || 0) * 2 +
+                    (user.localGuidesQuestions || 0) * 3 +
+                    (user.localGuidesFacts || 0) * 2 +
+                    (user.localGuidesRoads || 0) * 10 +
+                    (user.localGuidesLists || 0) * 8
+                  ).toFixed(1)} XP</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Level {user.localGuidesLevel || 0} Bonus:</span>
+                  <span>+{((user.localGuidesLevel || 0) * 200).toLocaleString()} XP</span>
+                </div>
+                {(user.localGuidesPoints || 0) > 0 && (
+                  <div className="flex justify-between">
+                    <span>{(user.localGuidesPoints || 0).toLocaleString()} Points:</span>
+                    <span>+{((user.localGuidesPoints || 0) * 0.1).toFixed(1)} XP</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-sm mt-4">
               <div className="flex items-center space-x-2">
                 <Info className="h-4 w-4 text-blue-400" />
                 <span className="text-muted-foreground">
