@@ -143,19 +143,19 @@ export function calculateLocalGuidesXP(data: any) {
   return baseXP + levelBonus;
 }
 
-// Fallback function for demo purposes
+// Fallback function for demo purposes - generates balanced sample data
 export async function fetchLocalGuidesData(profileUrl: string) {
   const sampleData = {
-    localGuidesLevel: Math.floor(Math.random() * 10) + 1,
-    localGuidesPoints: Math.floor(Math.random() * 10000) + 100,
-    localGuidesReviews: Math.floor(Math.random() * 500) + 10,
-    localGuidesPhotos: Math.floor(Math.random() * 1000) + 50,
-    localGuidesVideos: Math.floor(Math.random() * 50) + 2,
-    localGuidesEdits: Math.floor(Math.random() * 200) + 5,
-    localGuidesQuestions: Math.floor(Math.random() * 100) + 3,
-    localGuidesFacts: Math.floor(Math.random() * 150) + 8,
-    localGuidesRoads: Math.floor(Math.random() * 50) + 1,
-    localGuidesLists: Math.floor(Math.random() * 25) + 2,
+    localGuidesLevel: Math.floor(Math.random() * 5) + 2, // Level 2-6
+    localGuidesPoints: Math.floor(Math.random() * 1000) + 100, // 100-1100 points
+    localGuidesReviews: Math.floor(Math.random() * 50) + 5, // 5-55 reviews
+    localGuidesPhotos: Math.floor(Math.random() * 100) + 10, // 10-110 photos  
+    localGuidesVideos: Math.floor(Math.random() * 5) + 1, // 1-6 videos
+    localGuidesEdits: Math.floor(Math.random() * 20) + 2, // 2-22 edits
+    localGuidesQuestions: Math.floor(Math.random() * 10) + 1, // 1-11 questions
+    localGuidesFacts: Math.floor(Math.random() * 15) + 1, // 1-16 facts
+    localGuidesRoads: Math.floor(Math.random() * 3) + 0, // 0-3 roads
+    localGuidesLists: Math.floor(Math.random() * 5) + 1, // 1-6 lists
   };
 
   return sampleData;

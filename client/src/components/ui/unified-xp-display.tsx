@@ -83,7 +83,10 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
   
   // Calculate XP breakdown
   const localGuidesXP = user.localGuidesUrl ? calculateLocalGuidesXP(user) : 0;
-  const travelQuestXP = totalXP - localGuidesXP;
+  // If Local Guides XP is greater than total XP, show Local Guides as the total and TravelQuest as 0
+  // This happens when Local Guides integration adds significant XP
+  const adjustedTravelQuestXP = Math.max(0, totalXP - localGuidesXP);
+  const adjustedLocalGuidesXP = totalXP - adjustedTravelQuestXP;
   
   // Check for level up
   useEffect(() => {
@@ -163,7 +166,7 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
               <MapPin className="h-8 w-8 text-blue-400" />
               <div>
                 <p className="font-medium text-blue-400">TravelQuest</p>
-                <p className="text-2xl font-bold">{travelQuestXP.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{adjustedTravelQuestXP.toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground">Adventures & Challenges</p>
               </div>
             </div>
@@ -174,7 +177,7 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
                 <Globe className="h-8 w-8 text-green-400" />
                 <div>
                   <p className="font-medium text-green-400">Local Guides</p>
-                  <p className="text-2xl font-bold">{localGuidesXP.toLocaleString()}</p>
+                  <p className="text-2xl font-bold">{adjustedLocalGuidesXP.toLocaleString()}</p>
                   <p className="text-xs text-muted-foreground">
                     Level {user.localGuidesLevel} • {user.localGuidesPoints} pts
                   </p>
