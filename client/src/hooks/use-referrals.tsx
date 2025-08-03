@@ -36,6 +36,10 @@ export function useReferrals() {
   } = useQuery<ReferralStats>({
     queryKey: ['/api/referrals/stats'],
     retry: 1,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
   });
 
   // Generate referral link mutation

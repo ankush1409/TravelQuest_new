@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,12 +26,8 @@ export default function ReferralsPage() {
     generatedLink
   } = useReferrals();
 
-  // Generate link automatically when page loads
-  useEffect(() => {
-    if (!generatedLink && !isGeneratingLink && !error) {
-      generateLink();
-    }
-  }, [generateLink, generatedLink, isGeneratingLink, error]);
+  // Note: Removed automatic link generation to prevent infinite loops
+  // Users can now manually generate links using the buttons in the interface
 
   if (isLoading) {
     return (
@@ -186,8 +182,8 @@ export default function ReferralsPage() {
           >
             <ReferralCard
               stats={stats}
-              referralLink={generatedLink}
-              onGenerateLink={generateLink}
+              referralLink={generatedLink || undefined}
+              onGenerateLink={() => generateLink()}
               isGenerating={isGeneratingLink}
             />
           </motion.div>
@@ -212,7 +208,7 @@ export default function ReferralsPage() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                   <Button
-                    onClick={generateLink}
+                    onClick={() => generateLink()}
                     disabled={isGeneratingLink}
                     className="neopop-button bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 px-8 py-3"
                   >
