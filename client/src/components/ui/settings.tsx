@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
+import { LocalGuidesSettings } from "@/components/ui/local-guides-settings";
 import { 
   Bell, 
   Shield, 
@@ -19,7 +20,8 @@ import {
   ChevronRight,
   Moon,
   Sun,
-  Monitor
+  Monitor,
+  MapPin
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -46,6 +48,13 @@ interface SettingItem {
 }
 
 const settingsSections: SettingsSection[] = [
+  {
+    id: "integrations",
+    title: "Integrations",
+    description: "Connect external services and platforms",
+    icon: <MapPin className="w-5 h-5" />,
+    items: []
+  },
   {
     id: "notifications",
     title: "Notifications",
@@ -283,13 +292,23 @@ export function SettingsInterface() {
 
         {/* Settings Content */}
         <div className="lg:col-span-3">
-          <motion.div
-            key={selectedSection}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Card className="neopop-card">
+          {selectedSection === "integrations" ? (
+            <motion.div
+              key="integrations"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <LocalGuidesSettings />
+            </motion.div>
+          ) : (
+            <motion.div
+              key={selectedSection}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Card className="neopop-card">
               <CardHeader>
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-primary/10 rounded-lg">
@@ -414,6 +433,7 @@ export function SettingsInterface() {
               </CardContent>
             </Card>
           </motion.div>
+          )}
         </div>
       </div>
     </div>
