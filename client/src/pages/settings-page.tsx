@@ -1,10 +1,11 @@
-import { CustomizableDashboard } from "@/components/ui/dashboard-customization";
+import { SettingsInterface } from "@/components/ui/settings";
 import { Breadcrumb } from "@/components/ui/accessible-navigation";
 import { motion } from "framer-motion";
 
-export default function HomePage() {
+export default function SettingsPage() {
   const breadcrumbItems = [
-    { label: "Dashboard" }
+    { label: "Home", href: "/" },
+    { label: "Settings" }
   ];
 
   return (
@@ -17,7 +18,7 @@ export default function HomePage() {
     >
       <div className="container mx-auto px-4 py-8">
         <Breadcrumb items={breadcrumbItems} />
-        <CustomizableDashboard />
+        <SettingsInterface />
       </div>
     </motion.div>
   );
