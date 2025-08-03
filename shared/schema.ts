@@ -50,7 +50,7 @@ export const users = pgTable("users", {
   bio: text("bio"),
   profilePicture: text("profile_picture"),
   travelStyle: travelStyleEnum("travel_style").notNull().default("SOLO"),
-  totalXP: integer("total_xp").notNull().default(1000), // Start users with 1000 XP (Level 1)
+  totalXP: integer("total_xp").notNull().default(100), // Start users with 100 XP (Level 0-1)
   level: integer("level").notNull().default(1),
   isPrivate: boolean("is_private").notNull().default(false),
   // Google OAuth fields

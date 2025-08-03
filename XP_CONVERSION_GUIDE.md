@@ -4,19 +4,19 @@
 
 Here's exactly how your Google Local Guides contributions convert to TravelQuest XP:
 
-### Base Contributions
-- **Points**: 1 XP per Local Guides point
-- **Reviews**: 10 XP per review written
-- **Photos**: 5 XP per photo uploaded
-- **Videos**: 15 XP per video uploaded
-- **Edits**: 8 XP per map edit made
-- **Questions**: 12 XP per question answered
-- **Facts**: 6 XP per fact added
-- **Roads**: 20 XP per road added
-- **Lists**: 25 XP per list created
+### Base Contributions (BALANCED)
+- **Points**: 0.1 XP per Local Guides point (1000 points = 100 XP)
+- **Reviews**: 3 XP per review written
+- **Photos**: 1 XP per photo uploaded
+- **Videos**: 5 XP per video uploaded
+- **Edits**: 2 XP per map edit made
+- **Questions**: 3 XP per question answered
+- **Facts**: 2 XP per fact added
+- **Roads**: 10 XP per road added (rare achievement)
+- **Lists**: 8 XP per list created
 
 ### Level Bonus
-- **Level Bonus**: 500 XP per Local Guides level achieved
+- **Level Bonus**: 200 XP per Local Guides level achieved
 
 ## Example Calculation
 
@@ -34,20 +34,20 @@ If you're a Level 4 Local Guides contributor with:
 Your TravelQuest XP would be:
 ```
 Base XP:
-1,250 points × 1 = 1,250 XP
-45 reviews × 10 = 450 XP
-120 photos × 5 = 600 XP
-3 videos × 15 = 45 XP
-15 edits × 8 = 120 XP
-8 questions × 12 = 96 XP
-5 facts × 6 = 30 XP
-1 road × 20 = 20 XP
-3 lists × 25 = 75 XP
+1,250 points × 0.1 = 125 XP
+45 reviews × 3 = 135 XP
+120 photos × 1 = 120 XP
+3 videos × 5 = 15 XP
+15 edits × 2 = 30 XP
+8 questions × 3 = 24 XP
+5 facts × 2 = 10 XP
+1 road × 10 = 10 XP
+3 lists × 8 = 24 XP
 
 Level Bonus:
-Level 4 × 500 = 2,000 XP
+Level 4 × 200 = 800 XP
 
-Total Local Guides XP: 4,686 XP
+Total Local Guides XP: 1,293 XP
 ```
 
 ## How It Works in TravelQuest
