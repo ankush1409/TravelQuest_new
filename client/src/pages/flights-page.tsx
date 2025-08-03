@@ -64,26 +64,41 @@ export default function FlightsPage() {
 
   // Debug effect to track selectedFlight changes
   useEffect(() => {
-    console.log("selectedFlight state changed:", selectedFlight);
+    console.log("🔔 selectedFlight state changed:", selectedFlight);
+    if (selectedFlight) {
+      console.log("✈️ Flight object details:", {
+        flightNumber: selectedFlight.flightNumber,
+        airline: selectedFlight.airline,
+        status: selectedFlight.status
+      });
+    }
   }, [selectedFlight]);
 
   // Search for specific flight
   const searchFlightMutation = useMutation({
     mutationFn: async (flightNumber: string) => {
-      console.log("Making API request for flight:", flightNumber);
+      console.log("🔍 Making API request for flight:", flightNumber);
       const res = await apiRequest("GET", `/api/flights/search?q=${flightNumber}`);
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}: ${res.statusText}`);
       }
       const data = await res.json();
-      console.log("Raw API response:", data);
+      console.log("📡 Raw API response:", data);
       return data;
     },
     onSuccess: (data: FlightData) => {
-      console.log("Flight data received in onSuccess:", data);
-      console.log("Setting selectedFlight state to:", data);
-      setSelectedFlight(data);
-      console.log("selectedFlight state should now be:", data);
+      console.log("✅ Flight data received in onSuccess:", data);
+      console.log("🔄 Setting selectedFlight state to:", data);
+      
+      // Force state update with explicit type casting
+      const flightData = data as FlightData;
+      setSelectedFlight(flightData);
+      
+      // Add a small delay to ensure state update
+      setTimeout(() => {
+        console.log("⏰ State should be updated now");
+      }, 100);
+      
       toast({
         title: "Flight Found",
         description: `Found ${data.flightNumber} - ${data.airline}`,
@@ -172,6 +187,7 @@ export default function FlightsPage() {
         {/* Enhanced Flight Details with New Card */}
         {selectedFlight ? (
           <motion.div
+            key={selectedFlight.flightNumber}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
