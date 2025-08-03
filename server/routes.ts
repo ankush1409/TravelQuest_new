@@ -390,7 +390,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!req.isAuthenticated()) return res.sendStatus(401);
     
     try {
-      const { query } = req.query as { query: string };
+      const { q: query } = req.query as { q: string };
       if (!query) {
         return res.status(400).json({ error: "Flight number required" });
       }
