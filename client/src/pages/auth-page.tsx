@@ -18,11 +18,6 @@ export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Redirect if already authenticated
-  if (user) {
-    return <Redirect to="/" />;
-  }
-
   const loginForm = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -51,6 +46,11 @@ export default function AuthPage() {
   const handleRegister = (data: InsertUser) => {
     registerMutation.mutate(data);
   };
+
+  // Redirect if already authenticated
+  if (user) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className="min-h-screen flex">

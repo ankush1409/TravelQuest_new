@@ -93,7 +93,7 @@ export function setupAuth(app: Express) {
         if (err) return next(err);
         res.status(201).json(user);
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.issues) {
         return res.status(400).json({ message: "Validation error", errors: error.issues });
       }
@@ -108,7 +108,7 @@ export function setupAuth(app: Express) {
       return res.status(400).json({ message: "Invalid credentials format" });
     }
 
-    passport.authenticate("local", (err, user, info) => {
+    passport.authenticate("local", (err: any, user: any, info: any) => {
       if (err) return next(err);
       if (!user) return res.status(401).json({ message: "Invalid credentials" });
       
