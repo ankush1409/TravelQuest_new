@@ -26,6 +26,7 @@ interface FlightData {
   flightNumber: string;
   airline: string;
   aircraftType: string;
+  tailNumber?: string;
   departure: {
     airport: string;
     airportCode: string;
@@ -51,15 +52,9 @@ interface FlightData {
   progress?: number;
 }
 
-interface InboundFlight extends FlightData {
-  distanceToDestination?: number;
-  estimatedTimeToArrival?: number;
-}
-
 export default function FlightsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFlight, setSelectedFlight] = useState<FlightData | null>(null);
-  const [selectedAirport, setSelectedAirport] = useState("LAX");
   const { toast } = useToast();
 
   // Search for specific flight
@@ -84,11 +79,7 @@ export default function FlightsPage() {
     },
   });
 
-  // Get inbound flights for airport
-  const { data: inboundFlights, isLoading: isLoadingInbound } = useQuery<InboundFlight[]>({
-    queryKey: ["/api/flights/inbound", selectedAirport],
-    refetchInterval: 30000, // Update every 30 seconds
-  });
+  // Removed inbound flights functionality as per requirements
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -149,7 +140,7 @@ export default function FlightsPage() {
             <h1 className="text-4xl font-black text-foreground">Flight Tracker</h1>
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Track flights in real-time, monitor inbound arrivals, and stay updated on flight status
+            Search and track any flight by flight number with detailed real-time information
           </p>
         </motion.div>
 
@@ -217,6 +208,9 @@ export default function FlightsPage() {
                   </div>
                   <CardDescription>
                     {selectedFlight.aircraftType}
+                    {selectedFlight.tailNumber && (
+                      <span className="ml-2 text-primary font-medium">• {selectedFlight.tailNumber}</span>
+                    )}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -328,113 +322,7 @@ export default function FlightsPage() {
           )}
         </AnimatePresence>
 
-        {/* Inbound Flights */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Card className="neopop-card">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <MapPin className="w-5 h-5 mr-2 text-primary" />
-                  Inbound Flights
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-muted-foreground">Airport:</span>
-                  <select
-                    value={selectedAirport}
-                    onChange={(e) => setSelectedAirport(e.target.value)}
-                    className="bg-muted rounded px-2 py-1 text-sm font-medium"
-                  >
-                    <option value="LAX">LAX - Los Angeles</option>
-                    <option value="JFK">JFK - New York</option>
-                    <option value="ORD">ORD - Chicago</option>
-                    <option value="MIA">MIA - Miami</option>
-                    <option value="SFO">SFO - San Francisco</option>
-                  </select>
-                </div>
-              </CardTitle>
-              <CardDescription>
-                Real-time arrivals for {selectedAirport} • Updates every 30 seconds
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {isLoadingInbound ? (
-                <div className="flex items-center justify-center py-8">
-                  <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                  <span className="ml-2 text-muted-foreground">Loading flights...</span>
-                </div>
-              ) : inboundFlights && inboundFlights.length > 0 ? (
-                <div className="space-y-3">
-                  {inboundFlights.slice(0, 10).map((flight, index) => (
-                    <motion.div
-                      key={`${flight.flightNumber}-${index}`}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      onClick={() => setSelectedFlight(flight)}
-                      className="p-4 bg-muted/20 hover:bg-muted/40 rounded-lg cursor-pointer transition-all duration-200 border border-transparent hover:border-primary/20"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex flex-col">
-                            <span className="font-bold text-foreground">{flight.flightNumber}</span>
-                            <span className="text-sm text-muted-foreground">{flight.airline}</span>
-                          </div>
-                          <div className="hidden md:flex flex-col">
-                            <span className="text-sm font-medium">{flight.departure.airportCode}</span>
-                            <span className="text-xs text-muted-foreground">
-                              {formatTime(flight.departure.scheduledTime)}
-                            </span>
-                          </div>
-                          <div className="flex items-center text-muted-foreground">
-                            <div className="w-8 border-t border-dashed"></div>
-                            <Plane className="w-4 h-4 mx-2" />
-                            <div className="w-8 border-t border-dashed"></div>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-sm font-medium">{flight.arrival.airportCode}</span>
-                            <span className="text-xs text-muted-foreground">
-                              {formatTime(flight.arrival.scheduledTime)}
-                            </span>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center space-x-3">
-                          {flight.estimatedTimeToArrival && (
-                            <div className="text-right">
-                              <div className="text-sm font-medium text-primary">
-                                {flight.estimatedTimeToArrival} min
-                              </div>
-                              <div className="text-xs text-muted-foreground">ETA</div>
-                            </div>
-                          )}
-                          <Badge className={`${getStatusColor(flight.status)} border-0`}>
-                            {getStatusIcon(flight.status)}
-                            <span className="ml-1 capitalize">{flight.status}</span>
-                          </Badge>
-                        </div>
-                      </div>
-                      
-                      {flight.arrival.gate && (
-                        <div className="mt-2 text-sm text-muted-foreground">
-                          Gate: <span className="font-medium text-yellow-400">{flight.arrival.gate}</span>
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Plane className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p>No inbound flights found for {selectedAirport}</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </motion.div>
+        {/* Removed Inbound Flights section as per requirements */}
       </div>
     </div>
   );

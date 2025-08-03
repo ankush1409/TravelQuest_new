@@ -405,21 +405,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/flights/inbound", async (req, res) => {
-    if (!req.isAuthenticated()) return res.sendStatus(401);
-    
-    try {
-      const { airport = "LAX" } = req.query as { airport?: string };
-      
-      const { flightRadarService } = await import("./flightRadar");
-      const flights = await flightRadarService.getInboundFlights(airport);
-      
-      res.json(flights);
-    } catch (error) {
-      console.error("Error fetching inbound flights:", error);
-      res.status(500).json({ error: "Failed to fetch inbound flights" });
-    }
-  });
+  // Disabled inbound flights endpoint as per requirements
+  // app.get("/api/flights/inbound", async (req, res) => {
+  //   return res.status(404).json({ error: "Inbound flights endpoint has been disabled" });
+  // });
 
   // Enhanced flight tracking routes
   app.get("/api/flights/:flightNumber", async (req, res) => {
@@ -462,21 +451,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/flights/aircraft/:tailNumber/inbound", async (req, res) => {
-    if (!req.isAuthenticated()) return res.sendStatus(401);
-    
-    try {
-      const { tailNumber } = req.params;
-      
-      const { flightRadarService } = await import("./flightRadar");
-      const inboundFlights = await flightRadarService.getInboundFlightsByTailNumber(tailNumber);
-      
-      res.json(inboundFlights);
-    } catch (error) {
-      console.error("Error fetching inbound flights for aircraft:", error);
-      res.status(500).json({ error: "Failed to fetch inbound flights" });
-    }
-  });
+  // Disabled inbound flights by aircraft endpoint as per requirements
+  // app.get("/api/flights/aircraft/:tailNumber/inbound", async (req, res) => {
+  //   return res.status(404).json({ error: "Inbound flights by aircraft endpoint has been disabled" });
+  // });
 
   app.get("/api/flights/position/:flightId", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);

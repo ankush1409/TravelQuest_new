@@ -1,0 +1,54 @@
+Prompt: Simplify Flight Page — Search by Flight Number & Show Flight Details; Remove Live Inbound Flights Section
+Objective:
+Refactor the flight tracking page/UI in TravelQuest to simplify user experience by:
+
+Keeping only a search input for flight number.
+
+Displaying all relevant details for the searched flight: flight number, tail number, airline, current flight status, departure/arrival airports and times, and real-time position if available.
+
+Removing the entire “Live Inbound Flights” section and any related logic (backend or frontend).
+
+Backend Instructions:
+Keep or implement a single endpoint to fetch detailed flight info by flight number.
+
+Remove or disable any API endpoints or functions that fetch inbound flights by tail number or airport.
+
+Ensure response returns full flight info (including tail number, status, times) for the requested flight number.
+
+Frontend Instructions:
+On the flight search page/component:
+
+Remove/hide “Live Inbound Flights” section and all UI parts related to inbound flights.
+
+Keep a flight number search bar/input.
+
+Upon search, show a single clear card or panel with the flight’s:
+
+Flight number and airline
+
+Tail number (aircraft registration)
+
+Current flight status with color-coded indicator (e.g., on time green, delayed orange/red)
+
+Departure and arrival airport codes/names and scheduled/actual times
+
+Real-time flight position on map (optional, keep simple)
+
+Remove any UI complexity or multiple flight lists.
+
+Keep the styling aligned with TravelQuest’s current design.
+
+Provide simple loading state and error messages if flight not found.
+
+Acceptance Criteria:
+The user can enter a flight number and get detailed info about that specific flight.
+
+No mentions or UI sections of Live Inbound Flights remain anywhere on the page.
+
+UI remains clean, minimal, and intuitive.
+
+Backend calls minimized to just flight-by-flight queries.
+
+Agent Instruction:
+
+Refactor the TravelQuest flight tracking page to only support flight number search and detailed display of that flight’s info including tail number and current status. Remove the “Live Inbound Flights” section and all related backend and frontend code. Ensure the UI is clean, minimal, and user-friendly.
