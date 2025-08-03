@@ -262,9 +262,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const user = await storage.updateUserLocalGuides(req.user.id, sampleData);
       
+      // Check and award badges for new XP level
+      const newBadges = await storage.checkAndAwardBadges(req.user.id, user.totalXP);
+      
       res.json({
         success: true,
         user,
+        xpGained: xpGain,
+        newBadges,
         message: "Google Local Guides profile connected successfully!"
       });
     } catch (error) {

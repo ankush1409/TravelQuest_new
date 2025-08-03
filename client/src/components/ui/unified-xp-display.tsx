@@ -154,13 +154,13 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
             </div>
             <div>
               <div className="flex items-center space-x-3">
-                <span>Level {currentLevel}</span>
-                <Badge variant="secondary" className="text-xs">
-                  {totalXP.toLocaleString()} XP Total
+                <span className="text-2xl font-bold">Level {currentLevel}</span>
+                <Badge variant="secondary" className="text-sm font-medium">
+                  {totalXP.toLocaleString()} XP
                 </Badge>
               </div>
-              <CardDescription className="text-base mt-1">
-                {xpToNextLevel} XP to Level {currentLevel + 1}
+              <CardDescription className="text-lg mt-2 font-medium">
+                {xpToNextLevel.toLocaleString()} XP needed for Level {currentLevel + 1}
               </CardDescription>
             </div>
           </CardTitle>
@@ -173,10 +173,22 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
               <span>Level {currentLevel + 1}</span>
             </div>
             <Progress value={progressPercentage} className="h-4 neon-glow-purple" />
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>{currentLevelXP.toLocaleString()} XP</span>
-              <span className="font-medium text-foreground">{totalXP.toLocaleString()} XP</span>
-              <span>{nextLevelXP.toLocaleString()} XP</span>
+            <div className="flex justify-between text-sm">
+              <div className="text-muted-foreground">
+                <span>Level {currentLevel}</span>
+                <br />
+                <span className="text-xs">{currentLevelXP.toLocaleString()} XP</span>
+              </div>
+              <div className="text-center">
+                <span className="font-bold text-lg text-foreground">{totalXP.toLocaleString()}</span>
+                <br />
+                <span className="text-xs text-muted-foreground">Current XP</span>
+              </div>
+              <div className="text-muted-foreground text-right">
+                <span>Level {currentLevel + 1}</span>
+                <br />
+                <span className="text-xs">{nextLevelXP.toLocaleString()} XP</span>
+              </div>
             </div>
           </div>
 
@@ -251,25 +263,25 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
                 <Edit3 className="h-6 w-6 text-blue-400 mx-auto mb-1" />
                 <p className="text-lg font-bold text-blue-400">{user.localGuidesReviews || 0}</p>
                 <p className="text-xs text-muted-foreground">Reviews</p>
-                <Badge variant="outline" className="text-xs">+{(user.localGuidesReviews || 0) * 10} XP</Badge>
+                <Badge variant="outline" className="text-xs">+{(user.localGuidesReviews || 0) * 3} XP</Badge>
               </div>
               <div className="text-center p-3 bg-purple-500/10 rounded-lg">
                 <Camera className="h-6 w-6 text-purple-400 mx-auto mb-1" />
                 <p className="text-lg font-bold text-purple-400">{user.localGuidesPhotos || 0}</p>
                 <p className="text-xs text-muted-foreground">Photos</p>
-                <Badge variant="outline" className="text-xs">+{(user.localGuidesPhotos || 0) * 5} XP</Badge>
+                <Badge variant="outline" className="text-xs">+{(user.localGuidesPhotos || 0) * 1} XP</Badge>
               </div>
               <div className="text-center p-3 bg-green-500/10 rounded-lg">
                 <Video className="h-6 w-6 text-green-400 mx-auto mb-1" />
                 <p className="text-lg font-bold text-green-400">{user.localGuidesVideos || 0}</p>
                 <p className="text-xs text-muted-foreground">Videos</p>
-                <Badge variant="outline" className="text-xs">+{(user.localGuidesVideos || 0) * 15} XP</Badge>
+                <Badge variant="outline" className="text-xs">+{(user.localGuidesVideos || 0) * 5} XP</Badge>
               </div>
               <div className="text-center p-3 bg-orange-500/10 rounded-lg">
                 <Route className="h-6 w-6 text-orange-400 mx-auto mb-1" />
                 <p className="text-lg font-bold text-orange-400">{user.localGuidesEdits || 0}</p>
                 <p className="text-xs text-muted-foreground">Edits</p>
-                <Badge variant="outline" className="text-xs">+{(user.localGuidesEdits || 0) * 8} XP</Badge>
+                <Badge variant="outline" className="text-xs">+{(user.localGuidesEdits || 0) * 2} XP</Badge>
               </div>
             </div>
 
