@@ -46,13 +46,16 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   username: text("username").notNull().unique(),
   displayName: text("display_name").notNull(),
-  password: text("password").notNull(),
+  password: text("password"), // Make password optional for OAuth users
   bio: text("bio"),
   profilePicture: text("profile_picture"),
   travelStyle: travelStyleEnum("travel_style").notNull().default("SOLO"),
   totalXP: integer("total_xp").notNull().default(0),
   level: integer("level").notNull().default(1),
   isPrivate: boolean("is_private").notNull().default(false),
+  // Google OAuth fields
+  googleId: text("google_id").unique(),
+  provider: text("provider").default("local"), // 'local' or 'google'
   createdAt: timestamp("created_at").notNull().default(sql`now()`),
   updatedAt: timestamp("updated_at").notNull().default(sql`now()`),
 });
@@ -208,6 +211,18 @@ export const insertUserSchema = createInsertSchema(users).omit({
   level: true,
   createdAt: true,
   updatedAt: true,
+  googleId: true,
+  provider: true,
+}).extend({
+  password: z.string().optional(), // Make password optional for OAuth
+});
+
+export const insertGoogleUserSchema = createInsertSchema(users).omit({
+  id: true,
+  level: true,
+  createdAt: true,
+  updatedAt: true,
+  password: true, // Google users don't need password
 });
 
 export const insertBadgeSchema = createInsertSchema(badges).omit({
@@ -231,9 +246,9 @@ export const insertUserChallengeSchema = createInsertSchema(userChallenges).omit
   completedAt: true,
 });
 
-export const loginSchema = insertUserSchema.pick({
-  username: true,
-  password: true,
+export const loginSchema = z.object({
+  username: z.string(),
+  password: z.string(),
 });
 
 export const updateProfileSchema = insertUserSchema.pick({
@@ -278,6 +293,7 @@ export const checkInSchema = z.object({
 
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
+export type InsertGoogleUser = z.infer<typeof insertGoogleUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
 export type Challenge = typeof challenges.$inferSelect;
