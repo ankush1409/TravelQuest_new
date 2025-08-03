@@ -182,7 +182,7 @@ export default function ReferralsPage() {
           >
             <ReferralCard
               stats={stats}
-              referralLink={generatedLink || undefined}
+              referralLink={generatedLink}
               onGenerateLink={() => generateLink()}
               isGenerating={isGeneratingLink}
             />
