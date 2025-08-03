@@ -257,7 +257,7 @@ export default function ProfilePage() {
                 facts: user.localGuidesFacts || 0,
                 roads: user.localGuidesRoads || 0,
                 lists: user.localGuidesLists || 0,
-                lastUpdate: user.localGuidesLastUpdate,
+                lastUpdate: user.localGuidesLastUpdate ? user.localGuidesLastUpdate.toString() : undefined,
               } : undefined}
             />
           </div>

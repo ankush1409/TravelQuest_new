@@ -12,7 +12,7 @@ import {
   Star,
   Globe,
   ArrowRight,
-  Skip,
+  SkipForward as Skip,
   CheckCircle,
   X,
   Play,

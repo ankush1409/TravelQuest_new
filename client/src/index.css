@@ -71,6 +71,47 @@
 }
 
 @layer components {
+  /* Enhanced Input Styling for Maximum Visibility */
+  .input, 
+  input[type="text"], 
+  input[type="email"], 
+  input[type="password"], 
+  input[type="url"], 
+  textarea,
+  select {
+    @apply bg-input text-foreground placeholder:text-muted-foreground border border-border rounded-md px-3 py-2;
+    color: hsl(0, 0%, 98%) !important;
+    background-color: hsl(220, 13%, 20%) !important;
+    border-color: hsl(220, 13%, 30%) !important;
+    caret-color: hsl(280, 100%, 70%) !important;
+  }
+  
+  .input:focus, 
+  input:focus, 
+  textarea:focus,
+  select:focus {
+    @apply ring-2 ring-primary ring-offset-2 ring-offset-background outline-none;
+    border-color: hsl(280, 100%, 70%) !important;
+    background-color: hsl(220, 13%, 24%) !important;
+    color: hsl(0, 0%, 100%) !important;
+  }
+
+  .input::placeholder,
+  input::placeholder,
+  textarea::placeholder {
+    color: hsl(220, 9%, 55%) !important;
+    opacity: 0.8 !important;
+  }
+
+  /* Specific styling for form components */
+  .form-control input,
+  .form-control textarea,
+  .form-control select {
+    color: hsl(0, 0%, 98%) !important;
+    background-color: hsl(220, 13%, 20%) !important;
+    border-color: hsl(220, 13%, 30%) !important;
+  }
+
   /* NeoPOP Card Effects */
   .neopop-card {
     @apply relative overflow-hidden rounded-2xl;
