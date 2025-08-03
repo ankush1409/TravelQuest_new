@@ -1,11 +1,13 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Express } from "express";
 import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
+import jwt from "jsonwebtoken";
 import { storage } from "./storage";
-import { User as SelectUser, insertUserSchema, loginSchema } from "@shared/schema";
+import { User as SelectUser, insertUserSchema, loginSchema, InsertGoogleUser } from "@shared/schema";
 
 declare global {
   namespace Express {
@@ -45,11 +47,12 @@ export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // Local Strategy
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       try {
         const user = await storage.getUserByUsername(username);
-        if (!user || !(await comparePasswords(password, user.password))) {
+        if (!user || !user.password || !(await comparePasswords(password, user.password))) {
           return done(null, false);
         } else {
           return done(null, user);
@@ -58,6 +61,62 @@ export function setupAuth(app: Express) {
         return done(error);
       }
     }),
+  );
+
+  // Google OAuth Strategy
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID!,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        callbackURL: "/auth/google/callback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          // Check if user exists by Google ID
+          let user = await storage.getUserByGoogleId(profile.id);
+          
+          if (user) {
+            return done(null, user);
+          }
+          
+          // Check if user exists by email
+          user = await storage.getUserByEmail(profile.emails?.[0]?.value || "");
+          
+          if (user) {
+            // Link Google account to existing user
+            user = await storage.linkGoogleAccount(user.id, profile.id);
+            return done(null, user);
+          }
+          
+          // Create new user from Google profile
+          const displayName = profile.displayName || `${profile.name?.givenName || ""} ${profile.name?.familyName || ""}`.trim();
+          const username = profile.emails?.[0]?.value?.split("@")[0] || `user_${profile.id.slice(-8)}`;
+          
+          // Ensure unique username
+          let finalUsername = username;
+          let counter = 1;
+          while (await storage.getUserByUsername(finalUsername)) {
+            finalUsername = `${username}_${counter}`;
+            counter++;
+          }
+          
+          const newUser: InsertGoogleUser = {
+            email: profile.emails?.[0]?.value || "",
+            username: finalUsername,
+            displayName,
+            profilePicture: profile.photos?.[0]?.value,
+            googleId: profile.id,
+            provider: "google",
+          };
+          
+          user = await storage.createGoogleUser(newUser);
+          return done(null, user);
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
   );
 
   passport.serializeUser((user, done) => done(null, user.id));
@@ -70,9 +129,39 @@ export function setupAuth(app: Express) {
     }
   });
 
+  // Google OAuth routes
+  app.get("/auth/google", 
+    passport.authenticate("google", { scope: ["profile", "email"] })
+  );
+
+  app.get("/auth/google/callback",
+    passport.authenticate("google", { failureRedirect: "/auth?error=google_auth_failed" }),
+    async (req, res) => {
+      // Generate JWT for mobile/API access
+      const token = jwt.sign(
+        { userId: req.user!.id },
+        process.env.JWT_SECRET || "fallback-jwt-secret",
+        { expiresIn: "7d" }
+      );
+      
+      // Set JWT as cookie for web access
+      res.cookie("auth_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      });
+      
+      res.redirect("/?login=success");
+    }
+  );
+
   app.post("/api/register", async (req, res, next) => {
     try {
       const validatedData = insertUserSchema.parse(req.body);
+      
+      if (!validatedData.password) {
+        return res.status(400).json({ message: "Password is required for local registration" });
+      }
       
       const existingUser = await storage.getUserByUsername(validatedData.username);
       if (existingUser) {
@@ -87,6 +176,7 @@ export function setupAuth(app: Express) {
       const user = await storage.createUser({
         ...validatedData,
         password: await hashPassword(validatedData.password),
+        provider: "local",
       });
 
       req.login(user, (err) => {
