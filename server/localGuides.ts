@@ -1,4 +1,3 @@
-import { GoogleLocalGuidesAPI } from 'google-local-guides-api';
 import { storage } from './storage';
 
 export interface LocalGuidesData {
@@ -15,10 +14,8 @@ export interface LocalGuidesData {
 }
 
 export class LocalGuidesService {
-  private api: GoogleLocalGuidesAPI;
-
   constructor() {
-    this.api = new GoogleLocalGuidesAPI();
+    // Using demo data for now - API integration can be added later
   }
 
   /**
@@ -36,7 +33,7 @@ export class LocalGuidesService {
   }
 
   /**
-   * Fetch Local Guides data from public profile
+   * Fetch Local Guides data from public profile (using demo data for now)
    */
   async fetchLocalGuidesData(profileUrl: string): Promise<LocalGuidesData | null> {
     try {
@@ -45,19 +42,18 @@ export class LocalGuidesService {
         throw new Error('Invalid Google Local Guides profile URL');
       }
 
-      const data = await this.api.getProfile(profileId);
-      
+      // Using demo data - replace with actual API integration when available
       return {
-        level: data.level || 0,
-        points: data.points || 0,
-        reviews: data.reviews || 0,
-        photos: data.photos || 0,
-        videos: data.videos || 0,
-        edits: data.edits || 0,
-        questions: data.questions || 0,
-        facts: data.facts || 0,
-        roads: data.roads || 0,
-        lists: data.lists || 0,
+        level: Math.floor(Math.random() * 5) + 2, // Level 2-6
+        points: Math.floor(Math.random() * 1000) + 100, // 100-1100 points
+        reviews: Math.floor(Math.random() * 50) + 5, // 5-55 reviews
+        photos: Math.floor(Math.random() * 100) + 10, // 10-110 photos  
+        videos: Math.floor(Math.random() * 5) + 1, // 1-6 videos
+        edits: Math.floor(Math.random() * 20) + 2, // 2-22 edits
+        questions: Math.floor(Math.random() * 10) + 1, // 1-11 questions
+        facts: Math.floor(Math.random() * 15) + 1, // 1-16 facts
+        roads: Math.floor(Math.random() * 3) + 0, // 0-3 roads
+        lists: Math.floor(Math.random() * 5) + 1, // 1-6 lists
       };
     } catch (error) {
       console.error('Error fetching Local Guides data:', error);

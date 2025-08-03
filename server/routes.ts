@@ -257,17 +257,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         localGuidesUrl: profileUrl,
         ...localGuidesData,
         localGuidesLastUpdate: new Date(),
-        totalXP: Math.max(100, (currentUser?.totalXP || 100) + xpGain), // Add Local Guides XP to base
       };
 
       const user = await storage.updateUserLocalGuides(req.user.id, sampleData);
       
+      // Update total XP separately
+      const updatedUser = await storage.updateUser(req.user.id, {
+        totalXP: Math.max(100, (currentUser?.totalXP || 100) + xpGain),
+      });
+      
       // Check and award badges for new XP level
-      const newBadges = await storage.checkAndAwardBadges(req.user.id, user.totalXP);
+      const newBadges = await storage.checkAndAwardBadges(req.user.id, updatedUser.totalXP);
       
       res.json({
         success: true,
-        user,
+        user: updatedUser,
         xpGained: xpGain,
         newBadges,
         message: "Google Local Guides profile connected successfully!"
@@ -337,7 +341,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...localGuidesData,
         localGuidesUrl: user.localGuidesUrl,
         localGuidesLastUpdate: new Date(),
-        totalXP: Math.max(100, (user.totalXP || 100) + xpGain), // Add Local Guides XP to base
+      });
+
+      // Update total XP separately
+      await storage.updateUser(user.id, {
+        totalXP: Math.max(100, (user.totalXP || 100) + xpGain),
       });
 
       res.json({
