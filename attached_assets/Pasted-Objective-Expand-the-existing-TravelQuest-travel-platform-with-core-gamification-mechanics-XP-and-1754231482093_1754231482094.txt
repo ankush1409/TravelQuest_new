@@ -1,0 +1,70 @@
+Objective:
+Expand the existing TravelQuest travel platform with core gamification mechanics: XP and leveling, badges, and a challenge system, all with frontend and backend integration.
+
+Platform Stack:
+
+Frontend: React 18+ (TypeScript), Tailwind CSS
+
+Backend: Node.js, Express, Prisma, PostgreSQL (continue structure from Phase 1)
+
+Requirements:
+
+Database Schema Updates:
+
+Update users table: add fields for xp, level, and badge references.
+
+Create new tables:
+
+badges (id, name, icon, category, description)
+
+challenges (id, title, description, category, startDate, endDate, xpReward, badgeReward, status)
+
+user_challenges (userId, challengeId, status, progress)
+
+Provide migration files and seed at least 6 sample badges and 3 challenges.
+
+Backend Features:
+
+XP logic: users earn XP through actions like check-ins and challenge completion; level is calculated from XP (e.g., Level 1: 0–999 XP, Level 2: 1,000–2,999 XP, etc.)
+
+Badge logic: assign badges when criteria met.
+
+Challenge logic:
+
+Endpoints to list challenges, join a challenge, mark as complete.
+
+Track user challenge progress.
+
+Secure endpoints; prevent fraud/spoofing XP or achievements.
+
+API endpoints for retrieving user XP/level, badges, challenges.
+
+Frontend Features:
+
+Display user XP, XP bar, and current level in the dashboard/profile.
+
+Badge showcase: list earned and not-yet-earned badges with icons and tooltips.
+
+Challenge list UI: show available, active, completed challenges; enable joining and marking as complete.
+
+Notifications/toasts: pop up when earning XP, leveling up, unlocking badges, completing challenges.
+
+Must look and feel celebratory and motivating!
+
+Responsive/mobile-first design.
+
+Tests & Documentation:
+
+Provide basic unit tests (for backend logic, endpoints, frontend rendering).
+
+Comment code and document endpoints/new components.
+
+Acceptance Criteria:
+
+XP/level system is functional and visible.
+
+Badges and challenges work, with sample data seeded.
+
+All features work with the previously implemented authentication/profile logic.
+
+Mobile-first, gamified UI with positive feedback for user achievements.

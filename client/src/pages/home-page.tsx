@@ -17,21 +17,67 @@ import {
   LogOut,
   Menu,
   User,
-  Settings
+  Settings,
+  Plus,
+  Zap
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function HomePage() {
   const { user, logoutMutation } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { toast } = useToast();
+
+  // XP earning mutation
+  const earnXPMutation = useMutation({
+    mutationFn: async (amount: number) => {
+      const res = await apiRequest("POST", "/api/user/xp", { amount });
+      return await res.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      
+      // Show XP notification
+      toast({
+        title: `+${data.xpGained} XP Earned! ⭐`,
+        description: `Total XP: ${data.user.totalXP} (Level ${data.user.level})`,
+      });
+
+      // Show badge notifications
+      if (data.newBadges && data.newBadges.length > 0) {
+        setTimeout(() => {
+          data.newBadges.forEach((badge: any, index: number) => {
+            setTimeout(() => {
+              toast({
+                title: `🏆 New Badge: ${badge.name}!`,
+                description: badge.description,
+              });
+            }, index * 1500);
+          });
+        }, 1000);
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Failed to earn XP",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   if (!user) return null;
 
-  const currentLevel = Math.floor(user.totalXP / 100);
-  const xpInCurrentLevel = user.totalXP % 100;
-  const xpToNextLevel = 100 - xpInCurrentLevel;
-  const progressPercentage = (xpInCurrentLevel / 100) * 100;
+  const currentLevel = user.level;
+  const currentLevelXP = (currentLevel - 1) * 1000;
+  const nextLevelXP = currentLevel * 1000;
+  const xpInCurrentLevel = user.totalXP - currentLevelXP;
+  const xpToNextLevel = nextLevelXP - user.totalXP;
+  const progressPercentage = (xpInCurrentLevel / 1000) * 100;
 
   const getTravelStyleEmoji = (style: string) => {
     switch (style) {
@@ -239,8 +285,8 @@ export default function HomePage() {
                 </div>
                 <Progress value={progressPercentage} className="h-3" />
                 <div className="flex justify-between text-xs text-gray-500">
-                  <span>{currentLevel * 100} XP</span>
-                  <span>{(currentLevel + 1) * 100} XP</span>
+                  <span>{currentLevelXP} XP</span>
+                  <span>{nextLevelXP} XP</span>
                 </div>
               </CardContent>
             </Card>
@@ -270,21 +316,102 @@ export default function HomePage() {
           {/* Recent Activity & Challenges */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             
-            {/* Recent Activity */}
+            {/* XP Activities */}
             <Card>
               <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle className="text-lg">Recent Activity</CardTitle>
-                  <Button variant="link" className="text-primary hover:text-blue-700 text-sm font-medium">
-                    View All
-                  </Button>
-                </div>
+                <CardTitle className="text-lg flex items-center">
+                  <Zap className="h-5 w-5 mr-2" />
+                  Earn XP Activities
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8">
-                  <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">No recent activity</p>
-                  <p className="text-sm text-gray-400">Start your journey to see your progress here!</p>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Camera className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Share Travel Photo</p>
+                        <p className="text-xs text-gray-500">Document your journey</p>
+                      </div>
+                    </div>
+                    <Button 
+                      size="sm" 
+                      onClick={() => earnXPMutation.mutate(100)}
+                      disabled={earnXPMutation.isPending}
+                    >
+                      <Plus className="h-4 w-4 mr-1" />
+                      100 XP
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <Mountain className="h-5 w-5 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Visit New Destination</p>
+                        <p className="text-xs text-gray-500">Explore somewhere new</p>
+                      </div>
+                    </div>
+                    <Button 
+                      size="sm" 
+                      onClick={() => earnXPMutation.mutate(200)}
+                      disabled={earnXPMutation.isPending}
+                    >
+                      <Plus className="h-4 w-4 mr-1" />
+                      200 XP
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                        <Building className="h-5 w-5 text-purple-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Cultural Experience</p>
+                        <p className="text-xs text-gray-500">Try local food or traditions</p>
+                      </div>
+                    </div>
+                    <Button 
+                      size="sm" 
+                      onClick={() => earnXPMutation.mutate(150)}
+                      disabled={earnXPMutation.isPending}
+                    >
+                      <Plus className="h-4 w-4 mr-1" />
+                      150 XP
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                        <Users className="h-5 w-5 text-orange-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Connect with Locals</p>
+                        <p className="text-xs text-gray-500">Make new travel friends</p>
+                      </div>
+                    </div>
+                    <Button 
+                      size="sm" 
+                      onClick={() => earnXPMutation.mutate(300)}
+                      disabled={earnXPMutation.isPending}
+                    >
+                      <Plus className="h-4 w-4 mr-1" />
+                      300 XP
+                    </Button>
+                  </div>
+
+                  {earnXPMutation.isPending && (
+                    <div className="text-center py-2">
+                      <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
+                      <p className="text-xs text-gray-500 mt-1">Earning XP...</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
