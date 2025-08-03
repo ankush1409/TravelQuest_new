@@ -147,6 +147,28 @@ export class DatabaseStorage implements IStorage {
     return user || undefined;
   }
 
+  async updateUserLocalGuides(userId: string, localGuidesData: {
+    localGuidesUrl: string;
+    localGuidesLevel: number;
+    localGuidesPoints: number;
+    localGuidesReviews: number;
+    localGuidesPhotos: number;
+    localGuidesVideos: number;
+    localGuidesEdits: number;
+    localGuidesQuestions: number;
+    localGuidesFacts: number;
+    localGuidesRoads: number;
+    localGuidesLists: number;
+    localGuidesLastUpdate: Date;
+  }): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ ...localGuidesData, updatedAt: new Date() })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
   async updateUserXP(userId: string, xpToAdd: number): Promise<User | undefined> {
     const currentUser = await this.getUser(userId);
     if (!currentUser) return undefined;

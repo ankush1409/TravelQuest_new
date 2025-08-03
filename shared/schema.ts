@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, boolean, timestamp, pgEnum, uuid, primaryKey, real } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, boolean, timestamp, pgEnum, uuid, primaryKey, real, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -56,6 +56,26 @@ export const users = pgTable("users", {
   // Google OAuth fields
   googleId: text("google_id").unique(),
   provider: text("provider").default("local"), // 'local' or 'google'
+  // Google Local Guides Integration
+  localGuidesUrl: text("local_guides_url"),
+  localGuidesLevel: integer("local_guides_level"),
+  localGuidesPoints: integer("local_guides_points"),
+  localGuidesReviews: integer("local_guides_reviews"),
+  localGuidesPhotos: integer("local_guides_photos"),
+  localGuidesVideos: integer("local_guides_videos"),
+  localGuidesEdits: integer("local_guides_edits"),
+  localGuidesQuestions: integer("local_guides_questions"),
+  localGuidesFacts: integer("local_guides_facts"),
+  localGuidesRoads: integer("local_guides_roads"),
+  localGuidesLists: integer("local_guides_lists"),
+  localGuidesLastUpdate: timestamp("local_guides_last_update"),
+  // User preferences for enhanced UX
+  onboardingCompleted: boolean("onboarding_completed").default(false),
+  preferredTheme: text("preferred_theme").default("dark"),
+  notificationsEnabled: boolean("notifications_enabled").default(true),
+  privacyMode: boolean("privacy_mode").default(false),
+  accessibilityMode: boolean("accessibility_mode").default(false),
+  dashboardLayout: jsonb("dashboard_layout"),
   createdAt: timestamp("created_at").notNull().default(sql`now()`),
   updatedAt: timestamp("updated_at").notNull().default(sql`now()`),
 });

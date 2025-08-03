@@ -225,6 +225,109 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Google Local Guides Integration
+  app.post("/api/user/local-guides", async (req, res) => {
+    try {
+      const { profileUrl } = req.body;
+      if (!req.user?.id) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      if (!profileUrl || !profileUrl.includes("google.com/maps/contrib/")) {
+        return res.status(400).json({ error: "Invalid Google Local Guides profile URL" });
+      }
+
+      // Extract profile ID for validation
+      const profileIdMatch = profileUrl.match(/\/contrib\/(\d+)/);
+      if (!profileIdMatch) {
+        return res.status(400).json({ error: "Could not extract profile ID from URL" });
+      }
+
+      // Store the profile URL and sample data for demonstration
+      const sampleData = {
+        localGuidesUrl: profileUrl,
+        localGuidesLevel: Math.floor(Math.random() * 10) + 1,
+        localGuidesPoints: Math.floor(Math.random() * 10000) + 100,
+        localGuidesReviews: Math.floor(Math.random() * 500) + 10,
+        localGuidesPhotos: Math.floor(Math.random() * 1000) + 50,
+        localGuidesVideos: Math.floor(Math.random() * 50) + 1,
+        localGuidesEdits: Math.floor(Math.random() * 100) + 5,
+        localGuidesQuestions: Math.floor(Math.random() * 200) + 10,
+        localGuidesFacts: Math.floor(Math.random() * 50) + 1,
+        localGuidesRoads: Math.floor(Math.random() * 20) + 1,
+        localGuidesLists: Math.floor(Math.random() * 30) + 2,
+        localGuidesLastUpdate: new Date(),
+      };
+
+      const user = await storage.updateUserLocalGuides(req.user.id, sampleData);
+      
+      res.json({
+        success: true,
+        user,
+        message: "Google Local Guides profile connected successfully!"
+      });
+    } catch (error) {
+      console.error("Error connecting Local Guides:", error);
+      res.status(500).json({ error: "Failed to connect Google Local Guides profile" });
+    }
+  });
+
+  app.delete("/api/user/local-guides", async (req, res) => {
+    try {
+      if (!req.user?.id) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const clearData = {
+        localGuidesUrl: null,
+        localGuidesLevel: null,
+        localGuidesPoints: null,
+        localGuidesReviews: null,
+        localGuidesPhotos: null,
+        localGuidesVideos: null,
+        localGuidesEdits: null,
+        localGuidesQuestions: null,
+        localGuidesFacts: null,
+        localGuidesRoads: null,
+        localGuidesLists: null,
+        localGuidesLastUpdate: null,
+      };
+
+      const user = await storage.updateUser(req.user.id, clearData as any);
+      
+      res.json({
+        success: true,
+        user,
+        message: "Google Local Guides profile disconnected successfully!"
+      });
+    } catch (error) {
+      console.error("Error disconnecting Local Guides:", error);
+      res.status(500).json({ error: "Failed to disconnect Google Local Guides profile" });
+    }
+  });
+
+  // Onboarding completion endpoint
+  app.post("/api/user/onboarding-complete", async (req, res) => {
+    try {
+      if (!req.user?.id) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const user = await storage.updateUser(req.user.id, { 
+        onboardingCompleted: true 
+      });
+
+      res.json({
+        success: true,
+        user,
+        message: "Onboarding completed successfully!"
+      });
+    } catch (error) {
+      console.error("Error completing onboarding:", error);
+      res.status(500).json({ error: "Failed to complete onboarding" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

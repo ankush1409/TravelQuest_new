@@ -17,8 +17,10 @@ import {
   X,
   Trophy,
   Calendar,
-  Target
+  Target,
+  Globe
 } from "lucide-react";
+import { LocalGuidesIntegration } from "@/components/ui/local-guides-integration";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "@/lib/queryClient";
@@ -238,6 +240,27 @@ export default function ProfilePage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Google Local Guides Integration */}
+          <div className="mb-8">
+            <LocalGuidesIntegration 
+              userId={user.id}
+              currentData={user.localGuidesUrl ? {
+                url: user.localGuidesUrl,
+                level: user.localGuidesLevel || 0,
+                points: user.localGuidesPoints || 0,
+                reviews: user.localGuidesReviews || 0,
+                photos: user.localGuidesPhotos || 0,
+                videos: user.localGuidesVideos || 0,
+                edits: user.localGuidesEdits || 0,
+                questions: user.localGuidesQuestions || 0,
+                facts: user.localGuidesFacts || 0,
+                roads: user.localGuidesRoads || 0,
+                lists: user.localGuidesLists || 0,
+                lastUpdate: user.localGuidesLastUpdate,
+              } : undefined}
+            />
+          </div>
 
           {/* Badge Showcase */}
           <Card className="mb-8">
