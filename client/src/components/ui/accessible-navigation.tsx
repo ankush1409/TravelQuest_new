@@ -6,6 +6,21 @@ import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 
+// Calculate user level from total XP - matches the system from unified-xp-display
+const calculateUserLevel = (xp: number) => {
+  if (xp < 100) return 1;
+  if (xp < 300) return 2;
+  if (xp < 600) return 3;
+  if (xp < 1000) return 4;
+  if (xp < 1500) return 5;
+  if (xp < 2100) return 6;
+  if (xp < 2800) return 7;
+  if (xp < 3600) return 8;
+  if (xp < 4500) return 9;
+  // Level 10+: every 1000 XP
+  return Math.floor((xp - 4500) / 1000) + 10;
+};
+
 interface NavigationItem {
   id: string;
   label: string;
@@ -232,6 +247,11 @@ export function DesktopNavigation() {
               )}
               <span className="hidden sm:block font-medium text-foreground">
                 {user?.displayName || "User"}
+                {user?.totalXP && user.totalXP >= 100 && (
+                  <span className="ml-1 text-yellow-500" title={`Level ${calculateUserLevel(user.totalXP)} Explorer`}>
+                    🏅
+                  </span>
+                )}
               </span>
               <Menu className="w-4 h-4 md:hidden" />
             </Button>
