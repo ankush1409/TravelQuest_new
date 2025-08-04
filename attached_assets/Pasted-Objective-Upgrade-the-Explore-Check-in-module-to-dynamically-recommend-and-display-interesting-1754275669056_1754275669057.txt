@@ -1,0 +1,76 @@
+Objective:
+Upgrade the "Explore & Check-in" module to dynamically recommend and display interesting places based on the user’s current GPS location. Motivate in-person exploration with check-in, real-time XP rewards, and a seamless discovery UI—all styled to fit the TravelQuest gamified aesthetic.
+
+Functional Requirements
+1. Location-Aware Place Discovery
+
+Use device GPS to obtain real-time user location (with permission prompts and privacy info).
+
+Query a Places API (e.g., Google Places, Foursquare, Mapbox, or OpenStreetMap) to fetch a list of nearby landmarks, attractions, restaurants, cafes, or hidden gems.
+
+Group and sort places by categories (e.g., Sights, Food, Parks) and distance.
+
+Display key info per place: name, category, thumbnail, distance, rating, and short description.
+
+2. Gamified Check-In Flow
+
+Show a bold "Check-in" button next to each place if the user is within a defined radius (e.g., 200 meters).
+
+On check-in:
+
+Instantly award XP.
+
+Optionally, unlock special badges for first-time or repeat visits, or when visiting collections (e.g., 3 museums in a day).
+
+Log check-in with timestamp and (optionally) a user photo or note.
+
+Celebrate with a confetti or “Level Up!” animation and XP popup.
+
+3. Dynamic UI/UX Enhancements
+
+Mobile-first card/grid display of nearby places; swipeable on mobile, chunked cards on desktop.
+
+Floating map view/minimap to visualize your position and pins for suggested locations.
+
+"Refresh near me" button that uses updated GPS data.
+
+Optional: Display trending, top-rated, or “hidden gem” badges on select cards.
+
+Contextual tips (“Try the famous local dish here!”) and suggested challenges based on current location.
+
+4. Personalization & Engagement
+
+Consider travel style, check-in history, and user XP level to suggest places (e.g., foodies see top local eats, adventurers see trails).
+
+Show “Unlock more XP by exploring these 3 places nearby!” to keep users engaged and moving.
+
+5. Privacy, Permissions, and Fallback
+
+Clearly explain location use, with opt-in/out and manual location search support.
+
+If GPS is denied/unavailable, offer manual place search and city-based discovery ("Enter a location").
+
+6. Technical & Integration Notes
+
+Use fast/reliable Places API (Google/Foursquare) or fetch from curated internal dataset if API limits/cost are a concern.
+
+Handle geolocation errors gracefully (“We can't find your location. Please enable GPS or choose a city.”)
+
+Cache recent check-ins and nearby places to minimize repeated API calls and speed up UX.
+
+Maintain the CRED-inspired visual style: dark background, bold cards, animated XP badges.
+
+Acceptance Criteria
+Users immediately see nearby, relevant places when they open "Explore & Check-in."
+
+Check-in requires proximity, instantly rewards XP, and gives visual feedback.
+
+Dynamic recommendations update as user moves or searches new areas.
+
+UI is clean, mobile-friendly, and delights users with each successful check-in.
+
+Privacy is respected and clearly communicated.
+
+Agent Instruction:
+
+Redesign "Explore & Check-in" in TravelQuest to be location-aware and dynamic. Use GPS to recommend nearby, interesting places (via a Places API), display them in an engaging, swipeable list with a map, and allow in-person check-ins for XP rewards. Animate each success, and personalize recommendations by user interests and travel style. Prioritize privacy and responsive UX, and keep the visual style bold and gamified.

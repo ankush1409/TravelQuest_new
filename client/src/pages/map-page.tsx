@@ -1,62 +1,142 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { getQueryFn, apiRequest, queryClient } from "@/lib/queryClient";
 import { Location, CheckIn, CheckInData } from "@shared/schema";
-import { MapPin, Camera, Star, Navigation, Clock, Award } from "lucide-react";
+import { LocationPermissionPrompt } from "@/components/ui/location-permission-prompt";
+import { PlaceRecommendationCard } from "@/components/ui/place-recommendation-card";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  MapPin, 
+  Camera, 
+  Star, 
+  Navigation, 
+  Clock, 
+  Award, 
+  RefreshCw, 
+  Filter,
+  Search,
+  Compass,
+  Zap,
+  Sparkles
+} from "lucide-react";
+import confetti from "canvas-confetti";
 
-// Location category icons and colors
-const locationCategoryInfo = {
-  park: { icon: "🌳", color: "text-green-600", bgColor: "bg-green-50 border-green-200" },
-  landmark: { icon: "🏛️", color: "text-blue-600", bgColor: "bg-blue-50 border-blue-200" },
-  restaurant: { icon: "🍽️", color: "text-red-600", bgColor: "bg-red-50 border-red-200" },
-  bar: { icon: "🍸", color: "text-purple-600", bgColor: "bg-purple-50 border-purple-200" },
-  attraction: { icon: "🎯", color: "text-orange-600", bgColor: "bg-orange-50 border-orange-200" },
-  default: { icon: "📍", color: "text-gray-600", bgColor: "bg-gray-50 border-gray-200" },
-};
+// Enhanced place recommendation interface
+interface PlaceRecommendation {
+  id: string;
+  name: string;
+  category: string;
+  latitude: number;
+  longitude: number;
+  address?: string;
+  description?: string;
+  rating?: number;
+  priceLevel?: number;
+  photoUrl?: string;
+  distance?: number;
+  isOpen?: boolean;
+  website?: string;
+  phone?: string;
+  xpReward: number;
+  personalizedScore: number;
+  badges?: string[];
+  tips?: string[];
+}
 
 export default function MapPage() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  
+  // Location state
+  const [userLocation, setUserLocation] = useState<{lat: number, lng: number, address?: string} | null>(null);
+  const [locationPermission, setLocationPermission] = useState<'pending' | 'granted' | 'denied' | 'unsupported'>('pending');
+  
+  // UI state
+  const [selectedPlace, setSelectedPlace] = useState<PlaceRecommendation | null>(null);
+  const [showCheckInDialog, setShowCheckInDialog] = useState(false);
   const [checkInNotes, setCheckInNotes] = useState("");
   const [isCheckingIn, setIsCheckingIn] = useState(false);
-  const [locationPermission, setLocationPermission] = useState<string>("pending");
+  const [searchFilter, setSearchFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  // Fetch all locations
-  const { data: locations = [], isLoading: locationsLoading } = useQuery<Location[]>({
-    queryKey: ["/api/locations"],
+  // Fetch personalized place recommendations
+  const { data: recommendations = [], isLoading: recommendationsLoading, refetch: refetchRecommendations } = useQuery<PlaceRecommendation[]>({
+    queryKey: ["/api/places/recommendations", userLocation?.lat, userLocation?.lng, refreshKey],
     queryFn: getQueryFn({ on401: "returnNull" }),
+    enabled: !!user && !!userLocation,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
   });
 
-  // Fetch user's check-ins
+  // Fetch user's check-ins to know which places they've already visited
   const { data: userCheckIns = [] } = useQuery<(CheckIn & { location: Location })[]>({
     queryKey: ["/api/user/checkins"],
     queryFn: getQueryFn({ on401: "returnNull" }),
     enabled: !!user,
   });
 
-  // Check-in mutation
+  // Enhanced check-in mutation with proximity validation
   const checkInMutation = useMutation({
-    mutationFn: async (checkInData: CheckInData) => {
+    mutationFn: async (place: PlaceRecommendation) => {
+      if (!userLocation) throw new Error("Location required for check-in");
+      
+      // First validate proximity
+      const proximityRes = await apiRequest("POST", "/api/places/can-checkin", {
+        userLat: userLocation.lat,
+        userLng: userLocation.lng,
+        placeLat: place.latitude,
+        placeLng: place.longitude,
+        maxDistance: 200 // 200 meters
+      });
+      const { canCheckIn } = await proximityRes.json();
+      
+      if (!canCheckIn) {
+        throw new Error("You must be within 200 meters to check in!");
+      }
+
+      // Create the check-in
+      const checkInData: CheckInData = {
+        locationId: place.id,
+        latitude: place.latitude,
+        longitude: place.longitude,
+        notes: checkInNotes || undefined,
+      };
+
       const res = await apiRequest("POST", "/api/checkins", checkInData);
       return await res.json();
     },
     onSuccess: (checkIn) => {
+      // Celebrate with confetti!
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#8B5CF6', '#06B6D4', '#F59E0B']
+      });
+
+      // Update cache
       queryClient.invalidateQueries({ queryKey: ["/api/user/checkins"] });
       queryClient.invalidateQueries({ queryKey: ["/api/user"] });
-      setSelectedLocation(null);
+      queryClient.invalidateQueries({ queryKey: ["/api/places/recommendations"] });
+      
+      // Reset state
+      setSelectedPlace(null);
+      setShowCheckInDialog(false);
       setCheckInNotes("");
       setIsCheckingIn(false);
+      
       toast({
-        title: "Check-in successful!",
-        description: `You earned ${checkIn.xpEarned} XP for checking in at ${selectedLocation?.name}!`,
+        title: "🎉 Check-in successful!",
+        description: `You earned ${checkIn.xpEarned} XP at ${selectedPlace?.name}!`,
+        duration: 5000,
       });
     },
     onError: (error: Error) => {
@@ -69,48 +149,55 @@ export default function MapPage() {
     },
   });
 
-  const handleCheckIn = () => {
-    if (!selectedLocation || !userLocation) return;
-
+  const handleCheckIn = useCallback((place: PlaceRecommendation) => {
+    if (!userLocation) return;
+    
+    setSelectedPlace(place);
     setIsCheckingIn(true);
-    checkInMutation.mutate({
-      locationId: selectedLocation.id,
-      latitude: userLocation.lat,
-      longitude: userLocation.lng,
-      notes: checkInNotes || undefined,
-    });
-  };
+    checkInMutation.mutate(place);
+  }, [userLocation, checkInMutation]);
 
-  // Get user's current location on mount
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ lat: latitude, lng: longitude });
-          setLocationPermission("granted");
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          setLocationPermission("denied");
-          // Default to New York if location access denied
-          setUserLocation({ lat: 40.7589, lng: -73.9851 });
-        }
-      );
-    } else {
-      setLocationPermission("unsupported");
-      // Default location if geolocation not supported
-      setUserLocation({ lat: 40.7589, lng: -73.9851 });
-    }
+  const handleGetDirections = useCallback((place: PlaceRecommendation) => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${place.latitude},${place.longitude}`;
+    window.open(url, '_blank');
   }, []);
 
-  const hasCheckedIn = (locationId: string) => {
-    return userCheckIns.some(checkIn => checkIn.locationId === locationId);
-  };
+  const handleRefreshRecommendations = useCallback(() => {
+    setRefreshKey(prev => prev + 1);
+    refetchRecommendations();
+  }, [refetchRecommendations]);
 
-  const getLocationInfo = (location: Location) => {
-    return locationCategoryInfo[location.category as keyof typeof locationCategoryInfo] || locationCategoryInfo.default;
-  };
+  // Location permission handlers
+  const handleLocationGranted = useCallback((location: { lat: number; lng: number }) => {
+    setUserLocation(location);
+    setLocationPermission('granted');
+  }, []);
+
+  const handleLocationDenied = useCallback(() => {
+    setLocationPermission('denied');
+    // Don't set default location - let user choose manually
+  }, []);
+
+  const handleManualLocationSet = useCallback((location: { lat: number; lng: number; address: string }) => {
+    setUserLocation({ ...location, address });
+    setLocationPermission('granted');
+  }, []);
+
+  // Helper functions
+  const hasCheckedIn = useCallback((placeId: string) => {
+    return userCheckIns.some(checkIn => checkIn.locationId === placeId);
+  }, [userCheckIns]);
+
+  const canCheckIn = useCallback((place: PlaceRecommendation) => {
+    if (!userLocation) return false;
+    const distance = calculateDistance(
+      userLocation.lat, 
+      userLocation.lng, 
+      place.latitude, 
+      place.longitude
+    );
+    return distance <= 200; // 200 meters
+  }, [userLocation]);
 
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
     const R = 6371000; // Earth's radius in meters
@@ -123,56 +210,35 @@ export default function MapPage() {
     return R * c;
   };
 
-  const canCheckIn = (location: Location) => {
-    if (!userLocation || locationPermission !== "granted") return false;
+  // Filter recommendations based on search and category
+  const filteredRecommendations = recommendations.filter(place => {
+    const matchesSearch = searchFilter === "" || 
+      place.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
+      place.address?.toLowerCase().includes(searchFilter.toLowerCase());
     
-    // Calculate distance to location
-    const distance = calculateDistance(
-      userLocation.lat, userLocation.lng,
-      location.latitude, location.longitude
-    );
-    return distance <= 100; // Allow check-in within 100 meters
-  };
+    const matchesCategory = categoryFilter === "all" || place.category === categoryFilter;
+    
+    return matchesSearch && matchesCategory;
+  });
 
-  const getDistanceToLocation = (location: Location) => {
-    if (!userLocation) return null;
-    
-    const distance = calculateDistance(
-      userLocation.lat, userLocation.lng,
-      location.latitude, location.longitude
-    );
-    
-    if (distance < 1000) {
-      return `${Math.round(distance)}m away`;
-    } else {
-      return `${(distance / 1000).toFixed(1)}km away`;
-    }
-  };
+  // Get unique categories for filter
+  const availableCategories = Array.from(new Set(recommendations.map(p => p.category)));
 
-  const requestLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ lat: latitude, lng: longitude });
-          setLocationPermission("granted");
-          toast({
-            title: "Location access granted",
-            description: "You can now check in at nearby locations!",
-          });
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          setLocationPermission("denied");
-          toast({
-            title: "Location access denied",
-            description: "Enable location access to check in at places.",
-            variant: "destructive",
-          });
-        }
-      );
-    }
-  };
+  // Show location permission prompt if needed
+  if (locationPermission !== 'granted' || !userLocation) {
+    return (
+      <div className="container mx-auto p-4 max-w-2xl">
+        <LocationPermissionPrompt
+          onLocationGranted={handleLocationGranted}
+          onLocationDenied={handleLocationDenied}
+          onManualLocationSet={handleManualLocationSet}
+          permissionStatus={locationPermission}
+        />
+      </div>
+    );
+  }
+
+
 
   return (
     <div className="flex flex-col min-h-screen bg-background">

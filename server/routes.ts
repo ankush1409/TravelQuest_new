@@ -30,7 +30,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Location API routes
+  // Enhanced Location API routes with place recommendations
   app.get("/api/locations", async (req, res) => {
     try {
       const locations = await storage.getAllLocations();
@@ -55,6 +55,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(locations);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch nearby locations" });
+    }
+  });
+
+  // Dynamic place recommendations endpoint
+  app.get("/api/places/recommendations", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { lat, lng, radius, limit } = req.query;
+      if (!lat || !lng) {
+        return res.status(400).json({ error: "Latitude and longitude are required" });
+      }
+
+      const { placesService } = await import("./placesService");
+      const recommendations = await placesService.getRecommendations(
+        parseFloat(lat as string),
+        parseFloat(lng as string),
+        req.user!.id,
+        radius ? parseFloat(radius as string) : undefined,
+        limit ? parseInt(limit as string) : undefined
+      );
+
+      res.json(recommendations);
+    } catch (error) {
+      console.error("Error fetching place recommendations:", error);
+      res.status(500).json({ error: "Failed to fetch recommendations" });
+    }
+  });
+
+  // Check-in proximity validation endpoint
+  app.post("/api/places/can-checkin", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { userLat, userLng, placeLat, placeLng, maxDistance = 200 } = req.body;
+      
+      if (!userLat || !userLng || !placeLat || !placeLng) {
+        return res.status(400).json({ error: "All coordinates are required" });
+      }
+
+      // Calculate distance using Haversine formula
+      const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+        const R = 6371000; // Earth's radius in meters
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+      };
+
+      const distance = calculateDistance(userLat, userLng, placeLat, placeLng);
+      const canCheckIn = distance <= maxDistance;
+
+      res.json({ 
+        canCheckIn, 
+        distance: Math.round(distance),
+        maxDistance 
+      });
+    } catch (error) {
+      console.error("Error validating check-in proximity:", error);
+      res.status(500).json({ error: "Failed to validate proximity" });
     }
   });
 
