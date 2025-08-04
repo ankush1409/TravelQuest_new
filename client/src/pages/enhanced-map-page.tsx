@@ -63,10 +63,26 @@ export default function EnhancedMapPage() {
   // Fetch personalized place recommendations
   const { data: recommendations = [], isLoading: recommendationsLoading, refetch: refetchRecommendations } = useQuery<PlaceRecommendation[]>({
     queryKey: ["/api/places/recommendations", userLocation?.lat, userLocation?.lng, refreshKey],
-    queryFn: getQueryFn({ on401: "returnNull" }),
+    queryFn: async () => {
+      if (!userLocation) return [];
+      const url = `/api/places/recommendations?lat=${userLocation.lat}&lng=${userLocation.lng}&radius=2000&limit=20`;
+      const response = await fetch(url, {
+        credentials: 'include', // Include session cookies
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      if (response.status === 401) {
+        throw new Error("Authentication required");
+      }
+      if (!response.ok) {
+        throw new Error("Failed to fetch recommendations");
+      }
+      return response.json();
+    },
     enabled: !!user && !!userLocation,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   // Fetch user's check-ins to know which places they've already visited
@@ -170,7 +186,7 @@ export default function EnhancedMapPage() {
   }, []);
 
   const handleManualLocationSet = useCallback((location: { lat: number; lng: number; address: string }) => {
-    setUserLocation({ ...location, address });
+    setUserLocation({ lat: location.lat, lng: location.lng, address: location.address });
     setLocationPermission('granted');
   }, []);
 
@@ -202,7 +218,7 @@ export default function EnhancedMapPage() {
   };
 
   // Filter recommendations based on search and category
-  const filteredRecommendations = recommendations.filter(place => {
+  const filteredRecommendations = (recommendations as PlaceRecommendation[]).filter((place: PlaceRecommendation) => {
     const matchesSearch = searchFilter === "" || 
       place.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
       place.address?.toLowerCase().includes(searchFilter.toLowerCase());
@@ -213,7 +229,7 @@ export default function EnhancedMapPage() {
   });
 
   // Get unique categories for filter
-  const availableCategories = Array.from(new Set(recommendations.map(p => p.category)));
+  const availableCategories = Array.from(new Set((recommendations as PlaceRecommendation[]).map((p: PlaceRecommendation) => p.category)));
 
   // Show location permission prompt if needed
   if (locationPermission !== 'granted' || !userLocation) {
@@ -288,7 +304,7 @@ export default function EnhancedMapPage() {
           >
             All
           </Button>
-          {availableCategories.slice(0, 3).map((category) => (
+          {availableCategories.slice(0, 3).map((category: string) => (
             <Button
               key={category}
               variant={categoryFilter === category ? "default" : "outline"}
@@ -371,7 +387,7 @@ export default function EnhancedMapPage() {
             exit={{ opacity: 0 }}
             className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
           >
-            {filteredRecommendations.map((place, index) => (
+            {filteredRecommendations.map((place: PlaceRecommendation, index: number) => (
               <motion.div
                 key={place.id}
                 initial={{ opacity: 0, y: 20 }}

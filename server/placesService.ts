@@ -73,10 +73,13 @@ export class PlacesService {
         badges: this.getPotentialBadges(location, userCheckIns)
       }));
 
-      // If we have Google Places API key, fetch external places
+      // If we have Google Places API key, fetch external places, otherwise use demo data
       let externalRecommendations: PlaceRecommendation[] = [];
       if (this.apiKey) {
         externalRecommendations = await this.fetchExternalPlaces(latitude, longitude, userId, radius);
+      } else {
+        // Generate demo places when no API key available
+        externalRecommendations = this.generateDemoPlaces(latitude, longitude, userId, userCheckIns);
       }
 
       // Combine and sort all recommendations
@@ -388,6 +391,85 @@ export class PlacesService {
               Math.sin(dLon/2) * Math.sin(dLon/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return R * c;
+  }
+
+  /**
+   * Generate demo places when Google Places API is not available
+   */
+  private generateDemoPlaces(latitude: number, longitude: number, userId: string, userCheckIns: any[]): PlaceRecommendation[] {
+    const demoPlaces: ExternalPlace[] = [
+      {
+        id: 'demo-restaurant-1',
+        name: 'Local Favorite Restaurant',
+        category: 'restaurant',
+        latitude: latitude + 0.001,
+        longitude: longitude + 0.001,
+        address: 'Near your location',
+        description: 'Highly rated local restaurant with authentic cuisine',
+        rating: 4.6,
+        priceLevel: 2,
+        distance: 150,
+        isOpen: true
+      },
+      {
+        id: 'demo-cafe-1',
+        name: 'Cozy Corner Cafe',
+        category: 'cafe',
+        latitude: latitude - 0.0015,
+        longitude: longitude + 0.002,
+        address: 'Coffee lovers paradise',
+        description: 'Perfect spot for working or relaxing with great coffee',
+        rating: 4.4,
+        priceLevel: 1,
+        distance: 280,
+        isOpen: true
+      },
+      {
+        id: 'demo-landmark-1',
+        name: 'Historic Local Landmark',
+        category: 'landmark',
+        latitude: latitude + 0.002,
+        longitude: longitude - 0.001,
+        address: 'Cultural heritage site',
+        description: 'Beautiful historic site with rich cultural significance',
+        rating: 4.8,
+        distance: 320,
+        isOpen: true
+      },
+      {
+        id: 'demo-park-1',
+        name: 'Peaceful Green Park',
+        category: 'park',
+        latitude: latitude - 0.001,
+        longitude: longitude - 0.002,
+        address: 'Nature escape in the city',
+        description: 'Beautiful park perfect for walks and relaxation',
+        rating: 4.3,
+        distance: 450,
+        isOpen: true
+      },
+      {
+        id: 'demo-museum-1',
+        name: 'Local Art Museum',
+        category: 'museum',
+        latitude: latitude + 0.003,
+        longitude: longitude + 0.0015,
+        address: 'Art and culture center',
+        description: 'Inspiring collection of local and international art',
+        rating: 4.5,
+        distance: 520,
+        isOpen: false
+      }
+    ];
+
+    // Convert to recommendations with personalization
+    return demoPlaces.map(place => ({
+      ...place,
+      xpReward: this.calculateXPReward(place),
+      personalizedScore: this.calculatePersonalizedScore(place, { travelStyle: 'SOLO' }, userCheckIns),
+      tips: this.generateContextualTips(place.category),
+      badges: this.getPotentialBadges(place, userCheckIns)
+    }));
   }
 
   /**
