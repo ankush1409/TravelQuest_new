@@ -29,7 +29,7 @@ export interface PlaceRecommendation extends ExternalPlace {
 
 export class PlacesService {
   private apiKey: string;
-  private baseUrl = 'https://maps.googleapis.com/maps/api/place';
+  private baseUrl = 'https://places.googleapis.com/v1';
 
   constructor() {
     this.apiKey = process.env.GOOGLE_PLACES_API_KEY || '';
@@ -73,13 +73,20 @@ export class PlacesService {
         badges: this.getPotentialBadges(location, userCheckIns)
       }));
 
+      console.log(`API Key available: ${!!this.apiKey}`);
+      console.log(`Found ${existingRecommendations.length} existing locations`);
+
       // If we have Google Places API key, fetch external places, otherwise use demo data
       let externalRecommendations: PlaceRecommendation[] = [];
       if (this.apiKey) {
+        console.log('Fetching from Google Places API...');
         externalRecommendations = await this.fetchExternalPlaces(latitude, longitude, userId, radius);
+        console.log(`Google Places API returned ${externalRecommendations.length} places`);
       } else {
+        console.log('No API key - generating demo places...');
         // Generate demo places when no API key available
         externalRecommendations = this.generateDemoPlaces(latitude, longitude, userId, userCheckIns);
+        console.log(`Generated ${externalRecommendations.length} demo places`);
       }
 
       // Combine and sort all recommendations
@@ -140,32 +147,68 @@ export class PlacesService {
       
       const allPlaces: ExternalPlace[] = [];
 
-      // Search for different types of places
-      for (const type of searchTypes) {
-        const url = `${this.baseUrl}/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&key=${this.apiKey}`;
-        
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.status === 'OK' && data.results) {
-          const places: ExternalPlace[] = data.results.slice(0, 5).map((place: any) => ({
-            id: place.place_id,
-            name: place.name,
-            category: this.mapGoogleTypeToCategory(place.types[0]),
-            latitude: place.geometry.location.lat,
-            longitude: place.geometry.location.lng,
-            address: place.vicinity,
-            rating: place.rating,
-            priceLevel: place.price_level,
-            photoUrl: place.photos?.[0] ? 
-              `${this.baseUrl}/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${this.apiKey}` : 
-              undefined,
-            distance: this.calculateDistance(latitude, longitude, place.geometry.location.lat, place.geometry.location.lng),
-            isOpen: place.opening_hours?.open_now
-          }));
-
-          allPlaces.push(...places);
+      // Use the new Places API nearby search
+      const url = `${this.baseUrl}/places:searchNearby`;
+      
+      // Build request body for new API
+      const requestBody = {
+        includedTypes: searchTypes.slice(0, 3), // limit to avoid quota issues
+        maxResultCount: 10,
+        locationRestriction: {
+          circle: {
+            center: {
+              latitude: latitude,
+              longitude: longitude
+            },
+            radius: radius
+          }
+        },
+        languageCode: "en"
+      };
+      
+      console.log(`Fetching from New Places API: ${url}`);
+      console.log(`Request body:`, JSON.stringify(requestBody, null, 2));
+      
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Goog-Api-Key': this.apiKey,
+          'X-Goog-FieldMask': 'places.id,places.displayName,places.location,places.rating,places.priceLevel,places.primaryType,places.formattedAddress,places.regularOpeningHours.openNow,places.photos'
+        },
+        body: JSON.stringify(requestBody)
+      });
+      
+      const data = await response.json();
+      
+      console.log(`New API Response Status: ${response.status}`);
+      if (!response.ok) {
+        console.log(`New API Error Response:`, JSON.stringify(data, null, 2));
+      } else {
+        console.log(`Found ${data.places?.length || 0} results`);
+        if (data.places?.length > 0) {
+          console.log(`First result:`, JSON.stringify(data.places[0], null, 2));
         }
+      }
+
+      if (response.ok && data.places) {
+        const places: ExternalPlace[] = data.places.map((place: any) => ({
+          id: place.id,
+          name: place.displayName?.text || 'Unknown Place',
+          category: this.mapGoogleTypeToCategory(place.primaryType || 'establishment'),
+          latitude: place.location?.latitude || latitude,
+          longitude: place.location?.longitude || longitude,
+          address: place.formattedAddress || 'Address not available',
+          rating: place.rating,
+          priceLevel: place.priceLevel,
+          photoUrl: place.photos?.[0]?.name ? 
+            `https://places.googleapis.com/v1/${place.photos[0].name}/media?maxWidthPx=400&key=${this.apiKey}` : 
+            undefined,
+          distance: this.calculateDistance(latitude, longitude, place.location?.latitude || latitude, place.location?.longitude || longitude),
+          isOpen: place.regularOpeningHours?.openNow
+        }));
+
+        allPlaces.push(...places);
       }
 
       // Convert to recommendations with personalization
@@ -334,15 +377,15 @@ export class PlacesService {
   }
 
   /**
-   * Get search types based on travel style
+   * Get search types based on travel style (for new Places API)
    */
   private getSearchTypesForTravelStyle(travelStyle?: string): string[] {
     const typeMap: Record<string, string[]> = {
       'SOLO': ['museum', 'cafe', 'park', 'book_store', 'library'],
       'FAMILY': ['amusement_park', 'zoo', 'park', 'museum', 'aquarium'],
       'COUPLE': ['restaurant', 'bar', 'spa', 'park', 'movie_theater'],
-      'BUSINESS': ['restaurant', 'cafe', 'hotel', 'conference_center'],
-      'BACKPACKER': ['hostel', 'park', 'museum', 'local_government_office', 'transit_station']
+      'BUSINESS': ['restaurant', 'cafe', 'lodging', 'convention_center'],
+      'BACKPACKER': ['tourist_attraction', 'park', 'museum', 'transit_station']
     };
 
     return typeMap[travelStyle || 'SOLO'] || ['tourist_attraction', 'restaurant', 'park', 'museum'];
