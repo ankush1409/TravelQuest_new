@@ -100,25 +100,25 @@ export default function StreakMapPage() {
     }
   });
 
-  // Fetch user streaks
+  // Fetch user streaks (using demo endpoint)
   const { data: userStreaks } = useQuery({
-    queryKey: ["/api/streak-map/user-streaks", mapFilters],
+    queryKey: ["/api/streak-map/demo/user-streaks", mapFilters],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (mapFilters.regionTypes.length) params.append("regionTypes", mapFilters.regionTypes.join(","));
       if (mapFilters.streakTypes.length) params.append("streakTypes", mapFilters.streakTypes.join(","));
       if (mapFilters.minStreak > 0) params.append("minStreak", mapFilters.minStreak.toString());
       
-      const response = await apiRequest(`/api/streak-map/user-streaks?${params.toString()}`);
+      const response = await apiRequest(`/api/streak-map/demo/user-streaks?${params.toString()}`);
       return response;
     }
   });
 
-  // Fetch map statistics
+  // Fetch map statistics (using demo endpoint)
   const { data: mapStats } = useQuery({
-    queryKey: ["/api/streak-map/statistics"],
+    queryKey: ["/api/streak-map/demo/statistics"],
     queryFn: async () => {
-      const response = await apiRequest("/api/streak-map/statistics");
+      const response = await apiRequest("/api/streak-map/demo/statistics");
       return response;
     }
   });
