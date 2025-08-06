@@ -33,56 +33,27 @@ export class LocalGuidesService {
   }
 
   /**
-   * Fetch Local Guides data from public profile (using demo data for now)
-   */
-  async fetchLocalGuidesData(profileUrl: string): Promise<LocalGuidesData | null> {
-    try {
-      const profileId = this.extractProfileId(profileUrl);
-      if (!profileId) {
-        throw new Error('Invalid Google Local Guides profile URL');
-      }
-
-      // Using demo data - replace with actual API integration when available
-      return {
-        level: Math.floor(Math.random() * 5) + 2, // Level 2-6
-        points: Math.floor(Math.random() * 1000) + 100, // 100-1100 points
-        reviews: Math.floor(Math.random() * 50) + 5, // 5-55 reviews
-        photos: Math.floor(Math.random() * 100) + 10, // 10-110 photos  
-        videos: Math.floor(Math.random() * 5) + 1, // 1-6 videos
-        edits: Math.floor(Math.random() * 20) + 2, // 2-22 edits
-        questions: Math.floor(Math.random() * 10) + 1, // 1-11 questions
-        facts: Math.floor(Math.random() * 15) + 1, // 1-16 facts
-        roads: Math.floor(Math.random() * 3) + 0, // 0-3 roads
-        lists: Math.floor(Math.random() * 5) + 1, // 1-6 lists
-      };
-    } catch (error) {
-      console.error('Error fetching Local Guides data:', error);
-      return null;
-    }
-  }
-
-  /**
    * Update user's Local Guides data in database
    */
   async updateUserLocalGuidesData(userId: string, profileUrl: string): Promise<boolean> {
     try {
-      const localGuidesData = await this.fetchLocalGuidesData(profileUrl);
+      const localGuidesData = await fetchLocalGuidesData(profileUrl);
       if (!localGuidesData) {
         return false;
       }
 
       await storage.updateUserLocalGuides(userId, {
         localGuidesUrl: profileUrl,
-        localGuidesLevel: localGuidesData.level,
-        localGuidesPoints: localGuidesData.points,
-        localGuidesReviews: localGuidesData.reviews,
-        localGuidesPhotos: localGuidesData.photos,
-        localGuidesVideos: localGuidesData.videos,
-        localGuidesEdits: localGuidesData.edits,
-        localGuidesQuestions: localGuidesData.questions,
-        localGuidesFacts: localGuidesData.facts,
-        localGuidesRoads: localGuidesData.roads,
-        localGuidesLists: localGuidesData.lists,
+        localGuidesLevel: localGuidesData.localGuidesLevel,
+        localGuidesPoints: localGuidesData.localGuidesPoints,
+        localGuidesReviews: localGuidesData.localGuidesReviews,
+        localGuidesPhotos: localGuidesData.localGuidesPhotos,
+        localGuidesVideos: localGuidesData.localGuidesVideos,
+        localGuidesEdits: localGuidesData.localGuidesEdits,
+        localGuidesQuestions: localGuidesData.localGuidesQuestions,
+        localGuidesFacts: localGuidesData.localGuidesFacts,
+        localGuidesRoads: localGuidesData.localGuidesRoads,
+        localGuidesLists: localGuidesData.localGuidesLists,
         localGuidesLastUpdate: new Date(),
       });
 
@@ -139,20 +110,63 @@ export function calculateLocalGuidesXP(data: any) {
   return baseXP + levelBonus;
 }
 
-// Fallback function for demo purposes - generates balanced sample data
+/**
+ * Fetch real Local Guides data from Google Maps profile page
+ * Note: This uses web scraping since there's no official API
+ */
 export async function fetchLocalGuidesData(profileUrl: string) {
-  const sampleData = {
-    localGuidesLevel: Math.floor(Math.random() * 5) + 2, // Level 2-6
-    localGuidesPoints: Math.floor(Math.random() * 1000) + 100, // 100-1100 points
-    localGuidesReviews: Math.floor(Math.random() * 50) + 5, // 5-55 reviews
-    localGuidesPhotos: Math.floor(Math.random() * 100) + 10, // 10-110 photos  
-    localGuidesVideos: Math.floor(Math.random() * 5) + 1, // 1-6 videos
-    localGuidesEdits: Math.floor(Math.random() * 20) + 2, // 2-22 edits
-    localGuidesQuestions: Math.floor(Math.random() * 10) + 1, // 1-11 questions
-    localGuidesFacts: Math.floor(Math.random() * 15) + 1, // 1-16 facts
-    localGuidesRoads: Math.floor(Math.random() * 3) + 0, // 0-3 roads
-    localGuidesLists: Math.floor(Math.random() * 5) + 1, // 1-6 lists
-  };
+  try {
+    console.log('Fetching Local Guides data from:', profileUrl);
+    
+    // Fetch the profile page
+    const response = await fetch(profileUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    });
 
-  return sampleData;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const html = await response.text();
+    
+    // Extract data using regex patterns (Google's page structure)
+    const extractData = {
+      // Extract level (e.g., "Level 5 Local Guide")
+      localGuidesLevel: extractNumber(html, /Level (\d+) Local Guide/i) || 1,
+      
+      // Extract total points
+      localGuidesPoints: extractNumber(html, /(\d+(?:,\d+)*) points/i) || 0,
+      
+      // Extract individual contributions
+      localGuidesReviews: extractNumber(html, /(\d+(?:,\d+)*) reviews/i) || 0,
+      localGuidesPhotos: extractNumber(html, /(\d+(?:,\d+)*) photos/i) || 0,
+      localGuidesVideos: extractNumber(html, /(\d+(?:,\d+)*) videos/i) || 0,
+      localGuidesEdits: extractNumber(html, /(\d+(?:,\d+)*) edits/i) || 0,
+      localGuidesQuestions: extractNumber(html, /(\d+(?:,\d+)*) questions/i) || 0,
+      localGuidesFacts: extractNumber(html, /(\d+(?:,\d+)*) facts/i) || 0,
+      localGuidesRoads: extractNumber(html, /(\d+(?:,\d+)*) roads/i) || 0,
+      localGuidesLists: extractNumber(html, /(\d+(?:,\d+)*) lists/i) || 0,
+    };
+
+    console.log('Extracted Local Guides data:', extractData);
+    return extractData;
+
+  } catch (error) {
+    console.error('Error fetching Local Guides data:', error);
+    throw new Error(`Failed to fetch Local Guides data: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+/**
+ * Helper function to extract numbers from HTML text using regex
+ */
+function extractNumber(html: string, regex: RegExp): number {
+  const match = html.match(regex);
+  if (match && match[1]) {
+    // Remove commas and convert to number
+    return parseInt(match[1].replace(/,/g, ''), 10);
+  }
+  return 0;
 }

@@ -309,26 +309,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Fetch Local Guides data and calculate XP gain
       const { fetchLocalGuidesData, calculateLocalGuidesXP } = await import("./localGuides");
       const localGuidesData = await fetchLocalGuidesData(profileUrl);
-      
       // Calculate XP from Local Guides achievements
       const currentUser = await storage.getUser(req.user.id);
       const localGuidesXP = calculateLocalGuidesXP(localGuidesData);
       const previousLocalGuidesXP = currentUser?.localGuidesUrl ? calculateLocalGuidesXP(currentUser) : 0;
-      const xpGain = localGuidesXP - previousLocalGuidesXP;
-
+      const xpGain = Math.floor(localGuidesXP - previousLocalGuidesXP);
       const sampleData = {
         localGuidesUrl: profileUrl,
         ...localGuidesData,
         localGuidesLastUpdate: new Date(),
       };
 
-      const user = await storage.updateUserLocalGuides(req.user.id, sampleData);
-      
+      const user = await storage.updateUserLocalGuides(req.user.id, sampleData);  
       // Update total XP separately
       const updatedUser = await storage.updateUser(req.user.id, {
         totalXP: Math.max(100, (currentUser?.totalXP || 100) + xpGain),
       });
-      
+          
       if (!updatedUser) {
         return res.status(500).json({ error: "Failed to update user XP" });
       }
