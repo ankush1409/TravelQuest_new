@@ -511,6 +511,239 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Streak Map API Routes
+  app.get("/api/streak-map/regions", async (req, res) => {
+    try {
+      const { type } = req.query;
+      const { streakMapService } = await import('./streakMapService');
+      const regions = await streakMapService.getRegions(type as string);
+      res.json(regions);
+    } catch (error) {
+      console.error("Error fetching regions:", error);
+      res.status(500).json({ message: "Failed to fetch regions" });
+    }
+  });
+
+  app.get("/api/streak-map/regions/:id", async (req, res) => {
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      const region = await streakMapService.getRegionById(req.params.id);
+      if (!region) {
+        return res.status(404).json({ message: "Region not found" });
+      }
+      res.json(region);
+    } catch (error) {
+      console.error("Error fetching region:", error);
+      res.status(500).json({ message: "Failed to fetch region" });
+    }
+  });
+
+  app.post("/api/streak-map/regions", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      const region = await streakMapService.createRegion(req.body);
+      res.status(201).json(region);
+    } catch (error) {
+      console.error("Error creating region:", error);
+      res.status(500).json({ message: "Failed to create region" });
+    }
+  });
+
+  app.get("/api/streak-map/user-streaks", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      const filters = req.query as any; // Type assertion for simplicity
+      const streaks = await streakMapService.getUserStreaks(req.user!.id, filters);
+      res.json(streaks);
+    } catch (error) {
+      console.error("Error fetching user streaks:", error);
+      res.status(500).json({ message: "Failed to fetch user streaks" });
+    }
+  });
+
+  app.post("/api/streak-map/increment-streak", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { regionId, streakType, metadata } = req.body;
+      if (!regionId || !streakType) {
+        return res.status(400).json({ message: "regionId and streakType are required" });
+      }
+
+      const { streakMapService } = await import('./streakMapService');
+      const streak = await streakMapService.incrementStreak(
+        req.user!.id, 
+        regionId, 
+        streakType, 
+        metadata
+      );
+      res.json(streak);
+    } catch (error) {
+      console.error("Error incrementing streak:", error);
+      res.status(500).json({ message: "Failed to increment streak" });
+    }
+  });
+
+  app.get("/api/streak-map/configs", async (req, res) => {
+    try {
+      const { isGlobal } = req.query;
+      const { streakMapService } = await import('./streakMapService');
+      const configs = await streakMapService.getMapConfigs(
+        isGlobal === 'true' ? true : isGlobal === 'false' ? false : undefined
+      );
+      res.json(configs);
+    } catch (error) {
+      console.error("Error fetching map configs:", error);
+      res.status(500).json({ message: "Failed to fetch map configs" });
+    }
+  });
+
+  app.get("/api/streak-map/configs/default", async (req, res) => {
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      const config = await streakMapService.getDefaultMapConfig();
+      if (!config) {
+        return res.status(404).json({ message: "No default config found" });
+      }
+      res.json(config);
+    } catch (error) {
+      console.error("Error fetching default config:", error);
+      res.status(500).json({ message: "Failed to fetch default config" });
+    }
+  });
+
+  app.post("/api/streak-map/configs", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      const config = await streakMapService.createMapConfig({
+        ...req.body,
+        createdBy: req.user!.id
+      });
+      res.status(201).json(config);
+    } catch (error) {
+      console.error("Error creating map config:", error);
+      res.status(500).json({ message: "Failed to create map config" });
+    }
+  });
+
+  app.put("/api/streak-map/configs/:id", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      const config = await streakMapService.updateMapConfig(req.params.id, req.body);
+      if (!config) {
+        return res.status(404).json({ message: "Config not found" });
+      }
+      res.json(config);
+    } catch (error) {
+      console.error("Error updating map config:", error);
+      res.status(500).json({ message: "Failed to update map config" });
+    }
+  });
+
+  app.get("/api/streak-map/preferences", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { configId } = req.query;
+      const { streakMapService } = await import('./streakMapService');
+      const preferences = await streakMapService.getUserMapPreferences(
+        req.user!.id, 
+        configId as string
+      );
+      res.json(preferences);
+    } catch (error) {
+      console.error("Error fetching user preferences:", error);
+      res.status(500).json({ message: "Failed to fetch user preferences" });
+    }
+  });
+
+  app.post("/api/streak-map/preferences", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      const preferences = await streakMapService.saveUserMapPreferences({
+        ...req.body,
+        userId: req.user!.id
+      });
+      res.json(preferences);
+    } catch (error) {
+      console.error("Error saving user preferences:", error);
+      res.status(500).json({ message: "Failed to save user preferences" });
+    }
+  });
+
+  app.get("/api/streak-map/achievements", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { regionId } = req.query;
+      const { streakMapService } = await import('./streakMapService');
+      const achievements = await streakMapService.getUserAchievements(
+        req.user!.id, 
+        regionId as string
+      );
+      res.json(achievements);
+    } catch (error) {
+      console.error("Error fetching achievements:", error);
+      res.status(500).json({ message: "Failed to fetch achievements" });
+    }
+  });
+
+  app.get("/api/streak-map/statistics", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      const stats = await streakMapService.getMapStatistics(req.user!.id);
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching map statistics:", error);
+      res.status(500).json({ message: "Failed to fetch map statistics" });
+    }
+  });
+
+  app.post("/api/streak-map/export", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { format, quality, width, height, includeStats, includeTitle } = req.body;
+      
+      // This would typically generate an image using a service like Puppeteer or Canvas
+      // For now, return a placeholder response
+      res.json({
+        message: "Map export functionality will be implemented",
+        exportUrl: "/api/exports/placeholder.png",
+        format: format || "PNG",
+        dimensions: { width: width || 1200, height: height || 800 }
+      });
+    } catch (error) {
+      console.error("Error exporting map:", error);
+      res.status(500).json({ message: "Failed to export map" });
+    }
+  });
+
+  // Initialize default data on startup
+  app.post("/api/streak-map/initialize", async (req, res) => {
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      await streakMapService.initializeWorldRegions();
+      await streakMapService.initializeDefaultConfig();
+      res.json({ message: "Streak map system initialized successfully" });
+    } catch (error) {
+      console.error("Error initializing streak map:", error);
+      res.status(500).json({ message: "Failed to initialize streak map system" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

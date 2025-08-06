@@ -10,6 +10,7 @@ import AuthPage from "@/pages/auth-page";
 import ProfilePage from "@/pages/profile-page";
 import ChallengesPage from "@/pages/challenges-page";
 import EnhancedMapPage from "@/pages/enhanced-map-page";
+import StreakMapPage from "@/pages/streak-map-page";
 import SettingsPage from "@/pages/settings-page";
 
 import ReferralsPage from "@/pages/referrals-page";
@@ -51,6 +52,7 @@ function AppContent() {
           <ProtectedRoute path="/profile" component={() => <ProfilePage />} />
           <ProtectedRoute path="/challenges" component={() => <ChallengesPage />} />
           <ProtectedRoute path="/map" component={() => <EnhancedMapPage />} />
+          <ProtectedRoute path="/streak-map" component={() => <StreakMapPage />} />
 
           <ProtectedRoute path="/referrals" component={() => <ReferralsPage />} />
           <ProtectedRoute path="/settings" component={() => <SettingsPage />} />

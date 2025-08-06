@@ -46,6 +46,13 @@ const navigationItems: NavigationItem[] = [
     description: "Discover locations and check-in to places"
   },
   {
+    id: "streak-map",
+    label: "Streak Map",
+    href: "/streak-map",
+    icon: <Trophy className="w-5 h-5" />,
+    description: "View your travel streaks on an interactive world map"
+  },
+  {
     id: "challenges",
     label: "Challenges",
     href: "/challenges",
