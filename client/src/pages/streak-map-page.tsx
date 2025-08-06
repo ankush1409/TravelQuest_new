@@ -85,43 +85,59 @@ export default function StreakMapPage() {
   // Fetch map configurations
   const { data: configs } = useQuery({
     queryKey: ["/api/streak-map/configs"],
-    queryFn: () => apiRequest("/api/streak-map/configs?isGlobal=true")
+    queryFn: async () => {
+      const response = await apiRequest("/api/streak-map/configs?isGlobal=true");
+      return response;
+    }
   });
 
   // Fetch default config
   const { data: defaultConfig } = useQuery({
     queryKey: ["/api/streak-map/configs/default"],
-    queryFn: () => apiRequest("/api/streak-map/configs/default")
+    queryFn: async () => {
+      const response = await apiRequest("/api/streak-map/configs/default");
+      return response;
+    }
   });
 
   // Fetch user streaks
   const { data: userStreaks } = useQuery({
     queryKey: ["/api/streak-map/user-streaks", mapFilters],
-    queryFn: () => {
+    queryFn: async () => {
       const params = new URLSearchParams();
       if (mapFilters.regionTypes.length) params.append("regionTypes", mapFilters.regionTypes.join(","));
       if (mapFilters.streakTypes.length) params.append("streakTypes", mapFilters.streakTypes.join(","));
       if (mapFilters.minStreak > 0) params.append("minStreak", mapFilters.minStreak.toString());
       
-      return apiRequest(`/api/streak-map/user-streaks?${params.toString()}`);
+      const response = await apiRequest(`/api/streak-map/user-streaks?${params.toString()}`);
+      return response;
     }
   });
 
   // Fetch map statistics
   const { data: mapStats } = useQuery({
     queryKey: ["/api/streak-map/statistics"],
-    queryFn: () => apiRequest("/api/streak-map/statistics")
+    queryFn: async () => {
+      const response = await apiRequest("/api/streak-map/statistics");
+      return response;
+    }
   });
 
   // Fetch regions
   const { data: regions } = useQuery({
     queryKey: ["/api/streak-map/regions"],
-    queryFn: () => apiRequest("/api/streak-map/regions")
+    queryFn: async () => {
+      const response = await apiRequest("/api/streak-map/regions");
+      return response;
+    }
   });
 
   // Initialize streak map system
   const initializeMutation = useMutation({
-    mutationFn: () => apiRequest("/api/streak-map/initialize", { method: "POST" }),
+    mutationFn: async () => {
+      const response = await apiRequest("/api/streak-map/initialize", { method: "POST" });
+      return response;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/streak-map"] });
     }
@@ -134,7 +150,10 @@ export default function StreakMapPage() {
   // ========================================
   
   const initializeTestDataMutation = useMutation({
-    mutationFn: () => apiRequest("/api/streak-map/test-data/initialize", { method: "POST" }),
+    mutationFn: async () => {
+      const response = await apiRequest("/api/streak-map/test-data/initialize", { method: "POST" });
+      return response;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/streak-map"] });
       triggerAchievementAnimation();
@@ -142,7 +161,10 @@ export default function StreakMapPage() {
   });
 
   const removeTestDataMutation = useMutation({
-    mutationFn: () => apiRequest("/api/streak-map/test-data/remove", { method: "DELETE" }),
+    mutationFn: async () => {
+      const response = await apiRequest("/api/streak-map/test-data/remove", { method: "DELETE" });
+      return response;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/streak-map"] });
     }
@@ -154,10 +176,13 @@ export default function StreakMapPage() {
 
   // Export map mutation
   const exportMapMutation = useMutation({
-    mutationFn: (exportData: any) => apiRequest("/api/streak-map/export", {
-      method: "POST",
-      body: exportData
-    }),
+    mutationFn: async (exportData: any) => {
+      const response = await apiRequest("/api/streak-map/export", {
+        method: "POST",
+        body: exportData
+      });
+      return response;
+    },
     onSuccess: (data) => {
       // Handle successful export
       console.log("Map exported successfully", data);
@@ -166,13 +191,13 @@ export default function StreakMapPage() {
 
   useEffect(() => {
     if (defaultConfig && !selectedConfig) {
-      setSelectedConfig(defaultConfig.id);
+      setSelectedConfig((defaultConfig as any)?.id);
     }
   }, [defaultConfig, selectedConfig]);
 
   // Initialize if no data exists
   useEffect(() => {
-    if (regions?.length === 0) {
+    if ((regions as any)?.length === 0) {
       initializeMutation.mutate();
     }
   }, [regions]);
@@ -213,7 +238,7 @@ export default function StreakMapPage() {
     });
   };
 
-  const currentConfig = configs?.find((c: StreakMapConfig) => c.id === selectedConfig) || defaultConfig;
+  const currentConfig = (configs as any)?.find((c: StreakMapConfig) => c.id === selectedConfig) || defaultConfig;
 
   return (
     <div className={`min-h-screen bg-black text-white ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
@@ -261,7 +286,7 @@ export default function StreakMapPage() {
                       <SelectValue placeholder="Select configuration" />
                     </SelectTrigger>
                     <SelectContent className="bg-gray-800 border-gray-700">
-                      {configs?.map((config: StreakMapConfig) => (
+                      {(configs as any)?.map((config: StreakMapConfig) => (
                         <SelectItem key={config.id} value={config.id}>
                           {config.name}
                         </SelectItem>
@@ -408,7 +433,7 @@ export default function StreakMapPage() {
             
             <TabsContent value="streaks" className="p-4 space-y-4">
               <div className="space-y-3">
-                {userStreaks?.length === 0 && (
+                {(userStreaks as any)?.length === 0 && (
                   <div className="text-center py-8">
                     <p className="text-gray-400 mb-4">No streaks yet!</p>
                     <p className="text-sm text-gray-500 mb-4">
@@ -416,7 +441,7 @@ export default function StreakMapPage() {
                     </p>
                   </div>
                 )}
-                {userStreaks?.map((streak: UserStreak) => (
+                {(userStreaks as any)?.map((streak: UserStreak) => (
                   <Card key={streak.id} className="neopop-card bg-gray-800 border-gray-700">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
@@ -442,7 +467,7 @@ export default function StreakMapPage() {
             
             <TabsContent value="achievements" className="p-4 space-y-4">
               <div className="space-y-3">
-                {mapStats?.recentAchievements?.length === 0 && (
+                {(mapStats as any)?.recentAchievements?.length === 0 && (
                   <div className="text-center py-8">
                     <p className="text-gray-400 mb-4">No achievements yet!</p>
                     <p className="text-sm text-gray-500">
@@ -450,7 +475,7 @@ export default function StreakMapPage() {
                     </p>
                   </div>
                 )}
-                {mapStats?.recentAchievements?.map((achievement: any, index: number) => (
+                {(mapStats as any)?.recentAchievements?.map((achievement: any, index: number) => (
                   <motion.div
                     key={achievement.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -557,25 +582,25 @@ export default function StreakMapPage() {
                   <div className="grid grid-cols-4 gap-4 text-center">
                     <div>
                       <div className="text-lg font-bold text-purple-400">
-                        {mapStats?.totalRegionsVisited || 0}
+                        {(mapStats as any)?.totalRegionsVisited || 0}
                       </div>
                       <div className="text-xs text-gray-400">Regions</div>
                     </div>
                     <div>
                       <div className="text-lg font-bold text-cyan-400">
-                        {mapStats?.countriesVisited || 0}
+                        {(mapStats as any)?.countriesVisited || 0}
                       </div>
                       <div className="text-xs text-gray-400">Countries</div>
                     </div>
                     <div>
                       <div className="text-lg font-bold text-yellow-400">
-                        {mapStats?.longestStreak || 0}
+                        {(mapStats as any)?.longestStreak || 0}
                       </div>
                       <div className="text-xs text-gray-400">Best Streak</div>
                     </div>
                     <div>
                       <div className="text-lg font-bold text-green-400">
-                        {mapStats?.totalXPFromStreaks || 0}
+                        {(mapStats as any)?.totalXPFromStreaks || 0}
                       </div>
                       <div className="text-xs text-gray-400">XP Earned</div>
                     </div>
