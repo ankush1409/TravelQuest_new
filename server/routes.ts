@@ -744,6 +744,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ========================================
+  // TODO: REMOVE THESE ROUTES - TEST DATA ONLY
+  // These routes are for testing purposes only
+  // Remove before production deployment
+  // ========================================
+  
+  app.post("/api/streak-map/test-data/initialize", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      await streakMapService.initializeTestData(req.user!.id);
+      res.json({ 
+        message: "Test data initialized successfully",
+        warning: "⚠️ Remember to remove test data before production!",
+        userId: req.user!.id
+      });
+    } catch (error) {
+      console.error("Error initializing test data:", error);
+      res.status(500).json({ message: "Failed to initialize test data" });
+    }
+  });
+
+  app.delete("/api/streak-map/test-data/remove", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const { streakMapService } = await import('./streakMapService');
+      await streakMapService.removeTestData(req.user!.id);
+      res.json({ 
+        message: "Test data removed successfully",
+        userId: req.user!.id
+      });
+    } catch (error) {
+      console.error("Error removing test data:", error);
+      res.status(500).json({ message: "Failed to remove test data" });
+    }
+  });
+  
+  // ========================================
+  // END OF TEST DATA ROUTES
+  // ========================================
+
   const httpServer = createServer(app);
 
   return httpServer;

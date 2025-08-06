@@ -476,6 +476,222 @@ export class StreakMapService {
 
     await this.createMapConfig(defaultConfig);
   }
+
+  // ========================================
+  // TODO: REMOVE THIS SECTION - TEST DATA ONLY
+  // This section contains dummy data for testing purposes
+  // Remove before production deployment
+  // ========================================
+  
+  async initializeTestData(userId: string): Promise<void> {
+    try {
+      // Check if test data already exists
+      const existingStreaks = await this.getUserStreaks(userId);
+      if (existingStreaks.length > 0) {
+        return; // Test data already exists
+      }
+
+      // Get some regions to work with
+      const regions = await this.getRegions();
+      if (regions.length === 0) {
+        await this.initializeWorldRegions(); // Make sure we have regions first
+        await this.initializeDefaultConfig(); // And config
+      }
+
+      const allRegions = await this.getRegions();
+      
+      // Create test streaks for various regions
+      const testStreaks = [
+        {
+          regionId: allRegions.find(r => r.countryCode === 'US')?.id,
+          streakType: 'VISIT',
+          count: 15,
+          maxStreak: 18,
+          metadata: { 
+            cities: ['New York', 'Los Angeles', 'Chicago', 'Miami'],
+            lastLocation: 'San Francisco',
+            totalVisits: 28
+          }
+        },
+        {
+          regionId: allRegions.find(r => r.countryCode === 'CA')?.id,
+          streakType: 'VISIT',
+          count: 8,
+          maxStreak: 10,
+          metadata: { 
+            cities: ['Toronto', 'Vancouver', 'Montreal'],
+            lastLocation: 'Calgary',
+            totalVisits: 12
+          }
+        },
+        {
+          regionId: allRegions.find(r => r.countryCode === 'GB')?.id,
+          streakType: 'CHECK_IN',
+          count: 25,
+          maxStreak: 25,
+          metadata: { 
+            landmarks: ['Big Ben', 'London Eye', 'Buckingham Palace'],
+            lastLocation: 'Edinburgh Castle',
+            totalCheckIns: 47
+          }
+        },
+        {
+          regionId: allRegions.find(r => r.countryCode === 'FR')?.id,
+          streakType: 'DISCOVERY',
+          count: 12,
+          maxStreak: 15,
+          metadata: { 
+            discoveries: ['Hidden café in Montmartre', 'Secret garden in Lyon'],
+            lastLocation: 'Underground passages in Paris',
+            totalDiscoveries: 23
+          }
+        },
+        {
+          regionId: allRegions.find(r => r.countryCode === 'JP')?.id,
+          streakType: 'CHALLENGE_COMPLETION',
+          count: 6,
+          maxStreak: 8,
+          metadata: { 
+            challenges: ['Tokyo Food Tour', 'Mt. Fuji Hike', 'Kyoto Temple Quest'],
+            lastChallenge: 'Osaka Street Photography',
+            totalChallenges: 11
+          }
+        },
+        {
+          regionId: allRegions.find(r => r.countryCode === 'AU')?.id,
+          streakType: 'VISIT',
+          count: 3,
+          maxStreak: 5,
+          metadata: { 
+            cities: ['Sydney', 'Melbourne'],
+            lastLocation: 'Gold Coast',
+            totalVisits: 7
+          }
+        }
+      ];
+
+      // Insert test streaks
+      for (const streak of testStreaks) {
+        if (streak.regionId) {
+          await db.insert(userStreaks).values({
+            userId,
+            regionId: streak.regionId,
+            streakType: streak.streakType as any,
+            count: streak.count,
+            maxStreak: streak.maxStreak,
+            metadata: streak.metadata,
+            firstActivity: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000), // Random date within last year
+            lastActivity: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000), // Random date within last 30 days
+          });
+        }
+      }
+
+      // Create test achievements
+      const testAchievements = [
+        {
+          regionId: allRegions.find(r => r.countryCode === 'US')?.id,
+          achievementType: 'first_visit',
+          achievementData: { 
+            location: 'Times Square, New York',
+            date: '2024-03-15',
+            milestone: 'First time in the USA!'
+          },
+          xpEarned: 100,
+          badgeEarned: 'American Explorer'
+        },
+        {
+          regionId: allRegions.find(r => r.countryCode === 'GB')?.id,
+          achievementType: 'streak_milestone',
+          achievementData: { 
+            milestone: '25 check-ins in UK',
+            streakLevel: 'Master',
+            specialNote: 'Visited all major landmarks in London'
+          },
+          xpEarned: 500,
+          badgeEarned: 'British Isles Master'
+        },
+        {
+          regionId: allRegions.find(r => r.countryCode === 'JP')?.id,
+          achievementType: 'challenge_master',
+          achievementData: { 
+            challengesCompleted: 6,
+            favoriteChallenge: 'Mt. Fuji Hike',
+            completionRate: '85%'
+          },
+          xpEarned: 300,
+          badgeEarned: 'Rising Sun Champion'
+        }
+      ];
+
+      // Insert test achievements
+      for (const achievement of testAchievements) {
+        if (achievement.regionId) {
+          await db.insert(streakAchievements).values({
+            userId,
+            regionId: achievement.regionId,
+            achievementType: achievement.achievementType,
+            achievementData: achievement.achievementData,
+            xpEarned: achievement.xpEarned,
+            badgeEarned: achievement.badgeEarned,
+            createdAt: new Date(Date.now() - Math.random() * 180 * 24 * 60 * 60 * 1000), // Random date within last 6 months
+          });
+        }
+      }
+
+      // Create test user preferences
+      const defaultConfig = await this.getDefaultMapConfig();
+      if (defaultConfig) {
+        await db.insert(userMapPreferences).values({
+          userId,
+          configId: defaultConfig.id,
+          customSettings: {
+            preferredColorScheme: 'vibrant',
+            showAnimations: true,
+            displayMode: 'detailed'
+          },
+          favoriteRegions: [
+            allRegions.find(r => r.countryCode === 'US')?.id,
+            allRegions.find(r => r.countryCode === 'JP')?.id
+          ].filter(Boolean),
+          personalNotes: {
+            [allRegions.find(r => r.countryCode === 'US')?.id || '']: 'Amazing diversity, want to explore more states',
+            [allRegions.find(r => r.countryCode === 'JP')?.id || '']: 'Love the culture and food, planning another trip',
+            [allRegions.find(r => r.countryCode === 'GB')?.id || '']: 'Perfect for history buffs, great museums'
+          }
+        });
+      }
+
+      console.log(`✅ Test data initialized for user ${userId}`);
+      console.log(`📍 Created ${testStreaks.length} test streaks`);
+      console.log(`🏆 Created ${testAchievements.length} test achievements`);
+      console.log(`⚙️ Created user preferences`);
+      console.log(`⚠️  Remember to remove test data before production!`);
+
+    } catch (error) {
+      console.error('Error initializing test data:', error);
+    }
+  }
+
+  async removeTestData(userId: string): Promise<void> {
+    try {
+      // Remove test streaks
+      await db.delete(userStreaks).where(eq(userStreaks.userId, userId));
+      
+      // Remove test achievements  
+      await db.delete(streakAchievements).where(eq(streakAchievements.userId, userId));
+      
+      // Remove test preferences
+      await db.delete(userMapPreferences).where(eq(userMapPreferences.userId, userId));
+      
+      console.log(`✅ Test data removed for user ${userId}`);
+    } catch (error) {
+      console.error('Error removing test data:', error);
+    }
+  }
+  
+  // ========================================
+  // END OF TEST DATA SECTION
+  // ========================================
 }
 
 export const streakMapService = new StreakMapService();

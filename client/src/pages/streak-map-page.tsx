@@ -127,6 +127,31 @@ export default function StreakMapPage() {
     }
   });
 
+  // ========================================
+  // TODO: REMOVE THIS SECTION - TEST DATA ONLY
+  // These mutations are for testing purposes only
+  // Remove before production deployment
+  // ========================================
+  
+  const initializeTestDataMutation = useMutation({
+    mutationFn: () => apiRequest("/api/streak-map/test-data/initialize", { method: "POST" }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/streak-map"] });
+      triggerAchievementAnimation();
+    }
+  });
+
+  const removeTestDataMutation = useMutation({
+    mutationFn: () => apiRequest("/api/streak-map/test-data/remove", { method: "DELETE" }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/streak-map"] });
+    }
+  });
+  
+  // ========================================
+  // END OF TEST DATA SECTION
+  // ========================================
+
   // Export map mutation
   const exportMapMutation = useMutation({
     mutationFn: (exportData: any) => apiRequest("/api/streak-map/export", {
@@ -286,6 +311,33 @@ export default function StreakMapPage() {
             <Share2 className="w-4 h-4 mr-2" />
             Share
           </Button>
+          
+          {/* ========================================
+              TODO: REMOVE THIS SECTION - TEST DATA ONLY
+              These buttons are for testing purposes only
+              Remove before production deployment
+              ======================================== */}
+          <div className="flex gap-2 ml-4 border-l border-gray-700 pl-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => initializeTestDataMutation.mutate()}
+              disabled={initializeTestDataMutation.isPending}
+              className="border-yellow-600 text-yellow-400 hover:border-yellow-500"
+            >
+              {initializeTestDataMutation.isPending ? "Loading..." : "Add Test Data"}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => removeTestDataMutation.mutate()}
+              disabled={removeTestDataMutation.isPending}
+              className="border-red-600 text-red-400 hover:border-red-500"
+            >
+              {removeTestDataMutation.isPending ? "Removing..." : "Remove Test Data"}
+            </Button>
+          </div>
+          {/* ======================================== */}
         </div>
       </div>
 
@@ -356,6 +408,14 @@ export default function StreakMapPage() {
             
             <TabsContent value="streaks" className="p-4 space-y-4">
               <div className="space-y-3">
+                {userStreaks?.length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-400 mb-4">No streaks yet!</p>
+                    <p className="text-sm text-gray-500 mb-4">
+                      Click "Add Test Data" above to see how the streak map works
+                    </p>
+                  </div>
+                )}
                 {userStreaks?.map((streak: UserStreak) => (
                   <Card key={streak.id} className="neopop-card bg-gray-800 border-gray-700">
                     <CardContent className="p-4">
@@ -382,6 +442,14 @@ export default function StreakMapPage() {
             
             <TabsContent value="achievements" className="p-4 space-y-4">
               <div className="space-y-3">
+                {mapStats?.recentAchievements?.length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-400 mb-4">No achievements yet!</p>
+                    <p className="text-sm text-gray-500">
+                      Start exploring to unlock achievements and earn XP
+                    </p>
+                  </div>
+                )}
                 {mapStats?.recentAchievements?.map((achievement: any, index: number) => (
                   <motion.div
                     key={achievement.id}
