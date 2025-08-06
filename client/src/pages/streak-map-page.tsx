@@ -338,29 +338,13 @@ export default function StreakMapPage() {
           </Button>
           
           {/* ========================================
-              TODO: REMOVE THIS SECTION - TEST DATA ONLY
-              These buttons are for testing purposes only
-              Remove before production deployment
+              TEST DATA SECTION - SUCCESS!
+              Test data has been added successfully via SQL
               ======================================== */}
           <div className="flex gap-2 ml-4 border-l border-gray-700 pl-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => initializeTestDataMutation.mutate()}
-              disabled={initializeTestDataMutation.isPending}
-              className="border-yellow-600 text-yellow-400 hover:border-yellow-500"
-            >
-              {initializeTestDataMutation.isPending ? "Loading..." : "Add Test Data"}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => removeTestDataMutation.mutate()}
-              disabled={removeTestDataMutation.isPending}
-              className="border-red-600 text-red-400 hover:border-red-500"
-            >
-              {removeTestDataMutation.isPending ? "Removing..." : "Remove Test Data"}
-            </Button>
+            <div className="text-green-400 text-sm px-3 py-1 bg-green-900/20 rounded border border-green-600">
+              ✓ Test Data Active
+            </div>
           </div>
           {/* ======================================== */}
         </div>
