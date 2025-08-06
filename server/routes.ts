@@ -511,41 +511,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ===== DEMO LOGIN FOR TESTING =====
-  app.post("/api/demo/login", async (req, res) => {
-    try {
-      const { email, password } = req.body;
-      
-      if (email === 'demo@travelquest.com' && password === 'demo123') {
-        // Find or create demo user
-        const demoUser = await storage.getUserByEmail('demo@travelquest.com');
-        
-        if (demoUser) {
-          // Simulate login session
-          (req as any).session.userId = demoUser.id;
-          (req as any).session.isAuthenticated = true;
-          res.json({ 
-            success: true, 
-            user: {
-              id: demoUser.id,
-              email: demoUser.email,
-              username: demoUser.username,
-              displayName: demoUser.displayName
-            },
-            message: "Demo login successful! You can now test the Streak Map features."
-          });
-        } else {
-          res.status(400).json({ error: "Demo user not found. Please contact support." });
-        }
-      } else {
-        res.status(401).json({ error: "Invalid demo credentials. Use demo@travelquest.com / demo123" });
-      }
-    } catch (error) {
-      console.error("Demo login error:", error);
-      res.status(500).json({ error: "Demo login failed" });
-    }
-  });
-
   // ===== STREAK MAP DEMO ROUTES (TEMPORARY) =====
   app.get("/api/streak-map/demo/user-streaks", async (req, res) => {
     try {

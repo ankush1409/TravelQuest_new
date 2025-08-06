@@ -15,49 +15,6 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import confetti from "canvas-confetti";
 
-// Demo Login Component
-function DemoLoginButton() {
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  
-  const handleDemoLogin = async () => {
-    setIsLoggingIn(true);
-    try {
-      const response = await fetch('/api/demo/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: 'demo@travelquest.com', 
-          password: 'demo123' 
-        })
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        window.location.reload(); // Refresh to pick up session
-      } else {
-        const error = await response.json();
-        console.error('Demo login failed:', error);
-      }
-    } catch (error) {
-      console.error('Demo login error:', error);
-    } finally {
-      setIsLoggingIn(false);
-    }
-  };
-
-  return (
-    <Button
-      variant="outline"
-      size="sm"
-      onClick={handleDemoLogin}
-      disabled={isLoggingIn}
-      className="border-blue-600 text-blue-400 hover:border-blue-500"
-    >
-      {isLoggingIn ? "Logging in..." : "Demo Login"}
-    </Button>
-  );
-}
-
 interface StreakRegion {
   id: string;
   name: string;
@@ -381,10 +338,10 @@ export default function StreakMapPage() {
           </Button>
           
           {/* ========================================
-              DEMO LOGIN & TEST DATA SECTION
+              TEST DATA SECTION - SUCCESS!
+              Test data has been added successfully via SQL
               ======================================== */}
           <div className="flex gap-2 ml-4 border-l border-gray-700 pl-4">
-            <DemoLoginButton />
             <div className="text-green-400 text-sm px-3 py-1 bg-green-900/20 rounded border border-green-600">
               ✓ Test Data Active
             </div>
