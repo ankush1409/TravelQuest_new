@@ -328,67 +328,7 @@ export function DesktopNavigation() {
           {/* Actions Bar */}
           <div className="flex items-center gap-3">
             {/* Enhanced Notification Bell with Pulse */}
-            <motion.div className="relative">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="relative p-2 rounded-full hover:bg-purple-500/20 transition-all duration-300"
-                aria-label="Notifications"
-              >
-                <motion.div
-                  animate={{
-                    rotate: [0, -10, 10, -10, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatDelay: 5,
-                  }}
-                >
-                  <Bell className="w-5 h-5 text-white hover:text-purple-400 transition-colors" />
-                </motion.div>
-                
-                {/* Notification Badge with Pulse */}
-                <motion.div
-                  className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 rounded-full flex items-center justify-center shadow-sm border-2 border-background"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                >
-                  <span className="text-xs font-bold text-white px-1">3</span>
-                </motion.div>
-              </Button>
-              
-              {/* Notification Preview on Hover */}
-              <div className="absolute right-0 top-14 w-72 bg-background border border-border rounded-xl shadow-2xl p-4 z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
-                <h4 className="font-semibold text-foreground mb-3 text-sm">Recent Notifications</h4>
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-muted/30 transition-colors">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div className="text-sm">
-                      <span className="font-medium text-foreground">+25 XP</span>
-                      <span className="text-muted-foreground"> earned from Central Park check-in</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-muted/30 transition-colors">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div className="text-sm text-muted-foreground">
-                      New challenge available: <span className="font-medium text-foreground">"Weekend Explorer"</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-muted/30 transition-colors">
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div className="text-sm text-muted-foreground">
-                      You've unlocked the <span className="font-medium text-foreground">"City Walker"</span> badge!
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+            <NotificationCenter />
           </div>
 
           {/* Enhanced User Menu with Progress Ring */}

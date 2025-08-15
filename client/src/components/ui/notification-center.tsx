@@ -85,10 +85,10 @@ export function NotificationCenter() {
         variant="ghost"
         size="sm"
         onClick={() => setIsOpen(!isOpen)}
-        className="relative premium-button p-3"
+        className="relative p-2 rounded-full hover:bg-white/10 transition-all duration-300 text-white"
         aria-label={`Notifications: ${unreadCount} unread`}
       >
-        <Bell className="w-5 h-5" />
+        <Bell className="w-5 h-5 text-white" />
         {unreadCount > 0 && (
           <motion.div
             initial={{ scale: 0 }}
@@ -110,11 +110,16 @@ export function NotificationCenter() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="absolute right-0 top-full mt-2 w-96 max-h-96 overflow-hidden premium-card z-50"
+            className="absolute right-0 top-full mt-2 w-96 max-h-96 overflow-hidden bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+            style={{ 
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+              backgroundColor: "#ffffff",
+              color: "#1a1a1a"
+            }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-border">
-              <h3 className="text-lg font-bold">Notifications</h3>
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h3 className="text-lg font-bold text-gray-900">Notifications</h3>
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
                   <Button
@@ -140,9 +145,9 @@ export function NotificationCenter() {
             {/* Notification List */}
             <div className="max-h-80 overflow-y-auto">
               {notifications.length === 0 ? (
-                <div className="p-8 text-center text-muted-foreground">
-                  <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  <p>No notifications yet</p>
+                <div className="p-8 text-center text-gray-500">
+                  <Bell className="w-8 h-8 mx-auto mb-2 opacity-50 text-gray-400" />
+                  <p className="text-gray-500">No notifications yet</p>
                 </div>
               ) : (
                 <div className="space-y-1 p-2">
@@ -168,7 +173,7 @@ export function NotificationCenter() {
                         
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <h4 className="font-semibold text-sm truncate">
+                            <h4 className="font-semibold text-sm truncate text-gray-900">
                               {notification.title}
                             </h4>
                             <Button
@@ -184,12 +189,12 @@ export function NotificationCenter() {
                             </Button>
                           </div>
                           
-                          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                          <p className="text-xs text-gray-600 mt-1 line-clamp-2">
                             {notification.message}
                           </p>
                           
                           <div className="flex items-center justify-between mt-2">
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-gray-500">
                               {notification.timestamp.toLocaleTimeString([], { 
                                 hour: '2-digit', 
                                 minute: '2-digit' 
