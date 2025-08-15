@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Zap } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 export function SimpleDashboard() {
-
   return (
     <div className="space-y-6">
       {/* Premium Dashboard Header */}
