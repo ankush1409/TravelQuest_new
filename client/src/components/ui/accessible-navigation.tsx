@@ -124,7 +124,7 @@ export function MobileNavigation() {
                   whileTap={{ scale: 0.95 }}
                 >
                   <div className={`transition-colors duration-300 ${
-                    isActive ? 'text-white' : 'text-foreground group-hover:text-primary'
+                    isActive ? 'text-white' : 'text-white group-hover:text-purple-300'
                   }`}>
                     {item.icon}
                   </div>
@@ -158,7 +158,7 @@ export function MobileNavigation() {
                 </motion.div>
                 
                 <span className={`text-xs font-semibold mt-1 transition-colors duration-300 ${
-                  isActive ? "text-white" : "text-foreground group-hover:text-primary"
+                  isActive ? "text-white" : "text-white group-hover:text-purple-300"
                 }`}>
                   {item.label}
                 </span>
@@ -289,20 +289,20 @@ export function DesktopNavigation() {
                 >
                   <Link
                     href={item.href}
-                    className={`relative px-4 py-3 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 group ${
+                    className={`relative px-4 py-3 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/20 group ${
                       isActive
-                        ? "text-primary bg-primary/12 font-bold"
-                        : "text-foreground hover:text-foreground hover:bg-muted"
+                        ? "text-purple-400 bg-purple-500/20 font-bold"
+                        : "text-white hover:text-purple-300 hover:bg-slate-800"
                     }`}
                     role="tab"
                     aria-selected={isActive}
                     aria-label={`${item.label}: ${item.description}`}
                   >
                   <div className="flex items-center space-x-2">
-                    <div className={`transition-colors duration-200 ${isActive ? 'text-primary' : 'text-foreground group-hover:text-primary'}`}>
+                    <div className={`transition-colors duration-200 ${isActive ? 'text-purple-400' : 'text-white group-hover:text-purple-300'}`}>
                       {item.icon}
                     </div>
-                    <span className={`font-medium ${isActive ? 'text-primary font-semibold' : ''}`}>
+                    <span className={`font-medium ${isActive ? 'text-purple-400 font-semibold' : 'text-white'}`}>
                       {item.label}
                     </span>
                     {item.badge && (
@@ -335,7 +335,7 @@ export function DesktopNavigation() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="relative p-2 rounded-full hover:bg-primary/10 transition-all duration-300"
+                className="relative p-2 rounded-full hover:bg-purple-500/20 transition-all duration-300"
                 aria-label="Notifications"
               >
                 <motion.div
@@ -348,7 +348,7 @@ export function DesktopNavigation() {
                     repeatDelay: 5,
                   }}
                 >
-                  <Bell className="w-5 h-5 text-foreground hover:text-primary transition-colors" />
+                  <Bell className="w-5 h-5 text-white hover:text-purple-400 transition-colors" />
                 </motion.div>
                 
                 {/* Notification Badge with Pulse */}
@@ -456,11 +456,11 @@ export function DesktopNavigation() {
 
               {/* User Info with Quick Actions Preview */}
               <div className="hidden sm:block">
-                <div className="text-sm font-medium" style={{ color: "hsl(var(--foreground))" }}>
+                <div className="text-sm font-medium text-white">
                   {user?.displayName || user?.email?.split('@')[0] || "Traveler"}
                 </div>
-                <div className="text-xs flex items-center gap-1" style={{ color: "hsl(var(--muted-foreground))" }}>
-                  <Zap className="w-3 h-3" />
+                <div className="text-xs flex items-center gap-1 text-slate-300">
+                  <Zap className="w-3 h-3 text-yellow-400" />
                   1,250 XP • Level 8
                 </div>
               </div>
