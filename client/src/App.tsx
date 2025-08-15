@@ -13,7 +13,7 @@ const AuthPage = lazy(() => import("@/pages/auth-page"));
 const ProfilePage = lazy(() => import("@/pages/profile-page"));
 const ChallengesPage = lazy(() => import("@/pages/challenges-page"));
 const EnhancedMapPage = lazy(() => import("@/pages/enhanced-map-page"));
-const StreakMapPage = lazy(() => import("@/pages/streak-map-page"));
+const RewardsPage = lazy(() => import("@/pages/rewards-page"));
 const SettingsPage = lazy(() => import("@/pages/settings-page"));
 const ReferralsPage = lazy(() => import("@/pages/referrals-page"));
 const NotFound = lazy(() => import("@/pages/not-found"));
@@ -73,7 +73,7 @@ function AppContent() {
             <ProtectedRoute path="/profile" component={() => <ProfilePage />} />
             <ProtectedRoute path="/challenges" component={() => <ChallengesPage />} />
             <ProtectedRoute path="/map" component={() => <EnhancedMapPage />} />
-            <ProtectedRoute path="/streak-map" component={() => <StreakMapPage />} />
+            <ProtectedRoute path="/rewards" component={() => <RewardsPage />} />
             <ProtectedRoute path="/referrals" component={() => <ReferralsPage />} />
             <ProtectedRoute path="/settings" component={() => <SettingsPage />} />
             <Route path="/auth" component={() => <AuthPage />} />

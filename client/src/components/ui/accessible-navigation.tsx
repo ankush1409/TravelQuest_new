@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Map, Trophy, User, Users, Menu, X, Settings, Bell, Zap } from "lucide-react";
+import { Home, Map, Trophy, User, Users, Menu, X, Settings, Bell, Zap, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
@@ -48,11 +48,11 @@ const navigationItems: NavigationItem[] = [
     description: "Discover locations and check-in to places"
   },
   {
-    id: "streak-map",
-    label: "Streak Map",
-    href: "/streak-map",
-    icon: <Trophy className="w-5 h-5" />,
-    description: "View your travel streaks on an interactive world map"
+    id: "rewards",
+    label: "Rewards",
+    href: "/rewards",
+    icon: <Gift className="w-5 h-5" />,
+    description: "Redeem your XP for exciting rewards"
   },
   {
     id: "challenges",
