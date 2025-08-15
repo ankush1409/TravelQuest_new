@@ -102,41 +102,11 @@ export default function HomePage() {
                   </span>
                   <span className="text-foreground">Quest</span>
                 </h1>
-                <p className="text-sm md:text-base text-muted-foreground font-semibold">
-                  For the <span className="text-primary">New Generation</span>
-                </p>
+
               </div>
             </div>
             
-            {/* Quick Stats Grid */}
-            <motion.div 
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.5, type: "spring", stiffness: 300 }}
-            >
-              {[
-                { icon: MapPin, label: "Places", count: "1.2M+", gradient: "from-blue-500 to-cyan-500" },
-                { icon: Trophy, label: "Challenges", count: "500+", gradient: "from-purple-500 to-pink-500" },
-                { icon: Users, label: "Travelers", count: "50K+", gradient: "from-green-500 to-emerald-500" },
-                { icon: Zap, label: "XP Earned", count: "10M+", gradient: "from-yellow-500 to-orange-500" },
-              ].map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  className="premium-card text-center p-4"
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                  whileHover={{ y: -5 }}
-                >
-                  <div className={`w-10 h-10 rounded-2xl bg-gradient-to-r ${stat.gradient} flex items-center justify-center mx-auto mb-2`}>
-                    <stat.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="text-xl md:text-2xl font-black text-foreground">{stat.count}</div>
-                  <div className="text-xs text-muted-foreground font-medium">{stat.label}</div>
-                </motion.div>
-              ))}
-            </motion.div>
+
           </motion.div>
         </div>
       </motion.div>
