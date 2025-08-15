@@ -31,10 +31,10 @@ export default function ReferralsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
-          <Zap className="h-8 w-8 animate-pulse text-purple-400 mx-auto" />
-          <p className="text-white">Loading your referral stats...</p>
+          <Zap className="h-8 w-8 animate-pulse text-purple-600 mx-auto" />
+          <p style={{ color: "hsl(var(--foreground))" }}>Loading your referral stats...</p>
         </div>
       </div>
     );
@@ -42,11 +42,11 @@ export default function ReferralsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-950 p-4">
+      <div className="min-h-screen bg-background p-4">
         <div className="max-w-4xl mx-auto pt-8">
-          <Card className="neopop-card bg-red-900/20 border-red-500/30">
+          <Card className="neopop-card bg-red-50 border-red-200">
             <CardContent className="py-8 text-center">
-              <p className="text-red-400">Failed to load referral system. Please try again later.</p>
+              <p className="text-red-600">Failed to load referral system. Please try again later.</p>
             </CardContent>
           </Card>
         </div>
@@ -55,7 +55,7 @@ export default function ReferralsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 p-4 space-y-6">
+    <div className="min-h-screen bg-background p-4 space-y-6">
       {/* Header */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center space-y-4 mb-8">
@@ -67,16 +67,17 @@ export default function ReferralsPage() {
             <div className="p-3 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500">
               <Users className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-white">Invite Friends</h1>
+            <h1 className="text-4xl font-bold" style={{ color: "hsl(var(--foreground))" }}>Invite Friends</h1>
           </motion.div>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-gray-400 max-w-3xl mx-auto text-lg"
+            className="max-w-3xl mx-auto text-lg"
+            style={{ color: "hsl(var(--muted-foreground))" }}
           >
-            Share TravelQuest with friends and earn <span className="text-yellow-400 font-bold">500 XP</span> for each new traveler who joins. 
-            The more friends you invite, the closer you get to <span className="text-purple-400 font-bold">fulfilling your travels</span>!
+            Share TravelQuest with friends and earn <span className="text-yellow-600 font-bold">500 XP</span> for each new traveler who joins. 
+            The more friends you invite, the closer you get to <span className="text-purple-600 font-bold">fulfilling your travels</span>!
           </motion.p>
         </div>
 
@@ -87,10 +88,10 @@ export default function ReferralsPage() {
           transition={{ delay: 0.2 }}
           className="mb-8"
         >
-          <Card className="neopop-card bg-gradient-to-br from-indigo-900/20 to-purple-900/20 border-indigo-500/30">
+          <Card className="neopop-card bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200">
             <CardHeader>
-              <CardTitle className="text-white text-center">
-                <Gift className="h-6 w-6 mx-auto mb-2 text-yellow-400" />
+              <CardTitle className="text-center" style={{ color: "hsl(var(--foreground))" }}>
+                <Gift className="h-6 w-6 mx-auto mb-2 text-yellow-600" />
                 How Referrals Work
               </CardTitle>
             </CardHeader>
@@ -100,8 +101,8 @@ export default function ReferralsPage() {
                   <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mx-auto">
                     <span className="text-white font-bold">1</span>
                   </div>
-                  <h3 className="text-white font-semibold">Share Your Link</h3>
-                  <p className="text-gray-400 text-sm">
+                  <h3 className="font-semibold" style={{ color: "hsl(var(--foreground))" }}>Share Your Link</h3>
+                  <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
                     Generate your unique referral link and share it with friends via WhatsApp, SMS, or social media
                   </p>
                 </div>
@@ -109,8 +110,8 @@ export default function ReferralsPage() {
                   <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center mx-auto">
                     <span className="text-white font-bold">2</span>
                   </div>
-                  <h3 className="text-white font-semibold">Friend Joins</h3>
-                  <p className="text-gray-400 text-sm">
+                  <h3 className="font-semibold" style={{ color: "hsl(var(--foreground))" }}>Friend Joins</h3>
+                  <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
                     Your friend creates an account using your referral link and completes their profile setup
                   </p>
                 </div>
@@ -118,8 +119,8 @@ export default function ReferralsPage() {
                   <div className="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center mx-auto">
                     <span className="text-white font-bold">3</span>
                   </div>
-                  <h3 className="text-white font-semibold">Earn XP Rewards</h3>
-                  <p className="text-gray-400 text-sm">
+                  <h3 className="font-semibold" style={{ color: "hsl(var(--foreground))" }}>Earn XP Rewards</h3>
+                  <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
                     You automatically receive 500 XP that can be used for future travel perks and rewards
                   </p>
                 </div>
@@ -135,37 +136,37 @@ export default function ReferralsPage() {
           transition={{ delay: 0.3 }}
           className="mb-8"
         >
-          <Card className="neopop-card bg-gradient-to-br from-yellow-900/20 to-orange-900/20 border-yellow-500/30">
+          <Card className="neopop-card bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200">
             <CardHeader>
-              <CardTitle className="text-white text-center">
-                <Star className="h-6 w-6 mx-auto mb-2 text-yellow-400" />
+              <CardTitle className="text-center" style={{ color: "hsl(var(--foreground))" }}>
+                <Star className="h-6 w-6 mx-auto mb-2 text-yellow-600" />
                 Coming Soon: XP Travel Rewards
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-center space-y-4">
-                <p className="text-gray-300">
+                <p style={{ color: "hsl(var(--muted-foreground))" }}>
                   Your referral XP will soon unlock amazing travel benefits:
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
-                  <Badge className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border-purple-500/30">
+                  <Badge className="bg-purple-100 text-purple-800 border-purple-200">
                     <Heart className="h-3 w-3 mr-1" />
                     Hotel Discounts
                   </Badge>
-                  <Badge className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border-cyan-500/30">
+                  <Badge className="bg-blue-100 text-blue-800 border-blue-200">
                     <Target className="h-3 w-3 mr-1" />
                     Flight Deals
                   </Badge>
-                  <Badge className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border-green-500/30">
+                  <Badge className="bg-green-100 text-green-800 border-green-200">
                     <Trophy className="h-3 w-3 mr-1" />
                     Exclusive Experiences
                   </Badge>
-                  <Badge className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-300 border-yellow-500/30">
+                  <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
                     <Gift className="h-3 w-3 mr-1" />
                     Travel Gear
                   </Badge>
                 </div>
-                <p className="text-gray-400 text-sm">
+                <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
                   The more friends you refer, the better rewards you'll unlock!
                 </p>
               </div>

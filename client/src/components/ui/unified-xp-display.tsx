@@ -149,7 +149,7 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
       </AnimatePresence>
 
       {/* Main XP Progress Card */}
-      <Card className="neopop-card bg-gradient-to-br from-purple-900/20 to-blue-900/20">
+      <Card className="neopop-card bg-gradient-to-br from-purple-50 to-blue-50 border-purple-200">
         <CardHeader>
           <CardTitle className="text-2xl flex items-center">
             <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg mr-4">
@@ -172,12 +172,12 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
           {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span>Level {currentLevel}</span>
-              <span>Level {currentLevel + 1}</span>
+              <span style={{ color: "hsl(var(--foreground))" }}>Level {currentLevel}</span>
+              <span style={{ color: "hsl(var(--foreground))" }}>Level {currentLevel + 1}</span>
             </div>
             <Progress value={progressPercentage} className="h-4 neon-glow-purple" />
             <div className="flex justify-between text-sm">
-              <div className="text-muted-foreground">
+              <div style={{ color: "hsl(var(--muted-foreground))" }}>
                 <span>Level {currentLevel}</span>
                 <br />
                 <span className="text-xs">{currentLevelXP.toLocaleString()} XP</span>
@@ -185,9 +185,9 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
               <div className="text-center">
                 <span className="font-bold text-lg text-foreground">{totalXP.toLocaleString()}</span>
                 <br />
-                <span className="text-xs text-muted-foreground">Current XP</span>
+                <span className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>Current XP</span>
               </div>
-              <div className="text-muted-foreground text-right">
+              <div className="text-right" style={{ color: "hsl(var(--muted-foreground))" }}>
                 <span>Level {currentLevel + 1}</span>
                 <br />
                 <span className="text-xs">{nextLevelXP.toLocaleString()} XP</span>
@@ -198,34 +198,34 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
           {/* XP Sources Breakdown */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* TravelQuest XP */}
-            <div className="flex items-center space-x-3 p-4 bg-blue-500/10 rounded-lg">
-              <MapPin className="h-8 w-8 text-blue-400" />
+            <div className="flex items-center space-x-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <MapPin className="h-8 w-8 text-blue-600" />
               <div>
-                <p className="font-medium text-blue-400">TravelQuest</p>
-                <p className="text-2xl font-bold">{adjustedTravelQuestXP.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">Adventures & Challenges</p>
+                <p className="font-medium text-blue-700">TravelQuest</p>
+                <p className="text-2xl font-bold" style={{ color: "hsl(var(--foreground))" }}>{adjustedTravelQuestXP.toLocaleString()}</p>
+                <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>Adventures & Challenges</p>
               </div>
             </div>
 
             {/* Local Guides XP */}
             {user.localGuidesUrl ? (
-              <div className="flex items-center space-x-3 p-4 bg-green-500/10 rounded-lg">
-                <Globe className="h-8 w-8 text-green-400" />
+              <div className="flex items-center space-x-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <Globe className="h-8 w-8 text-green-600" />
                 <div>
-                  <p className="font-medium text-green-400">Local Guides</p>
-                  <p className="text-2xl font-bold">{adjustedLocalGuidesXP.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="font-medium text-green-700">Local Guides</p>
+                  <p className="text-2xl font-bold" style={{ color: "hsl(var(--foreground))" }}>{adjustedLocalGuidesXP.toLocaleString()}</p>
+                  <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
                     Level {user.localGuidesLevel} • {user.localGuidesPoints} pts
                   </p>
                 </div>
               </div>
             ) : (
               <Link href="/settings">
-                <div className="flex items-center space-x-3 p-4 bg-yellow-500/10 rounded-lg border-2 border-dashed border-yellow-500/30 hover:border-yellow-500/50 transition-colors cursor-pointer">
-                  <Globe className="h-8 w-8 text-yellow-400" />
+                <div className="flex items-center space-x-3 p-4 bg-yellow-50 rounded-lg border-2 border-dashed border-yellow-300 hover:border-yellow-400 transition-colors cursor-pointer">
+                  <Globe className="h-8 w-8 text-yellow-600" />
                   <div>
-                    <p className="font-medium text-yellow-400">Connect Local Guides</p>
-                    <p className="text-sm text-muted-foreground">Earn bonus XP from your contributions</p>
+                    <p className="font-medium text-yellow-700">Connect Local Guides</p>
+                    <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>Earn bonus XP from your contributions</p>
                   </div>
                 </div>
               </Link>
@@ -237,10 +237,10 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex items-center justify-center space-x-2 p-3 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-lg"
+              className="flex items-center justify-center space-x-2 p-3 bg-purple-50 border border-purple-200 rounded-lg"
             >
-              <TrendingUp className="h-5 w-5 text-purple-400" />
-              <span className="font-medium text-purple-400">
+              <TrendingUp className="h-5 w-5 text-purple-600" />
+              <span className="font-medium text-purple-700">
                 +{recentXpGain} XP earned recently!
               </span>
             </motion.div>
@@ -250,28 +250,28 @@ export function UnifiedXPDisplay({ user, recentXpGain = 0 }: UnifiedXPDisplayPro
 
       {/* Local Guides Detailed Breakdown */}
       {user.localGuidesUrl && (
-        <Card className="neopop-card">
+        <Card className="neopop-card bg-gradient-to-br from-green-50 to-blue-50 border-green-200">
           <CardHeader>
-            <CardTitle className="text-lg flex items-center">
+            <CardTitle className="text-lg flex items-center" style={{ color: "hsl(var(--foreground))" }}>
               <Globe className="h-5 w-5 mr-2 text-primary" />
               Local Guides Contributions
             </CardTitle>
-            <CardDescription>
+            <CardDescription style={{ color: "hsl(var(--muted-foreground))" }}>
               Your Google Maps contributions earning you XP in TravelQuest
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-              <div className="text-center p-3 bg-blue-500/10 rounded-lg">
-                <Edit3 className="h-6 w-6 text-blue-400 mx-auto mb-1" />
-                <p className="text-lg font-bold text-blue-400">{user.localGuidesReviews || 0}</p>
-                <p className="text-xs text-muted-foreground">Reviews</p>
+              <div className="text-center p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <Edit3 className="h-6 w-6 text-blue-600 mx-auto mb-1" />
+                <p className="text-lg font-bold" style={{ color: "hsl(var(--foreground))" }}>{user.localGuidesReviews || 0}</p>
+                <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>Reviews</p>
                 <Badge variant="outline" className="text-xs">+{(user.localGuidesReviews || 0) * 3} XP</Badge>
               </div>
-              <div className="text-center p-3 bg-purple-500/10 rounded-lg">
-                <Camera className="h-6 w-6 text-purple-400 mx-auto mb-1" />
-                <p className="text-lg font-bold text-purple-400">{user.localGuidesPhotos || 0}</p>
-                <p className="text-xs text-muted-foreground">Photos</p>
+              <div className="text-center p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                <Camera className="h-6 w-6 text-purple-600 mx-auto mb-1" />
+                <p className="text-lg font-bold" style={{ color: "hsl(var(--foreground))" }}>{user.localGuidesPhotos || 0}</p>
+                <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>Photos</p>
                 <Badge variant="outline" className="text-xs">+{(user.localGuidesPhotos || 0) * 1} XP</Badge>
               </div>
               <div className="text-center p-3 bg-green-500/10 rounded-lg">

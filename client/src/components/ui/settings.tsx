@@ -244,8 +244,8 @@ export function SettingsInterface() {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-black text-foreground mb-2">Settings</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-3xl font-black mb-2" style={{ color: "hsl(var(--foreground))" }}>Settings</h1>
+        <p style={{ color: "hsl(var(--muted-foreground))" }}>
           Customize your TravelQuest experience and manage your preferences
         </p>
       </div>

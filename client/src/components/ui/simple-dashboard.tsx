@@ -191,8 +191,8 @@ export function SimpleDashboard() {
             transition={{ delay: 0.5 }}
           >
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Level {userData.level}</span>
-              <span className="text-muted-foreground">Level {userData.level + 1}</span>
+              <span style={{ color: "hsl(var(--muted-foreground))" }}>Level {userData.level}</span>
+              <span style={{ color: "hsl(var(--muted-foreground))" }}>Level {userData.level + 1}</span>
             </div>
             <Progress value={userData.levelProgress} className="h-3 bg-muted" />
             <div className="text-center">
@@ -280,15 +280,15 @@ export function SimpleDashboard() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <div className="flex justify-between text-sm font-medium">
-                <span className="text-green-700">Progress to weekly badge</span>
-                <span className="text-green-700">{userData.streak}/7 days</span>
+                <span style={{ color: "hsl(var(--foreground))" }}>Progress to weekly badge</span>
+                <span style={{ color: "hsl(var(--foreground))" }}>{userData.streak}/7 days</span>
               </div>
               <Progress 
                 value={(userData.streak / 7) * 100} 
                 className="h-3 bg-green-100" 
               />
             </div>
-            <p className="text-sm text-green-600 font-medium">
+            <p className="text-sm font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>
               {7 - userData.streak} more days to earn your weekly badge!
             </p>
           </CardContent>
@@ -348,7 +348,7 @@ export function SimpleDashboard() {
                   <h3 className="text-2xl font-bold" style={{ color: "hsl(var(--foreground))" }}>
                     Recent Activity
                   </h3>
-                  <p className="text-blue-600 font-medium">
+                  <p className="font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>
                     3 new places discovered this week
                   </p>
                 </div>

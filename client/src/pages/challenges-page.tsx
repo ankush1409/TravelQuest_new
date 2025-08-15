@@ -165,9 +165,9 @@ export default function ChallengesPage() {
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        <p className="text-gray-600 mb-4">{challenge.description}</p>
+        <p className="mb-4" style={{ color: "hsl(var(--muted-foreground))" }}>{challenge.description}</p>
         
-        <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+        <div className="flex items-center justify-between text-sm mb-4" style={{ color: "hsl(var(--muted-foreground))" }}>
           <div className="flex items-center">
             <Calendar className="h-4 w-4 mr-1" />
             {formatDate(challenge.startDate)} - {formatDate(challenge.endDate)}
@@ -223,7 +223,7 @@ export default function ChallengesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-primary">
+              <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--primary))" }}>
                 <MapPin className="inline-block mr-2" />
                 TravelQuest
               </h1>
@@ -241,8 +241,8 @@ export default function ChallengesPage() {
           
           {/* Page Header */}
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Challenges</h2>
-            <p className="text-gray-600">Take on exciting challenges to earn XP, unlock badges, and discover new adventures!</p>
+            <h2 className="text-3xl font-bold mb-2" style={{ color: "hsl(var(--foreground))" }}>Challenges</h2>
+            <p style={{ color: "hsl(var(--muted-foreground))" }}>Take on exciting challenges to earn XP, unlock badges, and discover new adventures!</p>
           </div>
 
           {/* Challenge Stats */}
@@ -254,8 +254,8 @@ export default function ChallengesPage() {
                     <Target className="text-blue-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900">{activeChallenges.length}</p>
-                    <p className="text-sm text-gray-600">Active Challenges</p>
+                    <p className="text-2xl font-bold" style={{ color: "hsl(var(--foreground))" }}>{activeChallenges.length}</p>
+                    <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>Active Challenges</p>
                   </div>
                 </div>
               </CardContent>
@@ -268,8 +268,8 @@ export default function ChallengesPage() {
                     <CheckCircle className="text-green-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900">{completedChallenges.length}</p>
-                    <p className="text-sm text-gray-600">Completed</p>
+                    <p className="text-2xl font-bold" style={{ color: "hsl(var(--foreground))" }}>{completedChallenges.length}</p>
+                    <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>Completed</p>
                   </div>
                 </div>
               </CardContent>
@@ -282,8 +282,8 @@ export default function ChallengesPage() {
                     <Clock className="text-purple-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-2xl font-bold text-gray-900">{availableChallenges.length}</p>
-                    <p className="text-sm text-gray-600">Available</p>
+                    <p className="text-2xl font-bold" style={{ color: "hsl(var(--foreground))" }}>{availableChallenges.length}</p>
+                    <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>Available</p>
                   </div>
                 </div>
               </CardContent>
@@ -303,7 +303,7 @@ export default function ChallengesPage() {
               {challengesLoading ? (
                 <div className="text-center py-12">
                   <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
-                  <p className="text-gray-500 mt-4">Loading challenges...</p>
+                  <p className="mt-4" style={{ color: "hsl(var(--muted-foreground))" }}>Loading challenges...</p>
                 </div>
               ) : availableChallenges.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -134,7 +134,7 @@ export default function ProfilePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-primary">
+              <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--primary))" }}>
                 <MapPin className="inline-block mr-2" />
                 TravelQuest
               </h1>
@@ -165,21 +165,21 @@ export default function ProfilePage() {
                   {!isEditing ? (
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <h2 className="text-3xl font-bold text-gray-900">{user.displayName}</h2>
+                        <h2 className="text-3xl font-bold" style={{ color: "hsl(var(--foreground))" }}>{user.displayName}</h2>
                         <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
                           <Edit className="h-4 w-4 mr-2" />
                           Edit Profile
                         </Button>
                       </div>
                       <div className="flex items-center space-x-4 mb-4">
-                        <span className="text-lg text-gray-600">@{user.username}</span>
+                        <span className="text-lg" style={{ color: "hsl(var(--muted-foreground))" }}>@{user.username}</span>
                         <Badge variant="secondary">{getTravelStyleName(user.travelStyle)}</Badge>
                         <div className="flex items-center text-primary">
                           <Trophy className="h-4 w-4 mr-1" />
                           <span className="font-semibold">Level {currentLevel}</span>
                         </div>
                       </div>
-                      <p className="text-gray-700">{user.bio || "No bio yet. Add one to tell others about your travel interests!"}</p>
+                      <p style={{ color: "hsl(var(--foreground))" }}>{user.bio || "No bio yet. Add one to tell others about your travel interests!"}</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
