@@ -134,12 +134,12 @@ export default function ProfilePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-high-contrast">
+              <h1 className="text-2xl font-bold text-white">
                 <MapPin className="inline-block mr-2" />
                 TravelQuest
               </h1>
             </div>
-            <Button variant="ghost" onClick={() => window.history.back()} className="text-high-contrast">
+            <Button variant="ghost" onClick={() => window.history.back()} className="text-white hover:text-white/80">
               Back to Dashboard
             </Button>
           </div>
@@ -165,21 +165,21 @@ export default function ProfilePage() {
                   {!isEditing ? (
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <h2 className="text-3xl font-bold text-high-contrast">{user.displayName}</h2>
-                        <Button variant="outline" size="sm" onClick={() => setIsEditing(true)} className="text-high-contrast">
+                        <h2 className="text-3xl font-bold text-white">{user.displayName}</h2>
+                        <Button variant="outline" size="sm" onClick={() => setIsEditing(true)} className="text-white border-white/30 hover:bg-white/10">
                           <Edit className="h-4 w-4 mr-2" />
                           Edit Profile
                         </Button>
                       </div>
                       <div className="flex items-center space-x-4 mb-4">
-                        <span className="text-lg text-medium-contrast">@{user.username}</span>
+                        <span className="text-lg text-white/80">@{user.username}</span>
                         <Badge variant="secondary">{getTravelStyleName(user.travelStyle)}</Badge>
-                        <div className="flex items-center text-primary">
-                          <Trophy className="h-4 w-4 mr-1" />
+                        <div className="flex items-center text-white">
+                          <Trophy className="h-4 w-4 mr-1 text-yellow-400" />
                           <span className="font-semibold">Level {currentLevel}</span>
                         </div>
                       </div>
-                      <p style={{ color: "hsl(var(--foreground))" }}>{user.bio || "No bio yet. Add one to tell others about your travel interests!"}</p>
+                      <p className="text-white/90">{user.bio || "No bio yet. Add one to tell others about your travel interests!"}</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -223,7 +223,7 @@ export default function ProfilePage() {
                           rows={3}
                           maxLength={500}
                         />
-                        <p className="text-gray-500 text-xs mt-1">Maximum 500 characters</p>
+                        <p className="text-white/60 text-xs mt-1">Maximum 500 characters</p>
                       </div>
                       
                       <div className="flex space-x-2">
@@ -246,24 +246,24 @@ export default function ProfilePage() {
           {/* XP Progress */}
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle className="text-lg flex items-center">
-                <Star className="h-5 w-5 mr-2 text-primary" />
+              <CardTitle className="text-lg flex items-center text-white">
+                <Star className="h-5 w-5 mr-2 text-yellow-400" />
                 Level Progress
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-white">
                   Level {currentLevel} → Level {currentLevel + 1}
                 </span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-white/70">
                   {xpToNextLevel} XP to go
                 </span>
               </div>
               <Progress value={progressPercentage} className="h-4" />
-              <div className="flex justify-between text-xs text-gray-500">
+              <div className="flex justify-between text-xs text-white/70">
                 <span>{currentLevelXP} XP</span>
-                <span className="font-medium">{user.totalXP} XP</span>
+                <span className="font-medium text-white">{user.totalXP} XP</span>
                 <span>{nextLevelXP} XP</span>
               </div>
             </CardContent>
