@@ -58,10 +58,10 @@ export default function AuthPage() {
       <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-black" style={{ color: "hsl(var(--foreground))" }}>
+            <h2 className="text-3xl font-black text-high-contrast">
               {isSignUp ? "START YOUR ADVENTURE" : "WELCOME BACK!"}
             </h2>
-            <p className="mt-2 font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>
+            <p className="mt-2 font-semibold text-medium-contrast">
               {isSignUp ? "Create your account and begin earning XP" : "Sign in to continue your travel quest"}
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function AuthPage() {
                 <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-background font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>OR</span>
+                <span className="px-4 bg-background font-semibold text-medium-contrast">OR</span>
               </div>
             </div>
             {!isSignUp ? (
@@ -275,7 +275,7 @@ export default function AuthPage() {
             )}
 
             <div className="mt-6 text-center">
-              <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
+              <p className="text-sm font-semibold text-medium-contrast">
                 {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
                 <button
                   type="button"
@@ -297,8 +297,8 @@ export default function AuthPage() {
           <div className="text-center px-8 max-w-lg">
             <div className="neopop-card p-8 mb-8">
               <MapPin className="h-16 w-16 mx-auto mb-6 text-primary" />
-              <h1 className="text-4xl font-black mb-6" style={{ color: "hsl(var(--foreground))" }}>TURN YOUR ADVENTURES INTO ACHIEVEMENTS</h1>
-              <p className="text-lg mb-8 font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>
+              <h1 className="text-4xl font-black mb-6 text-high-contrast">TURN YOUR ADVENTURES INTO ACHIEVEMENTS</h1>
+              <p className="text-lg mb-8 font-semibold text-medium-contrast">
                 Earn XP, unlock badges, and level up your travel experiences with TravelQuest
               </p>
               <div className="grid grid-cols-1 gap-4 text-left">
@@ -306,19 +306,19 @@ export default function AuthPage() {
                   <div className="w-12 h-12 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-full flex items-center justify-center mr-4 border border-yellow-500/30">
                     <span className="text-2xl">🏆</span>
                   </div>
-                  <span className="font-bold" style={{ color: "hsl(var(--foreground))" }}>EARN XP & LEVEL UP</span>
+                  <span className="font-bold text-high-contrast">EARN XP & LEVEL UP</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center mr-4 border border-purple-500/30">
                     <span className="text-2xl">🏅</span>
                   </div>
-                  <span className="font-bold" style={{ color: "hsl(var(--foreground))" }}>COLLECT ACHIEVEMENT BADGES</span>
+                  <span className="font-bold text-high-contrast">COLLECT ACHIEVEMENT BADGES</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full flex items-center justify-center mr-4 border border-cyan-500/30">
                     <span className="text-2xl">👥</span>
                   </div>
-                  <span className="font-bold" style={{ color: "hsl(var(--foreground))" }}>CONNECT WITH FELLOW TRAVELERS</span>
+                  <span className="font-bold text-high-contrast">CONNECT WITH FELLOW TRAVELERS</span>
                 </div>
               </div>
             </div>
