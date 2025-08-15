@@ -387,7 +387,15 @@ export function SimpleDashboard() {
                 ))}
               </div>
               
-              <Button variant="outline" className="w-full border-2 border-blue-200 text-blue-700 hover:bg-blue-50 font-medium py-3">
+              <Button 
+                variant="outline" 
+                className="w-full border-2 border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 font-medium py-3 bg-white/80 backdrop-blur-sm transition-all duration-200"
+                style={{
+                  boxShadow: "0 2px 8px rgba(0, 124, 255, 0.1)",
+                  borderColor: "#007cff",
+                  color: "#1e40af"
+                }}
+              >
                 View All Activity
               </Button>
             </CardContent>

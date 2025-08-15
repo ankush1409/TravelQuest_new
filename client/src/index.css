@@ -324,6 +324,20 @@
     color: hsl(210 9% 31%) !important; /* lighter charcoal for muted text */
   }
 
+  /* Ensure button visibility */
+  button[class*="outline"] {
+    border: 2px solid #007cff !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #1e40af !important;
+    font-weight: 600 !important;
+  }
+  
+  button[class*="outline"]:hover {
+    background: rgba(0, 124, 255, 0.1) !important;
+    color: #1e40af !important;
+    border-color: #0056b3 !important;
+  }
+
   /* White text for dark backgrounds - comprehensive */
   .text-on-dark, .text-white, .text-white * {
     color: #ffffff !important; /* white text on dark backgrounds */
