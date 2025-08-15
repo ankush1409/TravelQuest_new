@@ -433,6 +433,7 @@ export function DesktopNavigation() {
                           className={`flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-all duration-200 rounded-lg mx-2 ${
                             isActive ? "text-blue-600 bg-blue-100 font-semibold" : "text-gray-700 hover:text-blue-600"
                           }`}
+                          style={{ color: isActive ? '#2563eb' : '#374151' }}
                           role="menuitem"
                         >
                           {item.icon}
@@ -450,7 +451,7 @@ export function DesktopNavigation() {
 
                   {/* Quick Actions Section */}
                   <div className="px-4 py-3">
-                    <p className="text-xs font-bold uppercase tracking-wider mb-3 text-gray-500">
+                    <p className="text-xs font-bold uppercase tracking-wider mb-3 text-gray-500" style={{ color: '#6b7280' }}>
                       QUICK ACTIONS
                     </p>
                     <div className="grid grid-cols-2 gap-3">
@@ -461,7 +462,7 @@ export function DesktopNavigation() {
                         role="menuitem"
                       >
                         <User className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform mb-1" />
-                        <span className="text-xs font-medium text-gray-700 group-hover:text-blue-600">Profile</span>
+                        <span className="text-xs font-medium text-gray-700 group-hover:text-blue-600" style={{ color: '#374151' }}>Profile</span>
                       </Link>
                       
                       <Link
@@ -471,7 +472,7 @@ export function DesktopNavigation() {
                         role="menuitem"
                       >
                         <Trophy className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform mb-1" />
-                        <span className="text-xs font-medium text-gray-700 group-hover:text-amber-600">Badges</span>
+                        <span className="text-xs font-medium text-gray-700 group-hover:text-amber-600" style={{ color: '#374151' }}>Badges</span>
                       </Link>
                     </div>
                   </div>
@@ -483,20 +484,22 @@ export function DesktopNavigation() {
                     href="/settings"
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-all duration-200 group rounded-lg mx-2 text-gray-700 hover:text-gray-900"
+                    style={{ color: '#374151' }}
                     role="menuitem"
                   >
                     <Settings className="w-5 h-5 text-gray-500 group-hover:text-gray-700 group-hover:rotate-90 transition-all duration-300" />
-                    <span className="font-medium">Settings</span>
+                    <span className="font-medium" style={{ color: '#374151' }}>Settings</span>
                   </Link>
                   
                   <Link
                     href="/notifications"
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-all duration-200 rounded-lg mx-2 text-gray-700 hover:text-blue-600"
+                    style={{ color: '#374151' }}
                     role="menuitem"
                   >
                     <Bell className="w-5 h-5 text-gray-500 group-hover:text-blue-600 transition-colors" />
-                    <span className="font-medium">Notifications</span>
+                    <span className="font-medium" style={{ color: '#374151' }}>Notifications</span>
                     <Badge 
                       className="ml-auto h-5 text-xs font-semibold bg-red-500 hover:bg-red-500 text-white border-0"
                     >
@@ -509,10 +512,11 @@ export function DesktopNavigation() {
                   <button
                     onClick={handleLogout}
                     className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-red-50 hover:text-red-600 transition-all duration-200 rounded-lg mx-2 font-medium text-gray-600"
+                    style={{ color: '#6b7280' }}
                     role="menuitem"
                   >
                     <X className="w-5 h-5" />
-                    <span>Sign Out</span>
+                    <span style={{ color: '#6b7280' }}>Sign Out</span>
                   </button>
                 </motion.div>
               )}

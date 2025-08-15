@@ -412,6 +412,30 @@
     -webkit-backdrop-filter: blur(20px);
   }
   
+  .dropdown-menu * {
+    color: #374151 !important;
+  }
+  
+  .dropdown-menu p {
+    color: #6b7280 !important;
+  }
+  
+  .dropdown-menu span {
+    color: #374151 !important;
+  }
+  
+  .dropdown-menu .text-blue-600 {
+    color: #2563eb !important;
+  }
+  
+  .dropdown-menu .text-amber-600 {
+    color: #d97706 !important;
+  }
+  
+  .dropdown-menu .text-gray-500 {
+    color: #6b7280 !important;
+  }
+  
   .dropdown-menu-item {
     position: relative;
     overflow: hidden;
