@@ -128,18 +128,18 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-card border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold" style={{ color: "hsl(var(--primary))" }}>
+              <h1 className="text-2xl font-bold text-high-contrast">
                 <MapPin className="inline-block mr-2" />
                 TravelQuest
               </h1>
             </div>
-            <Button variant="ghost" onClick={() => window.history.back()}>
+            <Button variant="ghost" onClick={() => window.history.back()} className="text-high-contrast">
               Back to Dashboard
             </Button>
           </div>
@@ -165,14 +165,14 @@ export default function ProfilePage() {
                   {!isEditing ? (
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <h2 className="text-3xl font-bold" style={{ color: "hsl(var(--foreground))" }}>{user.displayName}</h2>
-                        <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+                        <h2 className="text-3xl font-bold text-high-contrast">{user.displayName}</h2>
+                        <Button variant="outline" size="sm" onClick={() => setIsEditing(true)} className="text-high-contrast">
                           <Edit className="h-4 w-4 mr-2" />
                           Edit Profile
                         </Button>
                       </div>
                       <div className="flex items-center space-x-4 mb-4">
-                        <span className="text-lg" style={{ color: "hsl(var(--muted-foreground))" }}>@{user.username}</span>
+                        <span className="text-lg text-medium-contrast">@{user.username}</span>
                         <Badge variant="secondary">{getTravelStyleName(user.travelStyle)}</Badge>
                         <div className="flex items-center text-primary">
                           <Trophy className="h-4 w-4 mr-1" />

@@ -4,47 +4,47 @@
 
 @layer base {
   :root {
-    /* Yatra.com inspired theme - clean white backgrounds with red accents */
+    /* Light theme with excellent readability */
     --background: 0 0% 100%;
-    --foreground: 0 0% 9%;
+    --foreground: 0 0% 5%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 0 0% 5%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 0 0% 5%;
     
-    /* Yatra brand colors - signature red primary */
-    --primary: 356 81% 53%;
+    /* Yatra brand colors with improved contrast */
+    --primary: 356 81% 45%;
     --primary-foreground: 0 0% 100%;
-    --primary-dark: 356 81% 45%;
-    --primary-light: 356 81% 85%;
+    --primary-dark: 356 81% 35%;
+    --primary-light: 356 81% 95%;
     
-    /* Yatra-inspired accent colors for gamification */
-    --xp-color: 356 81% 53%;
-    --location-color: 207 90% 54%;
-    --challenge-color: 45 93% 47%;
-    --streak-color: 142 71% 45%;
-    --level-color: 25 85% 55%;
+    /* High contrast gamification colors */
+    --xp-color: 356 81% 45%;
+    --location-color: 207 90% 45%;
+    --challenge-color: 45 93% 40%;
+    --streak-color: 142 71% 35%;
+    --level-color: 25 85% 45%;
     
-    /* Clean UI system colors - Yatra style */
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 210 20% 94%;
-    --muted-foreground: 0 0% 25%;
-    --accent: 210 20% 96%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84% 60%;
+    /* Light theme UI system colors with strong contrast */
+    --secondary: 210 20% 97%;
+    --secondary-foreground: 0 0% 5%;
+    --muted: 210 20% 95%;
+    --muted-foreground: 0 0% 15%;
+    --accent: 210 20% 97%;
+    --accent-foreground: 0 0% 5%;
+    --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 356 81% 53%;
+    --border: 214 32% 88%;
+    --input: 214 32% 96%;
+    --ring: 356 81% 45%;
     
-    /* Yatra-inspired gradients - clean and modern */
-    --gradient-primary: linear-gradient(135deg, hsl(356 81% 53%) 0%, hsl(356 81% 45%) 100%);
-    --gradient-xp: linear-gradient(135deg, hsl(356 81% 53%) 0%, hsl(356 81% 45%) 100%);
-    --gradient-location: linear-gradient(135deg, hsl(207 90% 54%) 0%, hsl(207 90% 45%) 100%);
-    --gradient-challenge: linear-gradient(135deg, hsl(45 93% 47%) 0%, hsl(45 93% 38%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
-    --gradient-surface: linear-gradient(135deg, hsla(0 0% 100% / 0.98) 0%, hsla(210 20% 99% / 0.98) 100%);
+    /* Light theme gradients with enhanced readability */
+    --gradient-primary: linear-gradient(135deg, hsl(356 81% 45%) 0%, hsl(356 81% 35%) 100%);
+    --gradient-xp: linear-gradient(135deg, hsl(356 81% 45%) 0%, hsl(356 81% 35%) 100%);
+    --gradient-location: linear-gradient(135deg, hsl(207 90% 45%) 0%, hsl(207 90% 35%) 100%);
+    --gradient-challenge: linear-gradient(135deg, hsl(45 93% 40%) 0%, hsl(45 93% 30%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 20% 99%) 100%);
+    --gradient-surface: linear-gradient(135deg, hsla(0 0% 100% / 1) 0%, hsla(210 20% 99% / 1) 100%);
     
     /* Shadow system */
     --shadow-sm: 0 1px 2px 0 hsl(220 13% 18% / 0.05);
@@ -146,13 +146,15 @@
     box-shadow: var(--shadow);
   }
 
-  /* Enhanced text visibility classes */
+  /* Enhanced text visibility classes for light theme */
   .text-high-contrast {
-    color: hsl(var(--foreground)) !important;
+    color: hsl(0 0% 5%) !important;
+    font-weight: 600;
   }
 
   .text-medium-contrast {
-    color: hsl(var(--muted-foreground)) !important;
+    color: hsl(0 0% 15%) !important;
+    font-weight: 500;
   }
 
   /* Menu and dropdown enhancements */
@@ -197,18 +199,20 @@
     }
   }
 
-  /* Ensure text is always visible against dark backgrounds */
+  /* Ensure text is always visible in light theme */
   .text-visible {
-    color: white !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    color: hsl(0 0% 5%) !important;
+    font-weight: 600;
   }
 
   .text-secondary-visible {
-    color: rgb(203 213 225) !important; /* slate-300 */
+    color: hsl(0 0% 15%) !important;
+    font-weight: 500;
   }
 
   .text-muted-visible {
-    color: rgb(148 163 184) !important; /* slate-400 */
+    color: hsl(0 0% 35%) !important;
+    font-weight: 400;
   }
 
   /* Reduced motion support */
@@ -218,6 +222,34 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+
+  /* Global text readability for light theme */
+  * {
+    color: inherit !important;
+  }
+
+  /* Force readable text colors throughout the application */
+  h1, h2, h3, h4, h5, h6, .text-4xl, .text-3xl, .text-2xl, .text-xl, .text-lg {
+    color: hsl(0 0% 5%) !important;
+    font-weight: 700 !important;
+  }
+
+  p, span, div:not(.icon), .text-sm, .text-base {
+    color: hsl(0 0% 20%) !important;
+  }
+
+  .text-muted-foreground, .text-sm {
+    color: hsl(0 0% 35%) !important;
+  }
+
+  /* Override all inline styles for text visibility */
+  [style*="color: hsl(var(--foreground))"] {
+    color: hsl(0 0% 5%) !important;
+  }
+
+  [style*="color: hsl(var(--muted-foreground))"] {
+    color: hsl(0 0% 35%) !important;
   }
 
   .neopop-card:before {
