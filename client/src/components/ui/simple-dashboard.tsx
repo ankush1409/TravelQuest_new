@@ -221,29 +221,30 @@ export function SimpleDashboard() {
               transition: { type: "spring", stiffness: 300 }
             }}
           >
-            <Card className={`neopop-card group cursor-pointer overflow-hidden border-2 ${card.bgColor}`}>
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-4">
+            <Card className={`group cursor-pointer overflow-hidden ${card.bgColor} border-0`}
+                  style={{ boxShadow: "var(--shadow-md)" }}>
+              <CardContent className="p-8">
+                <div className="flex items-center space-x-6">
                   <motion.div 
-                    className="p-3 rounded-2xl bg-white/80 shadow-sm group-hover:scale-110 transition-transform duration-300 border"
-                    whileHover={{ rotate: [0, -10, 10, 0] }}
-                    transition={{ duration: 0.5 }}
+                    className="p-4 rounded-2xl bg-white shadow-sm group-hover:scale-105 transition-transform duration-300 border border-white/50"
+                    whileHover={{ rotate: [0, -5, 5, 0] }}
+                    transition={{ duration: 0.4 }}
                   >
-                    <card.icon className={`h-6 w-6 ${card.iconColor}`} />
+                    <card.icon className={`h-8 w-8 ${card.iconColor}`} />
                   </motion.div>
-                  <div className="flex-1">
-                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold text-muted-foreground/80 mb-2 uppercase tracking-wide">
                       {card.title}
                     </h3>
                     <motion.div 
-                      className={`text-3xl font-black ${card.textColor || 'text-foreground'}`}
+                      className={`text-4xl font-black mb-1 ${card.textColor || 'text-foreground'}`}
                       initial={{ scale: 1 }}
-                      whileInView={{ scale: [1, 1.1, 1] }}
-                      transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
+                      whileInView={{ scale: [1, 1.05, 1] }}
+                      transition={{ duration: 0.4, delay: 0.7 + index * 0.1 }}
                     >
                       {card.value}
                     </motion.div>
-                    <p className={`text-sm font-medium ${card.textColor || 'text-muted-foreground'}`}>
+                    <p className={`text-sm font-medium ${card.textColor ? card.textColor.replace('900', '700') : 'text-muted-foreground'}`}>
                       {card.subtitle}
                     </p>
                   </div>
@@ -260,25 +261,35 @@ export function SimpleDashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
       >
-        <Card className="neopop-card">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center space-x-2">
-              <Calendar className="h-5 w-5 text-primary" />
-              <span>Current Streak</span>
-              <Badge variant="secondary" className="ml-auto">
+        <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-100"
+              style={{ boxShadow: "var(--shadow-md)" }}>
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <Calendar className="h-5 w-5 text-green-600" />
+                </div>
+                <span className="text-lg font-bold text-foreground">Current Streak</span>
+              </div>
+              <Badge className="bg-green-500 hover:bg-green-500 text-white font-bold px-3 py-1">
                 {userData.streak} days
               </Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="flex items-center space-x-4">
-              <div className="flex-1">
-                <Progress value={(userData.streak / 7) * 100} className="h-2" />
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm font-medium">
+                <span className="text-green-700">Progress to weekly badge</span>
+                <span className="text-green-700">{userData.streak}/7 days</span>
               </div>
-              <span className="text-sm font-medium text-muted-foreground">
-                {7 - userData.streak} days to weekly badge
-              </span>
+              <Progress 
+                value={(userData.streak / 7) * 100} 
+                className="h-3 bg-green-100" 
+              />
             </div>
+            <p className="text-sm text-green-600 font-medium">
+              {7 - userData.streak} more days to earn your weekly badge!
+            </p>
           </CardContent>
         </Card>
       </motion.div>
@@ -295,74 +306,77 @@ export function SimpleDashboard() {
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          <Card className="neopop-card group cursor-pointer border-2"
-                style={{ 
-                  background: "linear-gradient(135deg, hsl(158 64% 52% / 0.05) 0%, hsl(217 91% 60% / 0.05) 100%)",
-                  borderColor: "hsl(var(--primary) / 0.2)"
-                }}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-foreground">
+          <Card className="bg-gradient-to-br from-primary/5 via-primary/8 to-blue-50 border-primary/20 group cursor-pointer border-0"
+                style={{ boxShadow: "var(--shadow-md)" }}>
+            <CardContent className="p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div className="space-y-3">
+                  <h3 className="text-2xl font-bold text-foreground">
                     Start a New Journey
                   </h3>
-                  <p className="text-muted-foreground font-medium">
-                    Discover amazing places nearby
+                  <p className="text-muted-foreground font-medium text-base">
+                    Discover amazing places nearby and earn XP
                   </p>
                 </div>
                 <motion.div
-                  className="p-3 rounded-full transition-colors duration-300 shadow-sm"
+                  className="p-4 rounded-2xl shadow-lg"
                   style={{ background: "var(--gradient-primary)" }}
                   whileHover={{ rotate: 360, scale: 1.1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Navigation className="h-6 w-6 text-white" />
+                  <Navigation className="h-8 w-8 text-white" />
                 </motion.div>
               </div>
-              <Button className="w-full mt-4 premium-button">
+              <Button className="w-full premium-button text-base py-4">
                 Explore Now
               </Button>
             </CardContent>
           </Card>
         </motion.div>
 
-        {/* Mini Map Preview */}
+        {/* Recent Activity */}
         <motion.div
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          <Card className="neopop-card group cursor-pointer">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="space-y-1">
-                  <h3 className="text-xl font-bold text-foreground">
-                    Recent Locations
+          <Card className="bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 border-blue-100 group cursor-pointer border-0"
+                style={{ boxShadow: "var(--shadow-md)" }}>
+            <CardContent className="p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-foreground">
+                    Recent Activity
                   </h3>
-                  <p className="text-muted-foreground text-sm">
-                    3 new places discovered
+                  <p className="text-blue-600 font-medium">
+                    3 new places discovered this week
                   </p>
                 </div>
-                <Globe className="h-6 w-6 text-primary group-hover:text-accent transition-colors duration-300" />
+                <div className="p-3 bg-blue-100 rounded-2xl">
+                  <Globe className="h-8 w-8 text-blue-600 group-hover:rotate-12 transition-transform duration-300" />
+                </div>
               </div>
               
-              {/* Mock recent locations */}
-              <div className="space-y-2">
+              {/* Recent locations with better styling */}
+              <div className="space-y-4 mb-6">
                 {[
-                  { name: "Central Park", xp: "+25 XP" },
-                  { name: "Brooklyn Bridge", xp: "+30 XP" },
-                  { name: "Times Square", xp: "+20 XP" }
+                  { name: "Central Park", xp: "+25 XP", icon: "🌳" },
+                  { name: "Brooklyn Bridge", xp: "+30 XP", icon: "🌉" },
+                  { name: "Times Square", xp: "+20 XP", icon: "🏙️" }
                 ].map((location, i) => (
-                  <div key={i} className="flex items-center justify-between text-sm">
-                    <span className="text-foreground">{location.name}</span>
-                    <Badge variant="outline" className="text-primary">
+                  <div key={i} className="flex items-center justify-between p-3 bg-white/60 rounded-lg border border-blue-100">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-lg">{location.icon}</span>
+                      <span className="font-medium text-foreground">{location.name}</span>
+                    </div>
+                    <Badge className="bg-purple-500 hover:bg-purple-500 text-white font-semibold">
                       {location.xp}
                     </Badge>
                   </div>
                 ))}
               </div>
               
-              <Button variant="outline" className="w-full mt-4">
-                View Map
+              <Button variant="outline" className="w-full border-2 border-blue-200 text-blue-700 hover:bg-blue-50 font-medium py-3">
+                View All Activity
               </Button>
             </CardContent>
           </Card>

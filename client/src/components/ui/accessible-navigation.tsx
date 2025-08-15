@@ -283,24 +283,27 @@ export function DesktopNavigation() {
                 >
                   <Link
                     href={item.href}
-                    className={`relative px-6 py-3 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 group ${
+                    className={`relative px-4 py-3 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 group ${
                       isActive
-                        ? "nav-active text-white"
-                        : "nav-item"
+                        ? "text-primary bg-primary/8"
+                        : "text-foreground/70 hover:text-foreground hover:bg-muted/50"
                     }`}
-                    style={{
-                      background: isActive ? "var(--gradient-primary)" : "transparent",
-                      boxShadow: isActive ? "var(--shadow)" : "none"
-                    }}
                     role="tab"
                     aria-selected={isActive}
                     aria-label={`${item.label}: ${item.description}`}
                   >
                   <div className="flex items-center space-x-2">
-                    {item.icon}
-                    <span>{item.label}</span>
+                    <div className={`transition-colors duration-200 ${isActive ? 'text-primary' : 'text-foreground/60 group-hover:text-foreground/80'}`}>
+                      {item.icon}
+                    </div>
+                    <span className={`font-medium ${isActive ? 'text-primary font-semibold' : ''}`}>
+                      {item.label}
+                    </span>
                     {item.badge && (
-                      <Badge variant="destructive" className="h-5 text-xs" aria-label={`${item.badge} notifications`}>
+                      <Badge 
+                        className="h-5 text-xs font-semibold bg-red-500 hover:bg-red-500 text-white border-0 ml-1" 
+                        aria-label={`${item.badge} notifications`}
+                      >
                         {item.badge}
                       </Badge>
                     )}
@@ -308,9 +311,9 @@ export function DesktopNavigation() {
                   {isActive && (
                     <motion.div
                       layoutId="desktop-nav-indicator"
-                      className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-primary rounded-full"
+                      className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"
                       initial={false}
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
                 </Link>
@@ -344,39 +347,44 @@ export function DesktopNavigation() {
                 
                 {/* Notification Badge with Pulse */}
                 <motion.div
-                  className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center"
+                  className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 rounded-full flex items-center justify-center shadow-sm border-2 border-background"
                   animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [1, 0.8, 1],
+                    scale: [1, 1.1, 1],
                   }}
                   transition={{
                     duration: 2,
                     repeat: Infinity,
                   }}
                 >
-                  <span className="text-xs font-bold text-white">3</span>
+                  <span className="text-xs font-bold text-white px-1">3</span>
                 </motion.div>
               </Button>
               
               {/* Notification Preview on Hover */}
-              <motion.div
-                className="absolute right-0 top-12 w-64 bg-background border border-border rounded-xl shadow-2xl p-4 z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300"
-                initial={{ opacity: 0, y: -10 }}
-                whileHover={{ opacity: 1, y: 0 }}
-              >
-                <h4 className="font-semibold text-foreground mb-2">Recent Notifications</h4>
-                <div className="space-y-2">
-                  <div className="text-sm text-muted-foreground">
-                    <span className="font-medium">+25 XP</span> earned from Central Park check-in
+              <div className="absolute right-0 top-14 w-72 bg-background border border-border rounded-xl shadow-2xl p-4 z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+                <h4 className="font-semibold text-foreground mb-3 text-sm">Recent Notifications</h4>
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-muted/30 transition-colors">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">+25 XP</span>
+                      <span className="text-muted-foreground"> earned from Central Park check-in</span>
+                    </div>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    New challenge available: "Weekend Explorer"
+                  <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-muted/30 transition-colors">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="text-sm text-muted-foreground">
+                      New challenge available: <span className="font-medium text-foreground">"Weekend Explorer"</span>
+                    </div>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    You've unlocked the "City Walker" badge!
+                  <div className="flex items-start space-x-3 p-2 rounded-lg hover:bg-muted/30 transition-colors">
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="text-sm text-muted-foreground">
+                      You've unlocked the <span className="font-medium text-foreground">"City Walker"</span> badge!
+                    </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
           </div>
 
@@ -461,8 +469,9 @@ export function DesktopNavigation() {
                   initial={{ opacity: 0, scale: 0.95, y: -10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                  transition={{ duration: 0.1 }}
-                  className="absolute right-0 mt-2 w-56 bg-background border border-border rounded-xl shadow-2xl py-2 z-50"
+                  transition={{ duration: 0.15 }}
+                  className="absolute right-0 mt-3 w-64 bg-background border border-border rounded-xl py-2 z-50"
+                  style={{ boxShadow: "var(--shadow-xl)" }}
                   role="menu"
                   aria-orientation="vertical"
                 >
@@ -494,29 +503,29 @@ export function DesktopNavigation() {
                   </div>
 
                   {/* Quick Actions Section */}
-                  <div className="px-4 py-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  <div className="px-4 py-3">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
                       Quick Actions
                     </p>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-3">
                       <Link
                         href="/profile"
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex flex-col items-center p-3 rounded-lg hover:bg-primary/10 transition-colors group"
+                        className="flex flex-col items-center p-4 rounded-lg hover:bg-primary/8 transition-all duration-200 group border border-transparent hover:border-primary/20"
                         role="menuitem"
                       >
-                        <User className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
-                        <span className="text-xs mt-1">Profile</span>
+                        <User className="w-6 h-6 text-primary group-hover:scale-110 transition-transform mb-1" />
+                        <span className="text-xs font-medium text-foreground">Profile</span>
                       </Link>
                       
                       <Link
                         href="/challenges"
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex flex-col items-center p-3 rounded-lg hover:bg-primary/10 transition-colors group"
+                        className="flex flex-col items-center p-4 rounded-lg hover:bg-amber-50 transition-all duration-200 group border border-transparent hover:border-amber-200"
                         role="menuitem"
                       >
-                        <Trophy className="w-5 h-5 text-yellow-500 group-hover:scale-110 transition-transform" />
-                        <span className="text-xs mt-1">Badges</span>
+                        <Trophy className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform mb-1" />
+                        <span className="text-xs font-medium text-foreground">Badges</span>
                       </Link>
                     </div>
                   </div>
@@ -527,34 +536,36 @@ export function DesktopNavigation() {
                   <Link
                     href="/settings"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-3 hover:bg-muted/50 transition-colors text-foreground group"
+                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors text-foreground group rounded-lg mx-2"
                     role="menuitem"
                   >
-                    <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
-                    <span>Settings</span>
+                    <Settings className="w-5 h-5 text-muted-foreground group-hover:text-foreground group-hover:rotate-90 transition-all duration-300" />
+                    <span className="font-medium">Settings</span>
                   </Link>
                   
                   <Link
                     href="/notifications"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-3 hover:bg-muted/50 transition-colors text-foreground"
+                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors text-foreground rounded-lg mx-2"
                     role="menuitem"
                   >
-                    <Bell className="w-4 h-4" />
-                    <span>Notifications</span>
-                    <Badge variant="destructive" className="ml-auto h-4 text-xs">
+                    <Bell className="w-5 h-5 text-muted-foreground" />
+                    <span className="font-medium">Notifications</span>
+                    <Badge 
+                      className="ml-auto h-5 text-xs font-semibold bg-red-500 hover:bg-red-500 text-white border-0"
+                    >
                       3
                     </Badge>
                   </Link>
 
-                  <hr className="my-2 border-border" />
+                  <hr className="my-3 border-border mx-2" />
                   
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-muted/50 transition-colors text-destructive"
+                    className="w-full flex items-center space-x-3 px-4 py-4 hover:bg-red-50 hover:text-red-600 transition-colors text-muted-foreground rounded-lg mx-2 font-medium"
                     role="menuitem"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-5 h-5" />
                     <span>Sign Out</span>
                   </button>
                 </motion.div>
