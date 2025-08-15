@@ -4,15 +4,15 @@
 
 @layer base {
   :root {
-    /* Light mode colors */
+    /* Clean light theme colors */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 210 40% 96%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96%;
@@ -23,36 +23,18 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 262.1 83.3% 57.8%;
+    --ring: 142 76% 36%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
     --radius: 0.5rem;
-  }
-
-  .dark {
-    /* Dark mode colors */
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 262.1 83.3% 57.8%;
+    
+    /* Travel theme gradients */
+    --gradient-primary: linear-gradient(135deg, #00aa6c 0%, #009f63 100%);
+    --gradient-secondary: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    --gradient-accent: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
   }
 }
 
@@ -69,7 +51,11 @@
 /* Premium UI Styles */
 @layer components {
   .premium-button {
-    @apply relative overflow-hidden bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95;
+    @apply relative overflow-hidden bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-lg shadow-sm transform transition-all duration-200 hover:shadow-md active:scale-95;
+  }
+  
+  .premium-button:hover {
+    background-color: hsl(var(--primary) / 0.9);
   }
 
   .premium-button:before {
@@ -88,18 +74,11 @@
   }
 
   .premium-card {
-    @apply bg-card backdrop-blur-sm border border-border rounded-xl shadow-lg hover:shadow-xl transition-all duration-300;
-    background-color: hsl(var(--card) / 0.8);
-    border-color: hsl(var(--border) / 0.5);
+    @apply bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200;
   }
 
   .neopop-card {
-    @apply bg-card border-2 rounded-2xl shadow-lg backdrop-blur-sm relative overflow-hidden transition-all duration-300 hover:shadow-xl;
-    border-color: hsl(var(--primary) / 0.2);
-  }
-  
-  .neopop-card:hover {
-    border-color: hsl(var(--primary) / 0.3);
+    @apply bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200;
   }
 
   /* Accessibility improvements */

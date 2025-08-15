@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+
 import { NotificationCenter } from "@/components/ui/notification-center";
 
 // Calculate user level from total XP - matches the system from unified-xp-display
@@ -319,8 +319,6 @@ export function DesktopNavigation() {
 
           {/* Actions Bar */}
           <div className="flex items-center gap-3">
-            <ThemeToggle />
-            
             {/* Enhanced Notification Bell with Pulse */}
             <motion.div className="relative">
               <Button
