@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+
+import { useState } from 'react';
 
 function SimpleApp() {
-  useEffect(() => {
-    console.log("React app is mounting successfully!");
-  }, []);
   const [count, setCount] = useState(0);
 
   return (
