@@ -172,14 +172,14 @@ export default function ProfilePage() {
                         </Button>
                       </div>
                       <div className="flex items-center space-x-4 mb-4">
-                        <span className="text-lg text-white/80">@{user.username}</span>
+                        <span className="text-lg text-white font-medium">@{user.username}</span>
                         <Badge variant="secondary">{getTravelStyleName(user.travelStyle)}</Badge>
                         <div className="flex items-center text-white">
                           <Trophy className="h-4 w-4 mr-1 text-yellow-400" />
                           <span className="font-semibold">Level {currentLevel}</span>
                         </div>
                       </div>
-                      <p className="text-white/90">{user.bio || "No bio yet. Add one to tell others about your travel interests!"}</p>
+                      <p className="text-white">{user.bio || "No bio yet. Add one to tell others about your travel interests!"}</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -223,7 +223,7 @@ export default function ProfilePage() {
                           rows={3}
                           maxLength={500}
                         />
-                        <p className="text-white/60 text-xs mt-1">Maximum 500 characters</p>
+                        <p className="text-white text-xs mt-1">Maximum 500 characters</p>
                       </div>
                       
                       <div className="flex space-x-2">
