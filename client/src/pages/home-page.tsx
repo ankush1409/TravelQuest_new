@@ -1,7 +1,8 @@
 import { SimpleDashboard } from "@/components/ui/simple-dashboard";
 import { Breadcrumb } from "@/components/ui/accessible-navigation";
 import { motion } from "framer-motion";
-import { Zap, MapPin, Trophy, Users, Sparkles } from "lucide-react";
+import { Zap, MapPin, Trophy, Users } from "lucide-react";
+import logoUrl from "@assets/generated_images/TravelQuest_premium_logo_c117bd19.png";
 
 export default function HomePage() {
   const breadcrumbItems = [
@@ -86,12 +87,17 @@ export default function HomePage() {
           >
             <div className="flex items-center justify-center mb-6">
               <motion.div
-                className="w-16 h-16 rounded-3xl flex items-center justify-center mr-4"
+                className="w-16 h-16 rounded-3xl flex items-center justify-center mr-4 overflow-hidden"
                 style={{ background: "var(--gradient-primary)" }}
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
-                <Sparkles className="w-8 h-8 text-white" />
+                <img 
+                  src={logoUrl} 
+                  alt="TravelQuest Logo" 
+                  className="w-12 h-12 object-contain"
+                  style={{ filter: 'brightness(1.2) contrast(1.1)' }}
+                />
               </motion.div>
               <div className="text-left">
                 <h1 className="text-4xl md:text-6xl font-black leading-tight">
