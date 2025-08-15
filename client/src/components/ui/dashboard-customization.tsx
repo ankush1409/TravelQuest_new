@@ -388,7 +388,6 @@ export function CustomizableDashboard() {
                           widget={widget} 
                           isCustomizing={isCustomizing}
                           dragHandleProps={provided.dragHandleProps}
-
                         />
                       </motion.div>
                     )}

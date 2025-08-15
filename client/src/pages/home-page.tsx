@@ -1,4 +1,4 @@
-import { CustomizableDashboard } from "@/components/ui/dashboard-customization";
+import { SimpleDashboard } from "@/components/ui/simple-dashboard";
 import { Breadcrumb } from "@/components/ui/accessible-navigation";
 import { motion } from "framer-motion";
 import { Zap, MapPin, Trophy, Users, Sparkles } from "lucide-react";
@@ -144,7 +144,7 @@ export default function HomePage() {
       {/* Dashboard Content */}
       <div className="container mx-auto px-4">
         <Breadcrumb items={breadcrumbItems} />
-        <CustomizableDashboard />
+        <SimpleDashboard />
       </div>
     </motion.div>
   );
