@@ -4,47 +4,54 @@
 
 @layer base {
   :root {
-    /* Light theme with excellent readability */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    /* Travel-inspired light theme */
+    --background: 216 33% 97%; /* #f5f6fa light sky */
+    --foreground: 218 20% 16%; /* #1a2135 dark blue for headings */
+    --card: 0 0% 100%; /* pure white cards */
+    --card-foreground: 210 9% 16%; /* #23272b charcoal for body text */
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover-foreground: 210 9% 16%;
     
-    /* Yatra brand colors with improved contrast */
-    --primary: 356 81% 45%;
-    --primary-foreground: 0 0% 100%;
-    --primary-dark: 356 81% 35%;
-    --primary-light: 356 81% 95%;
+    /* Travel blue primary theme */
+    --primary: 209 100% 50%; /* #007cff blue */
+    --primary-foreground: 0 0% 100%; /* white text on blue */
+    --primary-dark: 209 100% 40%;
+    --primary-light: 209 100% 90%;
     
-    /* High contrast gamification colors */
-    --xp-color: 356 81% 45%;
-    --location-color: 207 90% 45%;
-    --challenge-color: 45 93% 40%;
-    --streak-color: 142 71% 35%;
-    --level-color: 25 85% 45%;
+    /* Travel-inspired accent colors */
+    --accent-teal: 175 100% 37%; /* #00bfae teal */
+    --accent-orange: 36 100% 50%; /* #ff9800 sunset orange */
+    --accent-sky: 216 33% 97%; /* #f5f6fa light sky */
     
-    /* Light theme UI system colors with strong contrast */
-    --secondary: 210 20% 97%;
-    --secondary-foreground: 0 0% 5%;
-    --muted: 210 20% 95%;
-    --muted-foreground: 0 0% 15%;
-    --accent: 210 20% 97%;
-    --accent-foreground: 0 0% 5%;
+    /* Gamification colors with travel theme */
+    --xp-color: 36 100% 50%; /* orange for XP */
+    --location-color: 209 100% 50%; /* blue for locations */
+    --challenge-color: 175 100% 37%; /* teal for challenges */
+    --streak-color: 209 100% 50%; /* blue for streaks */
+    --level-color: 36 100% 50%; /* orange for levels */
+    
+    /* Travel UI system colors */
+    --secondary: 216 33% 97%; /* light sky */
+    --secondary-foreground: 210 9% 16%; /* charcoal */
+    --muted: 216 20% 94%;
+    --muted-foreground: 210 9% 31%; /* lighter charcoal */
+    --accent: 175 100% 37%; /* teal accent */
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 32% 88%;
-    --input: 214 32% 96%;
-    --ring: 356 81% 45%;
+    --border: 216 20% 88%;
+    --input: 0 0% 100%;
+    --ring: 209 100% 50%;
     
-    /* Light theme gradients with enhanced readability */
-    --gradient-primary: linear-gradient(135deg, hsl(356 81% 45%) 0%, hsl(356 81% 35%) 100%);
-    --gradient-xp: linear-gradient(135deg, hsl(356 81% 45%) 0%, hsl(356 81% 35%) 100%);
-    --gradient-location: linear-gradient(135deg, hsl(207 90% 45%) 0%, hsl(207 90% 35%) 100%);
-    --gradient-challenge: linear-gradient(135deg, hsl(45 93% 40%) 0%, hsl(45 93% 30%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 20% 99%) 100%);
-    --gradient-surface: linear-gradient(135deg, hsla(0 0% 100% / 1) 0%, hsla(210 20% 99% / 1) 100%);
+    /* Travel-inspired gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(209 100% 50%) 0%, hsl(175 100% 37%) 100%); /* blue to teal */
+    --gradient-menu: linear-gradient(90deg, hsl(209 100% 50%) 0%, hsl(175 100% 37%) 100%); /* menu bar gradient */
+    --gradient-action: linear-gradient(135deg, hsl(209 100% 50%) 0%, hsl(175 100% 37%) 100%); /* action bar gradient */
+    --gradient-xp: linear-gradient(135deg, hsl(36 100% 50%) 0%, hsl(36 100% 40%) 100%); /* orange XP */
+    --gradient-location: linear-gradient(135deg, hsl(209 100% 50%) 0%, hsl(209 100% 40%) 100%); /* blue locations */
+    --gradient-challenge: linear-gradient(135deg, hsl(175 100% 37%) 0%, hsl(175 100% 30%) 100%); /* teal challenges */
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(216 33% 99%) 100%); /* white to light sky */
+    --gradient-surface: linear-gradient(135deg, hsl(216 33% 97%) 0%, hsl(0 0% 100%) 100%); /* light sky to white */
     
     /* Shadow system */
     --shadow-sm: 0 1px 2px 0 hsl(220 13% 18% / 0.05);
@@ -146,15 +153,27 @@
     box-shadow: var(--shadow);
   }
 
-  /* Enhanced text visibility classes for light theme */
+  /* Travel theme text visibility classes */
   .text-high-contrast {
-    color: hsl(0 0% 5%) !important;
-    font-weight: 600;
+    color: hsl(218 20% 16%) !important; /* #1a2135 dark blue */
+    font-weight: 700;
   }
 
   .text-medium-contrast {
-    color: hsl(0 0% 15%) !important;
+    color: hsl(210 9% 16%) !important; /* #23272b charcoal */
     font-weight: 500;
+  }
+
+  .text-travel-blue {
+    color: hsl(209 100% 50%) !important; /* #007cff blue */
+  }
+
+  .text-travel-orange {
+    color: hsl(36 100% 50%) !important; /* #ff9800 orange */
+  }
+
+  .text-travel-teal {
+    color: hsl(175 100% 37%) !important; /* #00bfae teal */
   }
 
   /* Menu and dropdown enhancements */
@@ -199,20 +218,44 @@
     }
   }
 
-  /* Ensure text is always visible in light theme */
-  .text-visible {
-    color: hsl(0 0% 5%) !important;
+  /* Travel theme gradient menu bars and action bars */
+  .menu-gradient {
+    background: var(--gradient-menu);
+    color: white;
+  }
+
+  .action-gradient {
+    background: var(--gradient-action);
+    color: white;
+  }
+
+  /* Travel icon styling */
+  .travel-icon-blue {
+    color: hsl(209 100% 50%); /* #007cff */
+  }
+
+  .travel-icon-orange {
+    color: hsl(36 100% 50%); /* #ff9800 */
+  }
+
+  .travel-icon-teal {
+    color: hsl(175 100% 37%); /* #00bfae */
+  }
+
+  /* Travel button styling */
+  .travel-button, .yatra-button {
+    background: var(--gradient-primary);
+    color: white;
     font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    transition: all 0.2s ease;
   }
 
-  .text-secondary-visible {
-    color: hsl(0 0% 15%) !important;
-    font-weight: 500;
-  }
-
-  .text-muted-visible {
-    color: hsl(0 0% 35%) !important;
-    font-weight: 400;
+  .travel-button:hover, .yatra-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 124, 255, 0.3);
   }
 
   /* Reduced motion support */
@@ -229,27 +272,32 @@
     color: inherit !important;
   }
 
-  /* Force readable text colors throughout the application */
+  /* Travel theme text colors for excellent readability */
   h1, h2, h3, h4, h5, h6, .text-4xl, .text-3xl, .text-2xl, .text-xl, .text-lg {
-    color: hsl(0 0% 5%) !important;
+    color: hsl(218 20% 16%) !important; /* #1a2135 dark blue for headings */
     font-weight: 700 !important;
   }
 
   p, span, div:not(.icon), .text-sm, .text-base {
-    color: hsl(0 0% 20%) !important;
+    color: hsl(210 9% 16%) !important; /* #23272b charcoal for body text */
   }
 
   .text-muted-foreground, .text-sm {
-    color: hsl(0 0% 35%) !important;
+    color: hsl(210 9% 31%) !important; /* lighter charcoal for muted text */
   }
 
-  /* Override all inline styles for text visibility */
+  /* White text for dark backgrounds */
+  .text-on-dark, .text-white {
+    color: hsl(0 0% 100%) !important; /* white text on dark backgrounds */
+  }
+
+  /* Override all inline styles for travel theme */
   [style*="color: hsl(var(--foreground))"] {
-    color: hsl(0 0% 5%) !important;
+    color: hsl(218 20% 16%) !important; /* dark blue headings */
   }
 
   [style*="color: hsl(var(--muted-foreground))"] {
-    color: hsl(0 0% 35%) !important;
+    color: hsl(210 9% 31%) !important; /* lighter charcoal */
   }
 
   .neopop-card:before {

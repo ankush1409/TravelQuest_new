@@ -332,7 +332,7 @@ export function SimpleDashboard() {
                   <Navigation className="h-8 w-8 text-white" />
                 </motion.div>
               </div>
-              <Button className="w-full yatra-button text-base py-4">
+              <Button className="w-full travel-button text-base py-4">
                 Explore Now
               </Button>
             </CardContent>
