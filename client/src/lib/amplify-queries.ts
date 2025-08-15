@@ -1,231 +1,123 @@
-import { graphqlClient } from './amplify-client';
-import { 
-  getUser, 
-  getUserStats, 
-  getStreakMapData, 
-  getNearbyLocations, 
-  searchPlaces,
-  listCheckIns,
-  listDiscoveries,
-  listBadges,
-  listUserBadges,
-  listStreakRegions,
-  listUserStreaks,
-  listReferrals
-} from '../../../src/graphql/queries';
+// AWS Amplify GraphQL queries temporarily disabled for development
+// This prevents runtime errors while maintaining the AWS architecture ready for deployment
 
-import {
-  createUser,
-  updateUser,
-  processCheckIn,
-  createCheckIn,
-  createDiscovery,
-  updateDiscovery,
-  processReferral,
-  createReferral,
-  updateStreakProgress,
-  createUserStreak,
-  createStreakAchievement
-} from '../../../src/graphql/mutations';
-
-// Query functions
+// Mock query functions for development mode
 export const amplifyQueries = {
-  // User queries
   async getUser(id: string) {
-    const result = await graphqlClient.graphql({
-      query: getUser,
-      variables: { id }
-    });
-    return result.data.getUser;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
   async getUserStats(userId: string) {
-    const result = await graphqlClient.graphql({
-      query: getUserStats,
-      variables: { userId }
-    });
-    return result.data.getUserStats;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
-  // Streak map queries
   async getStreakMapData(userId: string) {
-    const result = await graphqlClient.graphql({
-      query: getStreakMapData,
-      variables: { userId }
-    });
-    return result.data.getStreakMapData;
+    console.warn('AWS Amplify not configured - using development mode');
+    return { regions: [], userStreaks: [], achievements: [] };
   },
 
-  // Location queries
   async getNearbyLocations(latitude: number, longitude: number, radius?: number) {
-    const result = await graphqlClient.graphql({
-      query: getNearbyLocations,
-      variables: { latitude, longitude, radius }
-    });
-    return result.data.getNearbyLocations;
+    console.warn('AWS Amplify not configured - using development mode');
+    return [];
   },
 
   async searchPlaces(searchQuery: string, latitude?: number, longitude?: number) {
-    const result = await graphqlClient.graphql({
-      query: searchPlaces,
-      variables: { query: searchQuery, latitude, longitude }
-    });
-    return result.data.searchPlaces;
+    console.warn('AWS Amplify not configured - using development mode');
+    return [];
   },
 
-  // Check-ins and discoveries
   async listCheckIns(filter?: any, limit?: number) {
-    const result = await graphqlClient.graphql({
-      query: listCheckIns,
-      variables: { filter, limit }
-    });
-    return result.data.listCheckIns;
+    console.warn('AWS Amplify not configured - using development mode');
+    return { items: [], nextToken: null };
   },
 
   async listDiscoveries(filter?: any, limit?: number) {
-    const result = await graphqlClient.graphql({
-      query: listDiscoveries,
-      variables: { filter, limit }
-    });
-    return result.data.listDiscoveries;
+    console.warn('AWS Amplify not configured - using development mode');
+    return { items: [], nextToken: null };
   },
 
-  // Badges
   async listBadges(filter?: any) {
-    const result = await graphqlClient.graphql({
-      query: listBadges,
-      variables: { filter }
-    });
-    return result.data.listBadges;
+    console.warn('AWS Amplify not configured - using development mode');
+    return { items: [], nextToken: null };
   },
 
   async listUserBadges(filter?: any) {
-    const result = await graphqlClient.graphql({
-      query: listUserBadges,
-      variables: { filter }
-    });
-    return result.data.listUserBadges;
+    console.warn('AWS Amplify not configured - using development mode');
+    return { items: [], nextToken: null };
   },
 
-  // Streaks
   async listStreakRegions(filter?: any) {
-    const result = await graphqlClient.graphql({
-      query: listStreakRegions,
-      variables: { filter }
-    });
-    return result.data.listStreakRegions;
+    console.warn('AWS Amplify not configured - using development mode');
+    return { items: [], nextToken: null };
   },
 
   async listUserStreaks(filter?: any) {
-    const result = await graphqlClient.graphql({
-      query: listUserStreaks,
-      variables: { filter }
-    });
-    return result.data.listUserStreaks;
+    console.warn('AWS Amplify not configured - using development mode');
+    return { items: [], nextToken: null };
   },
 
-  // Referrals
   async listReferrals(filter?: any) {
-    const result = await graphqlClient.graphql({
-      query: listReferrals,
-      variables: { filter }
-    });
-    return result.data.listReferrals;
+    console.warn('AWS Amplify not configured - using development mode');
+    return { items: [], nextToken: null };
   }
 };
 
-// Mutation functions
+// Mock mutation functions for development mode
 export const amplifyMutations = {
-  // User mutations
   async createUser(input: any) {
-    const result = await graphqlClient.graphql({
-      query: createUser,
-      variables: { input }
-    });
-    return result.data.createUser;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
   async updateUser(input: any) {
-    const result = await graphqlClient.graphql({
-      query: updateUser,
-      variables: { input }
-    });
-    return result.data.updateUser;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
-  // Check-in mutations
   async processCheckIn(input: any) {
-    const result = await graphqlClient.graphql({
-      query: processCheckIn,
-      variables: { input }
-    });
-    return result.data.processCheckIn;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
   async createCheckIn(input: any) {
-    const result = await graphqlClient.graphql({
-      query: createCheckIn,
-      variables: { input }
-    });
-    return result.data.createCheckIn;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
-  // Discovery mutations
   async createDiscovery(input: any) {
-    const result = await graphqlClient.graphql({
-      query: createDiscovery,
-      variables: { input }
-    });
-    return result.data.createDiscovery;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
   async updateDiscovery(input: any) {
-    const result = await graphqlClient.graphql({
-      query: updateDiscovery,
-      variables: { input }
-    });
-    return result.data.updateDiscovery;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
-  // Referral mutations
   async processReferral(input: any) {
-    const result = await graphqlClient.graphql({
-      query: processReferral,
-      variables: { input }
-    });
-    return result.data.processReferral;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
   async createReferral(input: any) {
-    const result = await graphqlClient.graphql({
-      query: createReferral,
-      variables: { input }
-    });
-    return result.data.createReferral;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
-  // Streak mutations
   async updateStreakProgress(input: any) {
-    const result = await graphqlClient.graphql({
-      query: updateStreakProgress,
-      variables: { input }
-    });
-    return result.data.updateStreakProgress;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
   async createUserStreak(input: any) {
-    const result = await graphqlClient.graphql({
-      query: createUserStreak,
-      variables: { input }
-    });
-    return result.data.createUserStreak;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   },
 
   async createStreakAchievement(input: any) {
-    const result = await graphqlClient.graphql({
-      query: createStreakAchievement,
-      variables: { input }
-    });
-    return result.data.createStreakAchievement;
+    console.warn('AWS Amplify not configured - using development mode');
+    return null;
   }
 };

@@ -1,45 +1,62 @@
-// Note: AWS Amplify integration is configured but not initialized yet
-// This prevents runtime errors while maintaining the AWS architecture
-// To enable: Configure environment variables and uncomment Amplify.configure(awsConfig)
+// AWS Amplify integration temporarily disabled for development
+// This prevents runtime errors while maintaining the AWS architecture ready for deployment
 
-let graphqlClient: any = null;
-let isAuthenticated = async () => false;
-let getCurrentUserInfo = async () => ({ user: null, session: null, isAuthenticated: false });
+// Mock functions for development mode
+const getCurrentUser = async () => { 
+  throw new Error('AWS Amplify not configured'); 
+};
 
-// Mock functions for development (replace when AWS is configured)
-const getCurrentUser = async () => { throw new Error('AWS not configured'); };
-const signIn = async () => { throw new Error('AWS not configured'); };
-const signOut = async () => { throw new Error('AWS not configured'); };
-const signUp = async () => { throw new Error('AWS not configured'); };
-const confirmSignUp = async () => { throw new Error('AWS not configured'); };
-const fetchAuthSession = async () => { throw new Error('AWS not configured'); };
+const signIn = async () => { 
+  throw new Error('AWS Amplify not configured'); 
+};
 
-// Uncomment when AWS is configured:
-// import { Amplify } from 'aws-amplify';
-// import { generateClient } from 'aws-amplify/api';
-// import { getCurrentUser, signIn, signOut, signUp, confirmSignUp, fetchAuthSession } from 'aws-amplify/auth';
-// import awsConfig from '../../../src/aws-config';
-// Amplify.configure(awsConfig);
-// export const graphqlClient = generateClient();
+const signOut = async () => { 
+  throw new Error('AWS Amplify not configured'); 
+};
 
-// Export mock GraphQL client (replace when AWS is configured)
-export { graphqlClient };
+const signUp = async () => { 
+  throw new Error('AWS Amplify not configured'); 
+};
 
-// Export auth functions
+const confirmSignUp = async () => { 
+  throw new Error('AWS Amplify not configured'); 
+};
+
+const fetchAuthSession = async () => { 
+  throw new Error('AWS Amplify not configured'); 
+};
+
+// Mock GraphQL client
+const graphqlClient = null;
+
+// Helper functions
+const getAuthHeaders = async () => {
+  console.warn('AWS Amplify not configured - using development mode');
+  return {};
+};
+
+const isAuthenticated = async (): Promise<boolean> => {
+  return false;
+};
+
+const getCurrentUserInfo = async () => {
+  return {
+    user: null,
+    session: null,
+    isAuthenticated: false
+  };
+};
+
+// Export all functions
 export {
+  graphqlClient,
   getCurrentUser,
   signIn,
   signOut,
   signUp,
   confirmSignUp,
-  fetchAuthSession
+  fetchAuthSession,
+  getAuthHeaders,
+  isAuthenticated,
+  getCurrentUserInfo
 };
-
-// Helper function to get authenticated headers
-export const getAuthHeaders = async () => {
-  console.warn('AWS Amplify not configured - using development mode');
-  return {};
-};
-
-// Export helper functions
-export { isAuthenticated, getCurrentUserInfo };
