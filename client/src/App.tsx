@@ -31,14 +31,26 @@ function AppContent() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="flex items-center justify-center min-h-screen bg-slate-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500 mx-auto mb-4"></div>
+          <h2 style={{ 
+            background: 'linear-gradient(135deg, #8B5CF6, #EC4899)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            fontSize: '1.5rem',
+            fontWeight: 'bold'
+          }}>
+            Loading TravelQuest...
+          </h2>
+          <p className="text-slate-400 mt-2">Preparing your premium travel experience</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-slate-900">
       <SkipLink />
       
       {/* Navigation */}
@@ -52,8 +64,8 @@ function AppContent() {
       {/* Main Content */}
       <main className={user ? "pb-20 md:pb-0" : ""}>
         <Suspense fallback={
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="flex items-center justify-center min-h-screen bg-slate-900">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-purple-500"></div>
           </div>
         }>
           <Switch>
