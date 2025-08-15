@@ -58,10 +58,10 @@ export default function AuthPage() {
       <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-black text-foreground">
+            <h2 className="text-3xl font-black" style={{ color: "hsl(var(--foreground))" }}>
               {isSignUp ? "START YOUR ADVENTURE" : "WELCOME BACK!"}
             </h2>
-            <p className="mt-2 text-muted-foreground font-medium">
+            <p className="mt-2 font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>
               {isSignUp ? "Create your account and begin earning XP" : "Sign in to continue your travel quest"}
             </p>
           </div>
@@ -71,7 +71,11 @@ export default function AuthPage() {
             <div className="mb-6">
               <a 
                 href="/auth/google"
-                className="w-full flex items-center justify-center px-4 py-3 border border-border rounded-xl bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 hover:scale-[1.02] text-gray-900 dark:text-white font-bold shadow-lg"
+                className="w-full flex items-center justify-center px-4 py-3 border rounded-xl bg-white hover:bg-gray-50 transition-all duration-200 hover:scale-[1.02] font-bold shadow-lg"
+                style={{ 
+                  borderColor: "hsl(var(--border))",
+                  color: "hsl(var(--foreground))"
+                }}
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -88,14 +92,14 @@ export default function AuthPage() {
                 <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-background text-muted-foreground font-medium">OR</span>
+                <span className="px-4 bg-background font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>OR</span>
               </div>
             </div>
             {!isSignUp ? (
               // Login Form
               <form className="space-y-6" onSubmit={loginForm.handleSubmit(handleLogin)}>
                 <div>
-                  <Label htmlFor="username" className="text-foreground font-bold">Username</Label>
+                  <Label htmlFor="username" className="font-bold" style={{ color: "hsl(var(--foreground))" }}>Username</Label>
                   <Input
                     {...loginForm.register("username")}
                     id="username"
@@ -110,7 +114,7 @@ export default function AuthPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="password" className="text-foreground font-bold">Password</Label>
+                  <Label htmlFor="password" className="font-bold" style={{ color: "hsl(var(--foreground))" }}>Password</Label>
                   <div className="relative mt-1">
                     <Input
                       {...loginForm.register("password")}
@@ -157,7 +161,7 @@ export default function AuthPage() {
               <form className="space-y-6" onSubmit={registerForm.handleSubmit(handleRegister)}>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="reg-username" className="text-foreground font-bold">Username</Label>
+                    <Label htmlFor="reg-username" className="font-bold" style={{ color: "hsl(var(--foreground))" }}>Username</Label>
                     <Input
                       {...registerForm.register("username")}
                       id="reg-username"
@@ -173,7 +177,7 @@ export default function AuthPage() {
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="reg-displayName" className="text-foreground font-bold">Display Name</Label>
+                    <Label htmlFor="reg-displayName" className="font-bold" style={{ color: "hsl(var(--foreground))" }}>Display Name</Label>
                     <Input
                       {...registerForm.register("displayName")}
                       id="reg-displayName"
@@ -191,7 +195,7 @@ export default function AuthPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="reg-email" className="text-foreground font-bold">Email Address</Label>
+                  <Label htmlFor="reg-email" className="font-bold" style={{ color: "hsl(var(--foreground))" }}>Email Address</Label>
                   <Input
                     {...registerForm.register("email")}
                     id="reg-email"
@@ -208,7 +212,7 @@ export default function AuthPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="reg-password" className="text-foreground font-bold">Password</Label>
+                  <Label htmlFor="reg-password" className="font-bold" style={{ color: "hsl(var(--foreground))" }}>Password</Label>
                   <div className="relative mt-1">
                     <Input
                       {...registerForm.register("password")}
@@ -238,7 +242,7 @@ export default function AuthPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="reg-travelStyle" className="text-foreground font-bold">Travel Style</Label>
+                  <Label htmlFor="reg-travelStyle" className="font-bold" style={{ color: "hsl(var(--foreground))" }}>Travel Style</Label>
                   <Select onValueChange={(value) => registerForm.setValue("travelStyle", value as any)}>
                     <SelectTrigger className="mt-1 bg-muted/30 border-border">
                       <SelectValue placeholder="Select your travel style" />
@@ -271,11 +275,12 @@ export default function AuthPage() {
             )}
 
             <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
                 {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
                 <button
                   type="button"
-                  className="text-primary hover:text-accent font-bold underline"
+                  className="font-bold underline hover:opacity-80"
+                  style={{ color: "hsl(var(--primary))" }}
                   onClick={() => setIsSignUp(!isSignUp)}
                 >
                   {isSignUp ? "SIGN IN HERE" : "SIGN UP HERE"}
@@ -292,8 +297,8 @@ export default function AuthPage() {
           <div className="text-center px-8 max-w-lg">
             <div className="neopop-card p-8 mb-8">
               <MapPin className="h-16 w-16 mx-auto mb-6 text-primary" />
-              <h1 className="text-4xl font-black text-foreground mb-6">TURN YOUR ADVENTURES INTO ACHIEVEMENTS</h1>
-              <p className="text-lg text-muted-foreground mb-8 font-medium">
+              <h1 className="text-4xl font-black mb-6" style={{ color: "hsl(var(--foreground))" }}>TURN YOUR ADVENTURES INTO ACHIEVEMENTS</h1>
+              <p className="text-lg mb-8 font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>
                 Earn XP, unlock badges, and level up your travel experiences with TravelQuest
               </p>
               <div className="grid grid-cols-1 gap-4 text-left">
@@ -301,19 +306,19 @@ export default function AuthPage() {
                   <div className="w-12 h-12 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-full flex items-center justify-center mr-4 border border-yellow-500/30">
                     <span className="text-2xl">🏆</span>
                   </div>
-                  <span className="font-bold text-foreground">EARN XP & LEVEL UP</span>
+                  <span className="font-bold" style={{ color: "hsl(var(--foreground))" }}>EARN XP & LEVEL UP</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center mr-4 border border-purple-500/30">
                     <span className="text-2xl">🏅</span>
                   </div>
-                  <span className="font-bold text-foreground">COLLECT ACHIEVEMENT BADGES</span>
+                  <span className="font-bold" style={{ color: "hsl(var(--foreground))" }}>COLLECT ACHIEVEMENT BADGES</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full flex items-center justify-center mr-4 border border-cyan-500/30">
                     <span className="text-2xl">👥</span>
                   </div>
-                  <span className="font-bold text-foreground">CONNECT WITH FELLOW TRAVELERS</span>
+                  <span className="font-bold" style={{ color: "hsl(var(--foreground))" }}>CONNECT WITH FELLOW TRAVELERS</span>
                 </div>
               </div>
             </div>
