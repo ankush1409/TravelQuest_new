@@ -1,13 +1,29 @@
-import { Amplify } from 'aws-amplify';
-import { generateClient } from 'aws-amplify/api';
-import { getCurrentUser, signIn, signOut, signUp, confirmSignUp, fetchAuthSession } from 'aws-amplify/auth';
-import awsConfig from '../../../src/aws-config';
+// Note: AWS Amplify integration is configured but not initialized yet
+// This prevents runtime errors while maintaining the AWS architecture
+// To enable: Configure environment variables and uncomment Amplify.configure(awsConfig)
 
-// Configure Amplify
-Amplify.configure(awsConfig);
+let graphqlClient: any = null;
+let isAuthenticated = async () => false;
+let getCurrentUserInfo = async () => ({ user: null, session: null, isAuthenticated: false });
 
-// Create GraphQL client
-export const graphqlClient = generateClient();
+// Mock functions for development (replace when AWS is configured)
+const getCurrentUser = async () => { throw new Error('AWS not configured'); };
+const signIn = async () => { throw new Error('AWS not configured'); };
+const signOut = async () => { throw new Error('AWS not configured'); };
+const signUp = async () => { throw new Error('AWS not configured'); };
+const confirmSignUp = async () => { throw new Error('AWS not configured'); };
+const fetchAuthSession = async () => { throw new Error('AWS not configured'); };
+
+// Uncomment when AWS is configured:
+// import { Amplify } from 'aws-amplify';
+// import { generateClient } from 'aws-amplify/api';
+// import { getCurrentUser, signIn, signOut, signUp, confirmSignUp, fetchAuthSession } from 'aws-amplify/auth';
+// import awsConfig from '../../../src/aws-config';
+// Amplify.configure(awsConfig);
+// export const graphqlClient = generateClient();
+
+// Export mock GraphQL client (replace when AWS is configured)
+export { graphqlClient };
 
 // Export auth functions
 export {
@@ -21,49 +37,9 @@ export {
 
 // Helper function to get authenticated headers
 export const getAuthHeaders = async () => {
-  try {
-    const session = await fetchAuthSession();
-    const token = session.tokens?.idToken?.toString();
-    
-    if (token) {
-      return {
-        Authorization: `Bearer ${token}`
-      };
-    }
-    
-    return {};
-  } catch (error) {
-    console.warn('Failed to get auth headers:', error);
-    return {};
-  }
+  console.warn('AWS Amplify not configured - using development mode');
+  return {};
 };
 
-// Helper function to check if user is authenticated
-export const isAuthenticated = async (): Promise<boolean> => {
-  try {
-    await getCurrentUser();
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-// Helper function to get current user info
-export const getCurrentUserInfo = async () => {
-  try {
-    const user = await getCurrentUser();
-    const session = await fetchAuthSession();
-    
-    return {
-      user,
-      session,
-      isAuthenticated: true
-    };
-  } catch (error) {
-    return {
-      user: null,
-      session: null,
-      isAuthenticated: false
-    };
-  }
-};
+// Export helper functions
+export { isAuthenticated, getCurrentUserInfo };
