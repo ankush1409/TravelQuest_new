@@ -1,0 +1,100 @@
+/* Backup of current CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SIMPLE, WORKING CSS FOR VISIBILITY */
+@layer base {
+  :root {
+    --background: 216 33% 97%;
+    --foreground: 218 20% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 9% 16%;
+    --primary: 209 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 216 33% 97%;
+    --secondary-foreground: 210 9% 16%;
+    --muted: 216 20% 94%;
+    --muted-foreground: 210 9% 31%;
+    --accent: 175 100% 37%;
+    --accent-foreground: 0 0% 100%;
+    --border: 216 20% 88%;
+    --input: 0 0% 100%;
+    --ring: 209 100% 50%;
+    --radius: 0.75rem;
+  }
+  
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    color: #1a2135 !important;
+    background-color: #f5f6fa !important;
+  }
+}
+
+/* Force all text to be visible */
+* {
+  color: #1a2135 !important;
+}
+
+/* Navigation specific styling */
+nav {
+  background: linear-gradient(90deg, #007cff 0%, #00bfae 100%) !important;
+}
+
+nav * {
+  color: white !important;
+}
+
+/* Card styling */
+.card, [data-component-name="Card"] {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  color: #1a2135 !important;
+}
+
+/* Button styling */
+button {
+  color: #1a2135 !important;
+  background: white !important;
+  border: 1px solid #007cff !important;
+}
+
+button:hover {
+  background: #f3f4f6 !important;
+}
+
+/* Menu items */
+[role="menu"] {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+[role="menuitem"] {
+  color: #1a2135 !important;
+}
+
+[role="menuitem"]:hover {
+  background: #f3f4f6 !important;
+}
+
+/* Progress bars and badges */
+.bg-purple-500 {
+  background-color: #8b5cf6 !important;
+  color: white !important;
+}
+
+.bg-yellow-500 {
+  background-color: #eab308 !important;
+  color: white !important;
+}
+
+/* Travel button */
+.travel-button {
+  background: linear-gradient(135deg, #007cff 0%, #00bfae 100%) !important;
+  color: white !important;
+  border: none !important;
+}
