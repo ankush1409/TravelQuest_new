@@ -306,9 +306,10 @@
   }
 
   /* Global text readability for light theme */
-  * {
+  /* Commented out to allow specific styling */
+  /* * {
     color: inherit !important;
-  }
+  } */
 
   /* Travel theme text colors for excellent readability */
   h1, h2, h3, h4, h5, h6, .text-4xl, .text-3xl, .text-2xl, .text-xl, .text-lg {
@@ -370,6 +371,39 @@
   [data-radix-toast-description] {
     color: #6b7280 !important;
     font-size: 13px !important;
+  }
+
+  /* Notification center specific styling */
+  .notification-panel {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  }
+  
+  .notification-panel * {
+    color: inherit !important;
+  }
+  
+  .notification-panel h3,
+  .notification-panel h4 {
+    color: #111827 !important;
+  }
+  
+  .notification-panel p {
+    color: #6b7280 !important;
+  }
+  
+  .notification-panel .text-gray-900 {
+    color: #111827 !important;
+  }
+  
+  .notification-panel .text-gray-600 {
+    color: #6b7280 !important;
+  }
+  
+  .notification-panel .text-gray-500 {
+    color: #9ca3af !important;
   }
 
   /* White text for dark backgrounds - comprehensive */

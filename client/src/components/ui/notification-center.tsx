@@ -33,6 +33,14 @@ export function NotificationCenter() {
       timestamp: new Date(Date.now() - 900000),
       isRead: false,
     },
+    {
+      id: "3",
+      type: "info",
+      title: "New Challenge Available",
+      message: "Weekend Explorer challenge is now available!",
+      timestamp: new Date(Date.now() - 600000),
+      isRead: false,
+    },
   ]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -110,11 +118,11 @@ export function NotificationCenter() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="absolute right-0 top-full mt-2 w-96 max-h-96 overflow-hidden bg-white border border-gray-200 rounded-xl shadow-xl z-50"
+            className="absolute right-0 top-full mt-2 w-96 max-h-96 overflow-hidden bg-white border border-gray-200 rounded-xl shadow-xl z-50 notification-panel"
             style={{ 
               boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-              backgroundColor: "#ffffff",
-              color: "#1a1a1a"
+              backgroundColor: "#ffffff !important",
+              color: "#1f2937 !important"
             }}
           >
             {/* Header */}
@@ -157,10 +165,10 @@ export function NotificationCenter() {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
-                      className={`relative p-3 rounded-2xl cursor-pointer transition-all duration-300 ${
+                      className={`relative p-3 rounded-lg cursor-pointer transition-all duration-300 ${
                         notification.isRead 
-                          ? "bg-muted/30" 
-                          : "bg-gradient-to-r from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20"
+                          ? "bg-gray-50 hover:bg-gray-100" 
+                          : "bg-blue-50 hover:bg-blue-100"
                       }`}
                       onClick={() => markAsRead(notification.id)}
                     >
@@ -220,7 +228,7 @@ export function NotificationCenter() {
                       
                       {/* Unread indicator */}
                       {!notification.isRead && (
-                        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary" />
+                        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-blue-500" />
                       )}
                     </motion.div>
                   ))}
