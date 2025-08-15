@@ -487,22 +487,28 @@ export function DesktopNavigation() {
                           key={`mobile-${item.id}`}
                           href={item.href}
                           onClick={() => setIsMenuOpen(false)}
-                          className={`flex items-center space-x-3 px-4 py-3 hover:bg-muted/50 transition-colors ${
-                            isActive ? "text-primary bg-primary/10" : "text-foreground"
+                          className={`flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-colors rounded-lg mx-2 ${
+                            isActive ? "bg-blue-100" : ""
                           }`}
+                          style={{
+                            color: isActive ? "#007cff" : "#1e40af",
+                            fontWeight: isActive ? "600" : "500"
+                          }}
                           role="menuitem"
                         >
-                          {item.icon}
+                          <span style={{ color: isActive ? "#007cff" : "#007cff" }}>
+                            {item.icon}
+                          </span>
                           <span>{item.label}</span>
                           {item.badge && (
-                            <Badge variant="destructive" className="ml-auto h-5 text-xs">
+                            <Badge variant="destructive" className="ml-auto h-5 text-xs bg-red-500 text-white">
                               {item.badge}
                             </Badge>
                           )}
                         </Link>
                       );
                     })}
-                    <hr className="my-2 border-border" />
+                    <hr className="my-2 border-gray-200 mx-2" />
                   </div>
 
                   {/* Quick Actions Section */}
@@ -564,40 +570,53 @@ export function DesktopNavigation() {
                   <Link
                     href="/settings"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors group rounded-lg mx-2"
-                    style={{ color: "hsl(var(--foreground))" }}
+                    className="flex items-center space-x-3 px-4 py-4 hover:bg-gray-50 transition-colors group rounded-lg mx-2 border border-transparent hover:border-gray-200"
+                    style={{ color: "#1e40af" }}
                     role="menuitem"
                   >
-                    <Settings className="w-5 h-5 text-muted-foreground group-hover:text-foreground group-hover:rotate-90 transition-all duration-300" />
+                    <Settings 
+                      className="w-5 h-5 group-hover:rotate-90 transition-all duration-300" 
+                      style={{ color: "#6b7280" }}
+                    />
                     <span className="font-medium">Settings</span>
                   </Link>
                   
                   <Link
                     href="/notifications"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors rounded-lg mx-2"
-                    style={{ color: "hsl(var(--foreground))" }}
+                    className="flex items-center space-x-3 px-4 py-4 hover:bg-gray-50 transition-colors rounded-lg mx-2 border border-transparent hover:border-gray-200"
+                    style={{ color: "#1e40af" }}
                     role="menuitem"
                   >
-                    <Bell className="w-5 h-5 text-muted-foreground" />
+                    <Bell 
+                      className="w-5 h-5" 
+                      style={{ color: "#6b7280" }}
+                    />
                     <span className="font-medium">Notifications</span>
                     <Badge 
-                      className="ml-auto h-5 text-xs font-semibold bg-red-500 hover:bg-red-500 text-white border-0"
+                      className="ml-auto h-5 text-xs font-semibold border-0"
+                      style={{ 
+                        backgroundColor: "#ef4444",
+                        color: "white"
+                      }}
                     >
                       3
                     </Badge>
                   </Link>
 
-                  <hr className="my-3 border-border mx-2" />
+                  <hr className="my-3 border-gray-200 mx-2" />
                   
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center space-x-3 px-4 py-4 hover:bg-red-50 hover:text-red-600 transition-colors rounded-lg mx-2 font-medium"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
+                    className="w-full flex items-center space-x-3 px-4 py-4 hover:bg-red-50 transition-colors rounded-lg mx-2 font-medium border border-transparent hover:border-red-200"
+                    style={{ color: "#6b7280" }}
                     role="menuitem"
                   >
-                    <X className="w-5 h-5" />
-                    <span>Sign Out</span>
+                    <X 
+                      className="w-5 h-5" 
+                      style={{ color: "#ef4444" }}
+                    />
+                    <span className="hover:text-red-600">Sign Out</span>
                   </button>
                 </motion.div>
               )}
