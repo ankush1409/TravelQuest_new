@@ -255,7 +255,7 @@ export function DesktopNavigation() {
           <Link 
             href="/" 
             className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-primary rounded-2xl p-2 transition-all duration-300 hover:scale-105"
-            aria-label="TravelQuest home"
+            aria-label="Home"
           >
             <motion.div 
               className="w-10 h-10 rounded-2xl flex items-center justify-center overflow-hidden"
@@ -265,14 +265,7 @@ export function DesktopNavigation() {
             >
               <Zap className="w-6 h-6 text-white" />
             </motion.div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-black bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                TravelQuest
-              </span>
-              <span className="text-xs text-muted-foreground font-medium -mt-1">
-                For New Generation
-              </span>
-            </div>
+
           </Link>
 
           {/* Premium Desktop Navigation */}

@@ -22,11 +22,14 @@ export function ThemeToggle() {
 
     const root = document.documentElement;
     
+    // Remove existing theme classes
+    root.classList.remove('light', 'dark');
+    
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-      root.className = systemTheme;
+      root.classList.add(systemTheme);
     } else {
-      root.className = theme;
+      root.classList.add(theme);
     }
     
     localStorage.setItem("theme", theme);
