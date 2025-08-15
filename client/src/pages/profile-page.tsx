@@ -173,7 +173,7 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex items-center space-x-4 mb-4">
                         <span className="text-lg text-white font-medium">@{user.username}</span>
-                        <Badge variant="secondary">{getTravelStyleName(user.travelStyle)}</Badge>
+                        <Badge variant="secondary" className="bg-blue-600 text-white border-blue-500">{getTravelStyleName(user.travelStyle)}</Badge>
                         <div className="flex items-center text-white">
                           <Trophy className="h-4 w-4 mr-1 text-yellow-400" />
                           <span className="font-semibold">Level {currentLevel}</span>
@@ -293,8 +293,8 @@ export default function ProfilePage() {
           {/* Badge Showcase */}
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle className="text-lg flex items-center">
-                <Medal className="h-5 w-5 mr-2 text-primary" />
+              <CardTitle className="text-lg flex items-center text-white">
+                <Medal className="h-5 w-5 mr-2 text-yellow-400" />
                 Badge Collection ({userBadges.length} earned)
               </CardTitle>
             </CardHeader>
