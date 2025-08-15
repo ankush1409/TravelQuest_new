@@ -409,19 +409,21 @@ export function DesktopNavigation() {
                   <path
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     fill="none"
-                    stroke="hsl(var(--muted))"
+                    stroke="#e5e7eb"
                     strokeWidth="2"
+                    className="xp-progress-background"
                   />
                   <motion.path
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     fill="none"
-                    stroke="hsl(var(--primary))"
+                    stroke="#007cff"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeDasharray="75, 100" // 75% progress to next level
                     initial={{ strokeDasharray: "0, 100" }}
                     animate={{ strokeDasharray: "75, 100" }}
                     transition={{ duration: 1.5, delay: 0.5 }}
+                    className="xp-progress-ring"
                   />
                 </svg>
                 
@@ -434,30 +436,55 @@ export function DesktopNavigation() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
+                    <div 
+                      className="w-full h-full flex items-center justify-center profile-avatar-gradient"
+                      style={{ background: "linear-gradient(135deg, #007cff 0%, #00bfae 100%)" }}
+                    >
+                      <User 
+                        className="w-4 h-4" 
+                        style={{ color: "white" }}
+                      />
                     </div>
                   )}
                 </div>
                 
                 {/* Level Badge */}
                 <motion.div
-                  className="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center border-2 border-background"
+                  className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center level-badge"
+                  style={{ 
+                    backgroundColor: "#eab308",
+                    border: "2px solid white",
+                    color: "white"
+                  }}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.8, type: "spring" }}
                 >
-                  <span className="text-xs font-bold text-white">8</span>
+                  <span 
+                    className="text-xs font-bold"
+                    style={{ color: "white" }}
+                  >
+                    8
+                  </span>
                 </motion.div>
               </div>
 
               {/* User Info with Quick Actions Preview */}
-              <div className="hidden sm:block">
-                <div className="text-sm font-medium text-white">
+              <div className="hidden sm:block nav-profile-section">
+                <div 
+                  className="text-sm font-medium"
+                  style={{ color: "white" }}
+                >
                   {user?.displayName || user?.email?.split('@')[0] || "Traveler"}
                 </div>
-                <div className="text-xs flex items-center gap-1 text-slate-300">
-                  <Zap className="w-3 h-3 text-yellow-400" />
+                <div 
+                  className="text-xs flex items-center gap-1"
+                  style={{ color: "#cbd5e1" }}
+                >
+                  <Zap 
+                    className="w-3 h-3" 
+                    style={{ color: "#facc15" }}
+                  />
                   1,250 XP • Level 8
                 </div>
               </div>

@@ -305,23 +305,18 @@
     }
   }
 
-  /* Global text readability for light theme */
-  * {
-    color: inherit !important;
-  }
-
   /* Travel theme text colors for excellent readability */
   h1, h2, h3, h4, h5, h6, .text-4xl, .text-3xl, .text-2xl, .text-xl, .text-lg {
-    color: hsl(218 20% 16%) !important; /* #1a2135 dark blue for headings */
+    color: #1a2135 !important; /* dark blue for headings */
     font-weight: 700 !important;
   }
 
-  p, span, div:not(.icon), .text-sm, .text-base {
-    color: hsl(210 9% 16%) !important; /* #23272b charcoal for body text */
+  p, span:not([style*="color"]), div:not(.icon):not([style*="color"]), .text-sm, .text-base {
+    color: #23272b !important; /* charcoal for body text */
   }
 
-  .text-muted-foreground, .text-sm {
-    color: hsl(210 9% 31%) !important; /* lighter charcoal for muted text */
+  .text-muted-foreground {
+    color: #6b7280 !important; /* lighter charcoal for muted text */
   }
 
   /* Ensure button visibility */
@@ -386,11 +381,11 @@
     color: #1e40af !important;
   }
 
-  [role="menu"] span {
-    color: inherit !important;
+  [role="menu"] span:not([style*="color"]) {
+    color: #1e40af !important;
   }
 
-  [role="menu"] svg {
+  [role="menu"] svg:not([style*="color"]) {
     color: #6b7280 !important;
   }
 
@@ -405,6 +400,44 @@
   [role="menuitem"]:hover {
     background: #f3f4f6 !important;
     color: #1e40af !important;
+  }
+
+  /* Navigation header profile and badges */
+  .nav-profile-section {
+    color: white !important;
+  }
+
+  .nav-profile-section .text-white {
+    color: white !important;
+  }
+
+  .nav-profile-section .text-slate-300 {
+    color: #cbd5e1 !important;
+  }
+
+  .nav-profile-section .text-yellow-400 {
+    color: #facc15 !important;
+  }
+
+  /* Level badge styling */
+  .level-badge {
+    background-color: #eab308 !important;
+    color: white !important;
+    border: 2px solid white !important;
+  }
+
+  /* Profile avatar with gradient */
+  .profile-avatar-gradient {
+    background: linear-gradient(135deg, #007cff 0%, #00bfae 100%) !important;
+  }
+
+  /* XP progress ring colors */
+  .xp-progress-ring {
+    stroke: #007cff !important;
+  }
+
+  .xp-progress-background {
+    stroke: #e5e7eb !important;
   }
 
   /* White text for dark backgrounds - comprehensive */
