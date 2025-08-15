@@ -11,11 +11,6 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
-    "@aws-amplify/api-graphql": "^4.7.21",
-    "@aws-amplify/auth": "^6.15.0",
-    "@aws-amplify/core": "^6.13.1",
-    "@aws-amplify/storage": "^6.9.5",
-    "@aws-amplify/ui-react": "^6.11.2",
     "@hello-pangea/dnd": "^18.0.1",
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
@@ -53,7 +48,6 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/memoizee": "^0.4.12",
     "@types/passport-google-oauth20": "^2.0.16",
-    "aws-amplify": "^6.15.5",
     "bcrypt": "^6.0.0",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.1",
