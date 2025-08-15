@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Map, Trophy, User, Users, Menu, X, Settings, Bell } from "lucide-react";
+import { Home, Map, Trophy, User, Users, Menu, X, Settings, Bell, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { NotificationCenter } from "@/components/ui/notification-center";
 
 // Calculate user level from total XP - matches the system from unified-xp-display
 const calculateUserLevel = (xp: number) => {
@@ -77,66 +79,122 @@ const navigationItems: NavigationItem[] = [
 ];
 
 /**
- * Accessible mobile navigation component with proper ARIA labels
+ * Modern Premium Mobile Navigation with Bold Colors and Smooth Animations
  */
 export function MobileNavigation() {
   const [location] = useLocation();
   const { user } = useAuth();
 
   return (
-    <nav 
-      className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border z-40 safe-area-pb"
+    <motion.nav 
+      className="bottom-nav safe-area-pb"
       role="navigation" 
       aria-label="Main navigation"
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
-      <div className="flex items-center justify-around px-2 py-2">
-        {navigationItems.map((item) => {
+      <div className="flex items-center justify-around px-2 py-3">
+        {navigationItems.map((item, index) => {
           const isActive = location === item.href || (item.href !== "/" && location.startsWith(item.href));
           
           return (
-            <Link
+            <motion.div
               key={item.id}
-              href={item.href}
-              className={`relative flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-200 min-w-0 flex-1 group ${
-                isActive 
-                  ? "text-primary bg-primary/10" 
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              }`}
-              role="tab"
-              aria-selected={isActive}
-              aria-label={`${item.label}: ${item.description}`}
-              tabIndex={0}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ 
+                delay: index * 0.1,
+                type: "spring", 
+                stiffness: 400, 
+                damping: 25 
+              }}
             >
-              <div className="relative">
-                {item.icon}
-                {item.badge && (
-                  <Badge 
-                    variant="destructive" 
-                    className="absolute -top-2 -right-2 h-5 w-5 p-0 text-xs flex items-center justify-center"
-                    aria-label={`${item.badge} notifications`}
-                  >
-                    {item.badge}
-                  </Badge>
-                )}
-                {isActive && (
-                  <motion.div
-                    layoutId="mobile-nav-indicator"
-                    className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </div>
-              <span className={`text-xs font-medium mt-1 truncate max-w-full ${
-                isActive ? "text-primary" : "text-inherit"
-              }`}>
-                {item.label}
-              </span>
-            </Link>
+              <Link
+                href={item.href}
+                className={`nav-item group ${isActive ? 'active' : ''}`}
+                role="tab"
+                aria-selected={isActive}
+                aria-label={`${item.label}: ${item.description}`}
+                tabIndex={0}
+              >
+                <motion.div 
+                  className="relative"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <div className={`transition-colors duration-300 ${
+                    isActive ? 'text-white' : 'text-muted-foreground group-hover:text-primary'
+                  }`}>
+                    {item.icon}
+                  </div>
+                  
+                  {/* Notification Badge */}
+                  {item.badge && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-gradient-to-r from-red-500 to-pink-500 flex items-center justify-center"
+                      aria-label={`${item.badge} notifications`}
+                    >
+                      <span className="text-white text-xs font-bold">{item.badge}</span>
+                    </motion.div>
+                  )}
+                  
+                  {/* Active Glow Effect */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="mobile-nav-glow"
+                      className="absolute inset-0 -z-10 rounded-2xl"
+                      style={{
+                        background: "var(--gradient-primary)",
+                        filter: "blur(8px)",
+                        opacity: 0.6,
+                      }}
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </motion.div>
+                
+                <span className={`text-xs font-semibold mt-1 transition-colors duration-300 ${
+                  isActive ? "text-white" : "text-muted-foreground group-hover:text-primary"
+                }`}>
+                  {item.label}
+                </span>
+                
+                {/* Ripple Effect on Touch */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl pointer-events-none"
+                  initial={false}
+                  whileTap={{
+                    background: "radial-gradient(circle, rgba(98, 70, 234, 0.3) 0%, transparent 70%)",
+                    transition: { duration: 0.2 }
+                  }}
+                />
+              </Link>
+            </motion.div>
           );
         })}
       </div>
-    </nav>
+      
+      {/* Central Floating Action Button */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+        initial={{ scale: 0, rotate: -180 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ 
+          delay: 0.5,
+          type: "spring", 
+          stiffness: 300, 
+          damping: 20 
+        }}
+      >
+        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-accent shadow-lg flex items-center justify-center">
+          <Zap className="w-6 h-6 text-white" />
+        </div>
+      </motion.div>
+    </motion.nav>
   );
 }
 
@@ -179,43 +237,70 @@ export function DesktopNavigation() {
   };
 
   return (
-    <nav 
-      className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border"
+    <motion.nav 
+      className="sticky top-0 z-50 backdrop-blur-2xl border-b border-border/50"
+      style={{
+        background: "var(--gradient-surface)",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
+      }}
       role="navigation"
       aria-label="Main navigation"
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+        <div className="flex justify-between items-center h-20">
+          {/* Premium Logo */}
           <Link 
             href="/" 
-            className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg p-1"
+            className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-primary rounded-2xl p-2 transition-all duration-300 hover:scale-105"
             aria-label="TravelQuest home"
           >
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-              <Map className="w-5 h-5 text-white" />
+            <motion.div 
+              className="w-10 h-10 rounded-2xl flex items-center justify-center overflow-hidden"
+              style={{ background: "var(--gradient-primary)" }}
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Zap className="w-6 h-6 text-white" />
+            </motion.div>
+            <div className="flex flex-col">
+              <span className="text-2xl font-black bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                TravelQuest
+              </span>
+              <span className="text-xs text-muted-foreground font-medium -mt-1">
+                For New Generation
+              </span>
             </div>
-            <span className="text-xl font-black text-foreground">TravelQuest</span>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center space-x-1">
-            {navigationItems.map((item) => {
+          {/* Premium Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-2">
+            {navigationItems.slice(0, 4).map((item, index) => {
               const isActive = location === item.href || (item.href !== "/" && location.startsWith(item.href));
               
               return (
-                <Link
+                <motion.div
                   key={item.id}
-                  href={item.href}
-                  className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50 ${
-                    isActive
-                      ? "text-primary bg-primary/10"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                  }`}
-                  role="tab"
-                  aria-selected={isActive}
-                  aria-label={`${item.label}: ${item.description}`}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
+                  <Link
+                    href={item.href}
+                    className={`relative px-6 py-3 rounded-2xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 group ${
+                      isActive
+                        ? "text-white shadow-lg"
+                        : "text-muted-foreground hover:text-primary"
+                    }`}
+                    style={{
+                      background: isActive ? "var(--gradient-primary)" : "transparent",
+                    }}
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-label={`${item.label}: ${item.description}`}
+                  >
                   <div className="flex items-center space-x-2">
                     {item.icon}
                     <span>{item.label}</span>
@@ -234,8 +319,15 @@ export function DesktopNavigation() {
                     />
                   )}
                 </Link>
+                </motion.div>
               );
             })}
+          </div>
+
+          {/* Actions Bar */}
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <NotificationCenter />
           </div>
 
           {/* User Menu */}
@@ -347,7 +439,7 @@ export function DesktopNavigation() {
           </div>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 }
 

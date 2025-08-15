@@ -205,24 +205,40 @@ export function CustomizableDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Dashboard Header */}
-      <div className="flex items-center justify-between">
+      {/* Premium Dashboard Header */}
+      <motion.div 
+        className="flex items-center justify-between mb-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
         <div>
-          <h1 className="text-3xl font-black text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back to your travel adventure!</p>
+          <h1 className="text-2xl md:text-3xl font-black">
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Dashboard
+            </span>
+          </h1>
+          <p className="text-muted-foreground font-medium">Welcome back to your travel adventure!</p>
         </div>
         <Button
-          variant={isCustomizing ? "destructive" : "outline"}
+          variant={isCustomizing ? "destructive" : "ghost"}
           onClick={() => setIsCustomizing(!isCustomizing)}
-          className="flex items-center space-x-2"
+          className={`premium-button flex items-center space-x-2 ${
+            isCustomizing ? 'premium-button-secondary' : ''
+          }`}
         >
           {isCustomizing ? <X className="w-4 h-4" /> : <Settings className="w-4 h-4" />}
           <span>{isCustomizing ? 'Done' : 'Customize'}</span>
         </Button>
-      </div>
+      </motion.div>
 
-      {/* Quick Actions */}
-      <Card className="neopop-card">
+      {/* Premium Quick Actions */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <Card className="premium-card">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center space-x-2">
@@ -250,11 +266,21 @@ export function CustomizableDashboard() {
                 >
                   <Button
                     onClick={action.action}
-                    className={`w-full h-20 flex flex-col items-center justify-center space-y-2 ${action.color} hover:opacity-90 text-white border-0`}
+                    className={`premium-button w-full h-20 flex flex-col items-center justify-center space-y-2 ${action.color} border-0`}
                     disabled={isCustomizing}
+                    style={{
+                      background: action.color.includes('gradient') 
+                        ? `var(--${action.color})` 
+                        : `linear-gradient(135deg, ${action.color}, ${action.color}dd)`
+                    }}
                   >
-                    {action.icon}
-                    <span className="text-xs font-medium">{action.label}</span>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      {action.icon}
+                    </motion.div>
+                    <span className="text-xs font-semibold">{action.label}</span>
                   </Button>
                 </motion.div>
               ))}
@@ -385,7 +411,6 @@ interface DashboardWidgetProps {
   widget: DashboardWidget;
   isCustomizing: boolean;
   dragHandleProps?: any;
-
 }
 
 function DashboardWidget({ widget, isCustomizing, dragHandleProps }: DashboardWidgetProps) {

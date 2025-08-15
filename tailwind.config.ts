@@ -51,6 +51,16 @@ export default {
           "4": "var(--chart-4)",
           "5": "var(--chart-5)",
         },
+        // Premium New Generation Colors
+        "electric-blue": "var(--electric-blue)",
+        "neon-purple": "var(--neon-purple)",
+        "cyber-pink": "var(--cyber-pink)",
+        "mint-green": "var(--mint-green)",
+        "sunset-orange": "var(--sunset-orange)",
+        "pastel-lavender": "var(--pastel-lavender)",
+        "pastel-mint": "var(--pastel-mint)",
+        "pastel-peach": "var(--pastel-peach)",
+        "pastel-blue": "var(--pastel-blue)",
         sidebar: {
           DEFAULT: "var(--sidebar-background)",
           foreground: "var(--sidebar-foreground)",
@@ -83,6 +93,16 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float": "float 3s ease-in-out infinite",
+        "glow": "glow 2s ease-in-out infinite alternate",
+        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      // Premium Gradients
+      backgroundImage: {
+        'gradient-primary': 'var(--gradient-primary)',
+        'gradient-secondary': 'var(--gradient-secondary)',
+        'gradient-accent': 'var(--gradient-accent)',
+        'gradient-surface': 'var(--gradient-surface)',
       },
     },
   },
