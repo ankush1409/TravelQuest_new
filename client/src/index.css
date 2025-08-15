@@ -436,6 +436,26 @@
     color: #6b7280 !important;
   }
   
+  /* Fix icon visibility in dropdown */
+  .dropdown-menu svg {
+    color: inherit !important;
+    fill: currentColor !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+  
+  .dropdown-menu .text-blue-600 svg {
+    color: #2563eb !important;
+  }
+  
+  .dropdown-menu .text-amber-600 svg {
+    color: #d97706 !important;
+  }
+  
+  .dropdown-menu .text-gray-500 svg {
+    color: #6b7280 !important;
+  }
+  
   .dropdown-menu-item {
     position: relative;
     overflow: hidden;

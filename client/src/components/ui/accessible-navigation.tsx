@@ -436,7 +436,9 @@ export function DesktopNavigation() {
                           style={{ color: isActive ? '#2563eb' : '#374151' }}
                           role="menuitem"
                         >
-                          {item.icon}
+                          <div style={{ color: isActive ? '#2563eb' : '#6b7280' }}>
+                            {item.icon}
+                          </div>
                           <span>{item.label}</span>
                           {item.badge && (
                             <Badge variant="destructive" className="ml-auto h-5 text-xs">
@@ -461,7 +463,7 @@ export function DesktopNavigation() {
                         className="flex flex-col items-center p-4 rounded-xl hover:bg-blue-50 transition-all duration-200 group border border-gray-100 hover:border-blue-200 hover:shadow-sm"
                         role="menuitem"
                       >
-                        <User className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform mb-1" />
+                        <User className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform mb-1" style={{ color: '#2563eb' }} />
                         <span className="text-xs font-medium text-gray-700 group-hover:text-blue-600" style={{ color: '#374151' }}>Profile</span>
                       </Link>
                       
@@ -471,7 +473,7 @@ export function DesktopNavigation() {
                         className="flex flex-col items-center p-4 rounded-xl hover:bg-amber-50 transition-all duration-200 group border border-gray-100 hover:border-amber-200 hover:shadow-sm"
                         role="menuitem"
                       >
-                        <Trophy className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform mb-1" />
+                        <Trophy className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform mb-1" style={{ color: '#d97706' }} />
                         <span className="text-xs font-medium text-gray-700 group-hover:text-amber-600" style={{ color: '#374151' }}>Badges</span>
                       </Link>
                     </div>
@@ -487,7 +489,7 @@ export function DesktopNavigation() {
                     style={{ color: '#374151' }}
                     role="menuitem"
                   >
-                    <Settings className="w-5 h-5 text-gray-500 group-hover:text-gray-700 group-hover:rotate-90 transition-all duration-300" />
+                    <Settings className="w-5 h-5 text-gray-500 group-hover:text-gray-700 group-hover:rotate-90 transition-all duration-300" style={{ color: '#6b7280' }} />
                     <span className="font-medium" style={{ color: '#374151' }}>Settings</span>
                   </Link>
                   
@@ -498,7 +500,7 @@ export function DesktopNavigation() {
                     style={{ color: '#374151' }}
                     role="menuitem"
                   >
-                    <Bell className="w-5 h-5 text-gray-500 group-hover:text-blue-600 transition-colors" />
+                    <Bell className="w-5 h-5 text-gray-500 group-hover:text-blue-600 transition-colors" style={{ color: '#6b7280' }} />
                     <span className="font-medium" style={{ color: '#374151' }}>Notifications</span>
                     <Badge 
                       className="ml-auto h-5 text-xs font-semibold bg-red-500 hover:bg-red-500 text-white border-0"
@@ -515,7 +517,7 @@ export function DesktopNavigation() {
                     style={{ color: '#6b7280' }}
                     role="menuitem"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5" style={{ color: '#ef4444' }} />
                     <span style={{ color: '#6b7280' }}>Sign Out</span>
                   </button>
                 </motion.div>
