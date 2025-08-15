@@ -256,14 +256,14 @@ export default function ProfilePage() {
                 <span className="text-sm font-medium text-white">
                   Level {currentLevel} → Level {currentLevel + 1}
                 </span>
-                <span className="text-sm text-white/70">
+                <span className="text-sm text-white font-medium">
                   {xpToNextLevel} XP to go
                 </span>
               </div>
               <Progress value={progressPercentage} className="h-4" />
-              <div className="flex justify-between text-xs text-white/70">
+              <div className="flex justify-between text-xs text-white font-medium">
                 <span>{currentLevelXP} XP</span>
-                <span className="font-medium text-white">{user.totalXP} XP</span>
+                <span className="font-bold text-white">{user.totalXP} XP</span>
                 <span>{nextLevelXP} XP</span>
               </div>
             </CardContent>
