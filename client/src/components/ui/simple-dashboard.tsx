@@ -195,7 +195,13 @@ export function SimpleDashboard() {
               <span style={{ color: "hsl(var(--muted-foreground))" }}>Level {userData.level}</span>
               <span style={{ color: "hsl(var(--muted-foreground))" }}>Level {userData.level + 1}</span>
             </div>
-            <Progress value={userData.levelProgress} className="h-3 bg-muted" />
+            <Progress 
+              value={userData.levelProgress} 
+              className="h-3 progress-bar" 
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.3)',
+              }}
+            />
             <div className="text-center">
               <span className="text-sm font-bold" style={{ color: "hsl(var(--primary))" }}>
                 {userData.xpToNextLevel} XP to next level
@@ -287,7 +293,10 @@ export function SimpleDashboard() {
               </div>
               <Progress 
                 value={(userData.streak / 7) * 100} 
-                className="h-3 bg-green-100" 
+                className="h-3 progress-bar" 
+                style={{
+                  backgroundColor: 'rgba(34, 197, 94, 0.2)',
+                }}
               />
             </div>
             <p className="text-sm font-medium text-white opacity-90">
