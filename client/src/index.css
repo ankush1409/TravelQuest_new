@@ -221,12 +221,20 @@
   /* Travel theme gradient menu bars and action bars */
   .menu-gradient {
     background: var(--gradient-menu);
-    color: white;
+    color: #ffffff !important; /* Force white text on gradient menus */
+  }
+
+  .menu-gradient * {
+    color: #ffffff !important; /* Ensure all child elements are white */
   }
 
   .action-gradient {
     background: var(--gradient-action);
-    color: white;
+    color: #ffffff !important; /* Force white text on gradient action bars */
+  }
+
+  .action-gradient * {
+    color: #ffffff !important; /* Ensure all child elements are white */
   }
 
   /* Travel icon styling */
@@ -245,12 +253,16 @@
   /* Travel button styling */
   .travel-button, .yatra-button {
     background: var(--gradient-primary);
-    color: white;
+    color: #ffffff !important; /* Force white text on gradient buttons */
     font-weight: 600;
     border: none;
     border-radius: 8px;
     padding: 12px 24px;
     transition: all 0.2s ease;
+  }
+
+  .travel-button *, .yatra-button * {
+    color: #ffffff !important; /* Ensure all child elements are white */
   }
 
   .travel-button:hover, .yatra-button:hover {
@@ -286,9 +298,26 @@
     color: hsl(210 9% 31%) !important; /* lighter charcoal for muted text */
   }
 
-  /* White text for dark backgrounds */
-  .text-on-dark, .text-white {
-    color: hsl(0 0% 100%) !important; /* white text on dark backgrounds */
+  /* White text for dark backgrounds - comprehensive */
+  .text-on-dark, .text-white, .text-white * {
+    color: #ffffff !important; /* white text on dark backgrounds */
+  }
+
+  /* Force white text on all gradient elements */
+  [style*="background: var(--gradient"], 
+  [class*="gradient"], 
+  [class*="travel-button"],
+  [class*="yatra-button"],
+  [class*="menu-gradient"] {
+    color: #ffffff !important;
+  }
+
+  [style*="background: var(--gradient"] *, 
+  [class*="gradient"] *, 
+  [class*="travel-button"] *,
+  [class*="yatra-button"] *,
+  [class*="menu-gradient"] * {
+    color: #ffffff !important;
   }
 
   /* Override all inline styles for travel theme */
