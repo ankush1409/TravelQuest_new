@@ -266,7 +266,13 @@ export function DesktopNavigation() {
             >
               <Zap className="w-6 h-6 text-white" />
             </motion.div>
-
+            <motion.span 
+              className="text-xl font-black ml-3"
+              style={{ color: "hsl(var(--primary))" }}
+              whileHover={{ scale: 1.05 }}
+            >
+              TravelQuest
+            </motion.span>
           </Link>
 
           {/* Premium Desktop Navigation */}
@@ -450,10 +456,10 @@ export function DesktopNavigation() {
 
               {/* User Info with Quick Actions Preview */}
               <div className="hidden sm:block">
-                <div className="text-sm font-medium text-foreground">
+                <div className="text-sm font-medium" style={{ color: "hsl(var(--foreground))" }}>
                   {user?.displayName || user?.email?.split('@')[0] || "Traveler"}
                 </div>
-                <div className="text-xs text-muted-foreground flex items-center gap-1">
+                <div className="text-xs flex items-center gap-1" style={{ color: "hsl(var(--muted-foreground))" }}>
                   <Zap className="w-3 h-3" />
                   1,250 XP • Level 8
                 </div>

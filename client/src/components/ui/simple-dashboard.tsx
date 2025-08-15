@@ -114,7 +114,8 @@ export function SimpleDashboard() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-2">
               <motion.h1 
-                className="text-3xl md:text-4xl font-black text-foreground"
+                className="text-3xl md:text-4xl font-black"
+                style={{ color: "hsl(var(--foreground))" }}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
@@ -137,7 +138,7 @@ export function SimpleDashboard() {
                 </motion.div>
               )}
               
-              <p className="text-muted-foreground text-lg">
+              <p className="text-lg" style={{ color: "hsl(var(--muted-foreground))" }}>
                 Your next adventure awaits. Ready to explore?
               </p>
             </div>
@@ -233,7 +234,7 @@ export function SimpleDashboard() {
                     <card.icon className={`h-8 w-8 ${card.iconColor}`} />
                   </motion.div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-semibold text-muted-foreground/80 mb-2 uppercase tracking-wide">
+                    <h3 className="text-sm font-semibold mb-2 uppercase tracking-wide" style={{ color: "hsl(var(--muted-foreground))" }}>
                       {card.title}
                     </h3>
                     <motion.div 
@@ -269,7 +270,7 @@ export function SimpleDashboard() {
                 <div className="p-2 bg-green-100 rounded-lg">
                   <Calendar className="h-5 w-5 text-green-600" />
                 </div>
-                <span className="text-lg font-bold text-foreground">Current Streak</span>
+                <span className="text-lg font-bold" style={{ color: "hsl(var(--foreground))" }}>Current Streak</span>
               </div>
               <Badge className="bg-green-500 hover:bg-green-500 text-white font-bold px-3 py-1">
                 {userData.streak} days
@@ -311,10 +312,10 @@ export function SimpleDashboard() {
             <CardContent className="p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="space-y-3">
-                  <h3 className="text-2xl font-bold text-foreground">
+                  <h3 className="text-2xl font-bold" style={{ color: "hsl(var(--foreground))" }}>
                     Start a New Journey
                   </h3>
-                  <p className="text-muted-foreground font-medium text-base">
+                  <p className="font-medium text-base" style={{ color: "hsl(var(--muted-foreground))" }}>
                     Discover amazing places nearby and earn XP
                   </p>
                 </div>
@@ -344,7 +345,7 @@ export function SimpleDashboard() {
             <CardContent className="p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-foreground">
+                  <h3 className="text-2xl font-bold" style={{ color: "hsl(var(--foreground))" }}>
                     Recent Activity
                   </h3>
                   <p className="text-blue-600 font-medium">
@@ -366,7 +367,7 @@ export function SimpleDashboard() {
                   <div key={i} className="flex items-center justify-between p-3 bg-white/60 rounded-lg border border-blue-100">
                     <div className="flex items-center space-x-3">
                       <span className="text-lg">{location.icon}</span>
-                      <span className="font-medium text-foreground">{location.name}</span>
+                      <span className="font-medium" style={{ color: "hsl(var(--foreground))" }}>{location.name}</span>
                     </div>
                     <Badge className="bg-purple-500 hover:bg-purple-500 text-white font-semibold">
                       {location.xp}
