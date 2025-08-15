@@ -1,62 +1,69 @@
-// AWS Amplify integration temporarily disabled for development
-// This prevents runtime errors while maintaining the AWS architecture ready for deployment
+import { Amplify } from 'aws-amplify';
+import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser, signIn, signOut, signUp, confirmSignUp, fetchAuthSession } from 'aws-amplify/auth';
+import awsConfig from '../../../src/aws-config';
 
-// Mock functions for development mode
-const getCurrentUser = async () => { 
-  throw new Error('AWS Amplify not configured'); 
-};
+// Configure Amplify
+Amplify.configure(awsConfig);
 
-const signIn = async () => { 
-  throw new Error('AWS Amplify not configured'); 
-};
+// Create GraphQL client
+export const graphqlClient = generateClient();
 
-const signOut = async () => { 
-  throw new Error('AWS Amplify not configured'); 
-};
-
-const signUp = async () => { 
-  throw new Error('AWS Amplify not configured'); 
-};
-
-const confirmSignUp = async () => { 
-  throw new Error('AWS Amplify not configured'); 
-};
-
-const fetchAuthSession = async () => { 
-  throw new Error('AWS Amplify not configured'); 
-};
-
-// Mock GraphQL client
-const graphqlClient = null;
-
-// Helper functions
-const getAuthHeaders = async () => {
-  console.warn('AWS Amplify not configured - using development mode');
-  return {};
-};
-
-const isAuthenticated = async (): Promise<boolean> => {
-  return false;
-};
-
-const getCurrentUserInfo = async () => {
-  return {
-    user: null,
-    session: null,
-    isAuthenticated: false
-  };
-};
-
-// Export all functions
+// Export auth functions
 export {
-  graphqlClient,
   getCurrentUser,
   signIn,
   signOut,
   signUp,
   confirmSignUp,
-  fetchAuthSession,
-  getAuthHeaders,
-  isAuthenticated,
-  getCurrentUserInfo
+  fetchAuthSession
+};
+
+// Helper function to get authenticated headers
+export const getAuthHeaders = async () => {
+  try {
+    const session = await fetchAuthSession();
+    const token = session.tokens?.idToken?.toString();
+    
+    if (token) {
+      return {
+        Authorization: `Bearer ${token}`
+      };
+    }
+    
+    return {};
+  } catch (error) {
+    console.warn('Failed to get auth headers:', error);
+    return {};
+  }
+};
+
+// Helper function to check if user is authenticated
+export const isAuthenticated = async (): Promise<boolean> => {
+  try {
+    await getCurrentUser();
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+// Helper function to get current user info
+export const getCurrentUserInfo = async () => {
+  try {
+    const user = await getCurrentUser();
+    const session = await fetchAuthSession();
+    
+    return {
+      user,
+      session,
+      isAuthenticated: true
+    };
+  } catch (error) {
+    return {
+      user: null,
+      session: null,
+      isAuthenticated: false
+    };
+  }
 };

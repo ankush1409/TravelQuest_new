@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-// AWS Amplify imports disabled for development
-// import { getCurrentUser, signIn, signOut, signUp, confirmSignUp, fetchAuthSession } from 'aws-amplify/auth';
-// import { Hub } from 'aws-amplify/utils';
+import { getCurrentUser, signIn, signOut, signUp, confirmSignUp, fetchAuthSession } from 'aws-amplify/auth';
+import { Hub } from 'aws-amplify/utils';
 
 interface User {
   userId: string;
@@ -40,9 +39,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const checkAuthState = async () => {
     try {
       setIsLoading(true);
-      // AWS Amplify auth disabled for development
-      console.log('AWS Amplify auth not configured - using development mode');
-      setUser(null);
+      const currentUser = await getCurrentUser();
+      setUser({
+        userId: currentUser.userId,
+        username: currentUser.username,
+        attributes: currentUser.attributes
+      });
     } catch (error) {
       console.log('User not authenticated');
       setUser(null);
@@ -53,30 +55,85 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     checkAuthState();
-    
-    // AWS Amplify event listeners disabled for development
-    // const unsubscribe = Hub.listen('auth', ({ payload }) => { ... });
-    // return unsubscribe;
+
+    // Listen for auth events
+    const unsubscribe = Hub.listen('auth', ({ payload }) => {
+      const { event } = payload;
+      
+      switch (event) {
+        case 'signedIn':
+          checkAuthState();
+          break;
+        case 'signedOut':
+          setUser(null);
+          break;
+        case 'tokenRefresh':
+          // Token refresh succeeded
+          break;
+        case 'tokenRefresh_failure':
+          // Token refresh failed, user needs to sign in again
+          setUser(null);
+          break;
+        default:
+          break;
+      }
+    });
+
+    return unsubscribe;
   }, []);
 
   const handleSignIn = async (username: string, password: string) => {
-    console.warn('AWS Amplify sign in not configured - using development mode');
-    throw new Error('AWS Amplify not configured');
+    try {
+      const result = await signIn({ username, password });
+      
+      if (result.isSignedIn) {
+        await checkAuthState();
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('Sign in error:', error);
+      throw error;
+    }
   };
 
   const handleSignUp = async (username: string, password: string, email: string) => {
-    console.warn('AWS Amplify sign up not configured - using development mode');
-    throw new Error('AWS Amplify not configured');
+    try {
+      const result = await signUp({
+        username,
+        password,
+        options: {
+          userAttributes: {
+            email
+          }
+        }
+      });
+      
+      return result;
+    } catch (error) {
+      console.error('Sign up error:', error);
+      throw error;
+    }
   };
 
   const handleSignOut = async () => {
-    console.warn('AWS Amplify sign out not configured - using development mode');
-    setUser(null);
+    try {
+      await signOut();
+      setUser(null);
+    } catch (error) {
+      console.error('Sign out error:', error);
+      throw error;
+    }
   };
 
   const handleConfirmSignUp = async (username: string, code: string) => {
-    console.warn('AWS Amplify confirm sign up not configured - using development mode');
-    throw new Error('AWS Amplify not configured');
+    try {
+      const result = await confirmSignUp({ username, confirmationCode: code });
+      return result;
+    } catch (error) {
+      console.error('Confirm sign up error:', error);
+      throw error;
+    }
   };
 
   const value: AuthContextType = {
