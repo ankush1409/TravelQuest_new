@@ -4,37 +4,55 @@
 
 @layer base {
   :root {
-    /* Clean light theme colors */
+    /* High-contrast accessible light theme */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 220 13% 18%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 220 13% 18%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 142 76% 36%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 142 76% 36%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --radius: 0.5rem;
+    --popover-foreground: 220 13% 18%;
     
-    /* Travel theme gradients */
-    --gradient-primary: linear-gradient(135deg, #00aa6c 0%, #009f63 100%);
-    --gradient-secondary: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-    --gradient-accent: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    /* Travel-themed primary colors with high contrast */
+    --primary: 158 64% 52%;
+    --primary-foreground: 0 0% 100%;
+    --primary-dark: 158 64% 35%;
+    
+    /* Gamification accent colors - unified palette */
+    --xp-color: 262 83% 58%;
+    --location-color: 217 91% 60%;
+    --challenge-color: 43 96% 56%;
+    --streak-color: 120 100% 25%;
+    --level-color: 25 95% 53%;
+    
+    /* UI system colors */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 13% 18%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 220 14% 96%;
+    --accent-foreground: 220 13% 18%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 158 64% 52%;
+    
+    /* Travel theme gradients - vibrant and accessible */
+    --gradient-primary: linear-gradient(135deg, hsl(158 64% 52%) 0%, hsl(158 64% 35%) 100%);
+    --gradient-xp: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(262 83% 48%) 100%);
+    --gradient-location: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 50%) 100%);
+    --gradient-challenge: linear-gradient(135deg, hsl(43 96% 56%) 0%, hsl(43 96% 46%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(220 14% 99%) 100%);
+    --gradient-surface: linear-gradient(135deg, hsla(0 0% 100% / 0.95) 0%, hsla(220 14% 99% / 0.95) 100%);
+    
+    /* Shadow system */
+    --shadow-sm: 0 1px 2px 0 hsl(220 13% 18% / 0.05);
+    --shadow: 0 1px 3px 0 hsl(220 13% 18% / 0.1), 0 1px 2px -1px hsl(220 13% 18% / 0.1);
+    --shadow-md: 0 4px 6px -1px hsl(220 13% 18% / 0.1), 0 2px 4px -2px hsl(220 13% 18% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(220 13% 18% / 0.1), 0 4px 6px -4px hsl(220 13% 18% / 0.1);
+    --shadow-xl: 0 20px 25px -5px hsl(220 13% 18% / 0.1), 0 8px 10px -6px hsl(220 13% 18% / 0.1);
+    
+    --radius: 0.75rem;
   }
 }
 
@@ -48,14 +66,19 @@
   }
 }
 
-/* Premium UI Styles */
+/* Premium UI Components */
 @layer components {
+  /* High-contrast buttons */
   .premium-button {
-    @apply relative overflow-hidden bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-lg shadow-sm transform transition-all duration-200 hover:shadow-md active:scale-95;
+    @apply relative overflow-hidden font-semibold py-3 px-6 rounded-xl transition-all duration-200 active:scale-95;
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+    box-shadow: var(--shadow);
   }
   
   .premium-button:hover {
-    background-color: hsl(var(--primary) / 0.9);
+    box-shadow: var(--shadow-md);
+    background: hsl(var(--primary-dark));
   }
 
   .premium-button:before {
@@ -69,16 +92,67 @@
     animation: shimmer 0.6s ease-out;
   }
 
-  .premium-button-secondary {
-    @apply bg-gradient-to-r from-slate-600 via-slate-500 to-slate-600;
-  }
-
+  /* Accessible cards with high contrast */
   .premium-card {
-    @apply bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200;
+    @apply bg-card border border-border rounded-xl transition-all duration-200;
+    background: var(--gradient-card);
+    box-shadow: var(--shadow);
+    border-color: hsl(var(--border));
+  }
+  
+  .premium-card:hover {
+    box-shadow: var(--shadow-md);
   }
 
   .neopop-card {
-    @apply bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200;
+    @apply bg-card border-2 rounded-xl transition-all duration-200 relative overflow-hidden;
+    background: var(--gradient-card);
+    box-shadow: var(--shadow);
+    border-color: hsl(var(--primary) / 0.15);
+  }
+  
+  .neopop-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: hsl(var(--primary) / 0.3);
+  }
+
+  /* Gamification element styles */
+  .xp-badge {
+    background: var(--gradient-xp);
+    color: white;
+    @apply font-bold text-sm px-3 py-1 rounded-full;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .location-badge {
+    background: var(--gradient-location);
+    color: white;
+    @apply font-bold text-sm px-3 py-1 rounded-full;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .challenge-badge {
+    background: var(--gradient-challenge);
+    color: hsl(220 13% 18%);
+    @apply font-bold text-sm px-3 py-1 rounded-full;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Navigation enhancements */
+  .nav-active {
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+    box-shadow: var(--shadow);
+  }
+
+  .nav-item {
+    @apply font-medium transition-colors duration-200;
+    color: hsl(var(--foreground) / 0.8);
+  }
+
+  .nav-item:hover {
+    color: hsl(var(--foreground));
+    background: hsl(var(--primary) / 0.1);
   }
 
   /* Accessibility improvements */

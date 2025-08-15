@@ -238,10 +238,11 @@ export function DesktopNavigation() {
 
   return (
     <motion.nav 
-      className="sticky top-0 z-50 backdrop-blur-2xl border-b border-border/50"
+      className="sticky top-0 z-50 backdrop-blur-xl border-b"
       style={{
         background: "var(--gradient-surface)",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
+        borderColor: "hsl(var(--border))",
+        boxShadow: "var(--shadow-lg)",
       }}
       role="navigation"
       aria-label="Main navigation"
@@ -258,9 +259,9 @@ export function DesktopNavigation() {
             aria-label="Home"
           >
             <motion.div 
-              className="w-10 h-10 rounded-2xl flex items-center justify-center overflow-hidden"
+              className="w-10 h-10 rounded-2xl flex items-center justify-center overflow-hidden shadow-sm"
               style={{ background: "var(--gradient-primary)" }}
-              whileHover={{ rotate: 360 }}
+              whileHover={{ rotate: 360, scale: 1.1 }}
               transition={{ duration: 0.5 }}
             >
               <Zap className="w-6 h-6 text-white" />
@@ -282,13 +283,14 @@ export function DesktopNavigation() {
                 >
                   <Link
                     href={item.href}
-                    className={`relative px-6 py-3 rounded-2xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 group ${
+                    className={`relative px-6 py-3 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 group ${
                       isActive
-                        ? "text-white shadow-lg"
-                        : "text-muted-foreground hover:text-primary"
+                        ? "nav-active text-white"
+                        : "nav-item"
                     }`}
                     style={{
                       background: isActive ? "var(--gradient-primary)" : "transparent",
+                      boxShadow: isActive ? "var(--shadow)" : "none"
                     }}
                     role="tab"
                     aria-selected={isActive}

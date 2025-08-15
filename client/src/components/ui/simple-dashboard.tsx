@@ -41,27 +41,30 @@ export function SimpleDashboard() {
       value: userData.totalXP.toLocaleString(),
       subtitle: `Level ${userData.level} Explorer`,
       icon: Zap,
-      gradient: "from-purple-500 to-pink-500",
-      bgColor: "bg-purple-500/10",
-      iconColor: "text-purple-400"
+      gradient: "xp-badge",
+      bgColor: "bg-purple-50 border-purple-100",
+      iconColor: "text-purple-600",
+      textColor: "text-purple-900"
     },
     {
       title: "Locations",
       value: userData.locations.toString(),
       subtitle: "Places Visited",
       icon: MapPin,
-      gradient: "from-blue-500 to-cyan-500",
-      bgColor: "bg-blue-500/10",
-      iconColor: "text-blue-400"
+      gradient: "location-badge",
+      bgColor: "bg-blue-50 border-blue-100",
+      iconColor: "text-blue-600",
+      textColor: "text-blue-900"
     },
     {
       title: "Challenges",
       value: userData.challenges.toString(),
       subtitle: "Completed",
       icon: Trophy,
-      gradient: "from-yellow-500 to-orange-500",
-      bgColor: "bg-yellow-500/10",
-      iconColor: "text-yellow-400"
+      gradient: "challenge-badge",
+      bgColor: "bg-amber-50 border-amber-100",
+      iconColor: "text-amber-600",
+      textColor: "text-amber-900"
     }
   ];
 
@@ -69,7 +72,12 @@ export function SimpleDashboard() {
     <div className="space-y-8">
       {/* Enhanced Welcome Header with Travel Background */}
       <motion.div 
-        className="relative overflow-hidden rounded-3xl p-8 bg-gradient-to-br from-primary/20 via-accent/20 to-primary/20 border border-primary/20"
+        className="relative overflow-hidden rounded-2xl p-8 border"
+        style={{
+          background: "linear-gradient(135deg, hsl(158 64% 52% / 0.05) 0%, hsl(158 64% 52% / 0.1) 50%, hsl(217 91% 60% / 0.05) 100%)",
+          borderColor: "hsl(var(--border))",
+          boxShadow: "var(--shadow-md)"
+        }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
@@ -143,12 +151,16 @@ export function SimpleDashboard() {
             >
               <div className="relative">
                 <motion.div
-                  className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg"
+                  className="w-20 h-20 rounded-full flex items-center justify-center"
+                  style={{
+                    background: "var(--gradient-primary)",
+                    boxShadow: "var(--shadow-lg)"
+                  }}
                   animate={{
                     boxShadow: [
-                      "0 0 20px rgba(139, 92, 246, 0.3)",
-                      "0 0 30px rgba(139, 92, 246, 0.6)",
-                      "0 0 20px rgba(139, 92, 246, 0.3)"
+                      "var(--shadow-lg)",
+                      "0 0 30px hsl(var(--primary) / 0.6)",
+                      "var(--shadow-lg)"
                     ]
                   }}
                   transition={{ duration: 3, repeat: Infinity }}
@@ -209,29 +221,29 @@ export function SimpleDashboard() {
               transition: { type: "spring", stiffness: 300 }
             }}
           >
-            <Card className="neopop-card group cursor-pointer overflow-hidden">
+            <Card className={`neopop-card group cursor-pointer overflow-hidden border-2 ${card.bgColor}`}>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-4">
                   <motion.div 
-                    className={`p-3 rounded-2xl ${card.bgColor} group-hover:scale-110 transition-transform duration-300`}
+                    className="p-3 rounded-2xl bg-white/80 shadow-sm group-hover:scale-110 transition-transform duration-300 border"
                     whileHover={{ rotate: [0, -10, 10, 0] }}
                     transition={{ duration: 0.5 }}
                   >
                     <card.icon className={`h-6 w-6 ${card.iconColor}`} />
                   </motion.div>
                   <div className="flex-1">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">
                       {card.title}
                     </h3>
                     <motion.div 
-                      className="text-3xl font-black text-foreground"
+                      className={`text-3xl font-black ${card.textColor || 'text-foreground'}`}
                       initial={{ scale: 1 }}
                       whileInView={{ scale: [1, 1.1, 1] }}
                       transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
                     >
                       {card.value}
                     </motion.div>
-                    <p className="text-xs text-muted-foreground">
+                    <p className={`text-sm font-medium ${card.textColor || 'text-muted-foreground'}`}>
                       {card.subtitle}
                     </p>
                   </div>
@@ -283,20 +295,25 @@ export function SimpleDashboard() {
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          <Card className="neopop-card group cursor-pointer bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20 hover:border-primary/40 transition-all duration-300">
+          <Card className="neopop-card group cursor-pointer border-2"
+                style={{ 
+                  background: "linear-gradient(135deg, hsl(158 64% 52% / 0.05) 0%, hsl(217 91% 60% / 0.05) 100%)",
+                  borderColor: "hsl(var(--primary) / 0.2)"
+                }}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
                   <h3 className="text-xl font-bold text-foreground">
                     Start a New Journey
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground font-medium">
                     Discover amazing places nearby
                   </p>
                 </div>
                 <motion.div
-                  className="p-3 bg-primary rounded-full group-hover:bg-accent transition-colors duration-300"
-                  whileHover={{ rotate: 360 }}
+                  className="p-3 rounded-full transition-colors duration-300 shadow-sm"
+                  style={{ background: "var(--gradient-primary)" }}
+                  whileHover={{ rotate: 360, scale: 1.1 }}
                   transition={{ duration: 0.5 }}
                 >
                   <Navigation className="h-6 w-6 text-white" />
