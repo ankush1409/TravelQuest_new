@@ -320,39 +320,137 @@ export function DesktopNavigation() {
           {/* Actions Bar */}
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <NotificationCenter />
+            
+            {/* Enhanced Notification Bell with Pulse */}
+            <motion.div className="relative">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="relative p-2 rounded-full hover:bg-primary/10 transition-all duration-300"
+                aria-label="Notifications"
+              >
+                <motion.div
+                  animate={{
+                    rotate: [0, -10, 10, -10, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatDelay: 5,
+                  }}
+                >
+                  <Bell className="w-5 h-5 text-muted-foreground hover:text-primary transition-colors" />
+                </motion.div>
+                
+                {/* Notification Badge with Pulse */}
+                <motion.div
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [1, 0.8, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                >
+                  <span className="text-xs font-bold text-white">3</span>
+                </motion.div>
+              </Button>
+              
+              {/* Notification Preview on Hover */}
+              <motion.div
+                className="absolute right-0 top-12 w-64 bg-background border border-border rounded-xl shadow-2xl p-4 z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300"
+                initial={{ opacity: 0, y: -10 }}
+                whileHover={{ opacity: 1, y: 0 }}
+              >
+                <h4 className="font-semibold text-foreground mb-2">Recent Notifications</h4>
+                <div className="space-y-2">
+                  <div className="text-sm text-muted-foreground">
+                    <span className="font-medium">+25 XP</span> earned from Central Park check-in
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    New challenge available: "Weekend Explorer"
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    You've unlocked the "City Walker" badge!
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
 
-          {/* User Menu */}
+          {/* Enhanced User Menu with Progress Ring */}
           <div className="relative" ref={menuRef}>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex items-center space-x-2 focus:ring-2 focus:ring-primary"
+              className="flex items-center space-x-3 focus:ring-2 focus:ring-primary p-2 rounded-2xl hover:bg-primary/5 transition-all duration-300"
               aria-expanded={isMenuOpen}
               aria-haspopup="menu"
               aria-label={`User menu for ${user?.displayName || 'User'}`}
             >
-              {user?.profilePicture ? (
-                <img
-                  src={user.profilePicture}
-                  alt={`${user.displayName}'s profile`}
-                  className="w-8 h-8 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-primary" />
+              {/* Avatar with XP Progress Ring */}
+              <div className="relative">
+                {/* Progress Ring */}
+                <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                  <path
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none"
+                    stroke="hsl(var(--muted))"
+                    strokeWidth="2"
+                  />
+                  <motion.path
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none"
+                    stroke="hsl(var(--primary))"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeDasharray="75, 100" // 75% progress to next level
+                    initial={{ strokeDasharray: "0, 100" }}
+                    animate={{ strokeDasharray: "75, 100" }}
+                    transition={{ duration: 1.5, delay: 0.5 }}
+                  />
+                </svg>
+                
+                {/* Avatar */}
+                <div className="absolute inset-1 rounded-full overflow-hidden">
+                  {user?.profilePicture ? (
+                    <img
+                      src={user.profilePicture}
+                      alt={`${user.displayName}'s profile`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                      <User className="w-4 h-4 text-white" />
+                    </div>
+                  )}
                 </div>
-              )}
-              <span className="hidden sm:block font-medium text-foreground">
-                {user?.displayName || "User"}
-                {user?.totalXP && user.totalXP >= 100 && (
-                  <span className="ml-1 text-yellow-500" title={`Level ${calculateUserLevel(user.totalXP)} Explorer`}>
-                    🏅
-                  </span>
-                )}
-              </span>
+                
+                {/* Level Badge */}
+                <motion.div
+                  className="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center border-2 border-background"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.8, type: "spring" }}
+                >
+                  <span className="text-xs font-bold text-white">8</span>
+                </motion.div>
+              </div>
+
+              {/* User Info with Quick Actions Preview */}
+              <div className="hidden sm:block">
+                <div className="text-sm font-medium text-foreground">
+                  {user?.displayName || user?.email?.split('@')[0] || "Traveler"}
+                </div>
+                <div className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Zap className="w-3 h-3" />
+                  1,250 XP • Level 8
+                </div>
+              </div>
+
               <Menu className="w-4 h-4 md:hidden" />
             </Button>
 
@@ -395,14 +493,44 @@ export function DesktopNavigation() {
                     <hr className="my-2 border-border" />
                   </div>
 
+                  {/* Quick Actions Section */}
+                  <div className="px-4 py-2">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                      Quick Actions
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        href="/profile"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex flex-col items-center p-3 rounded-lg hover:bg-primary/10 transition-colors group"
+                        role="menuitem"
+                      >
+                        <User className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+                        <span className="text-xs mt-1">Profile</span>
+                      </Link>
+                      
+                      <Link
+                        href="/challenges"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex flex-col items-center p-3 rounded-lg hover:bg-primary/10 transition-colors group"
+                        role="menuitem"
+                      >
+                        <Trophy className="w-5 h-5 text-yellow-500 group-hover:scale-110 transition-transform" />
+                        <span className="text-xs mt-1">Badges</span>
+                      </Link>
+                    </div>
+                  </div>
+
+                  <hr className="my-2 border-border" />
+
                   {/* User Menu Items */}
                   <Link
                     href="/settings"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-3 hover:bg-muted/50 transition-colors text-foreground"
+                    className="flex items-center space-x-3 px-4 py-3 hover:bg-muted/50 transition-colors text-foreground group"
                     role="menuitem"
                   >
-                    <Settings className="w-4 h-4" />
+                    <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
                     <span>Settings</span>
                   </Link>
                   
@@ -414,6 +542,9 @@ export function DesktopNavigation() {
                   >
                     <Bell className="w-4 h-4" />
                     <span>Notifications</span>
+                    <Badge variant="destructive" className="ml-auto h-4 text-xs">
+                      3
+                    </Badge>
                   </Link>
 
                   <hr className="my-2 border-border" />
