@@ -62,495 +62,155 @@
   }
 }
 
-/* Yatra-inspired UI Components */
+/* Fix text and icon visibility across all components */
 @layer components {
-  /* Yatra-style buttons */
-  .yatra-button {
-    @apply relative overflow-hidden font-semibold py-3 px-6 rounded-lg transition-all duration-200 active:scale-95;
-    background: var(--gradient-primary);
-    color: hsl(var(--primary-foreground));
-    box-shadow: var(--shadow);
-  }
-  
-  .yatra-button:hover {
-    box-shadow: var(--shadow-md);
-    background: hsl(var(--primary-dark));
-  }
-
-  .yatra-button:before {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 transition-opacity duration-300;
-    transform: translateX(-100%);
-  }
-
-  .yatra-button:hover:before {
-    @apply opacity-100;
-    animation: shimmer 0.6s ease-out;
-  }
-
-  /* Yatra-style cards with clean design */
-  .yatra-card {
-    @apply bg-card border border-border rounded-lg transition-all duration-200;
-    background: var(--gradient-card);
-    box-shadow: var(--shadow);
-    border-color: hsl(var(--border));
-  }
-  
-  .yatra-card:hover {
-    box-shadow: var(--shadow-md);
-  }
-
-  .neopop-card, .yatra-card-accent {
-    @apply bg-card border-2 rounded-lg transition-all duration-200 relative overflow-hidden;
-    background: var(--gradient-card);
-    box-shadow: var(--shadow);
-    border-color: hsl(var(--primary) / 0.15);
-  }
-  
-  .neopop-card:hover {
-    box-shadow: var(--shadow-lg);
-    border-color: hsl(var(--primary) / 0.3);
-  }
-
-  /* Gamification element styles */
-  .xp-badge {
-    background: var(--gradient-xp);
-    color: white;
-    @apply font-bold text-sm px-3 py-1 rounded-full;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .location-badge {
-    background: var(--gradient-location);
-    color: white;
-    @apply font-bold text-sm px-3 py-1 rounded-full;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .challenge-badge {
-    background: var(--gradient-challenge);
-    color: hsl(0 0% 100%);
-    @apply font-bold text-sm px-3 py-1 rounded-full;
-    box-shadow: var(--shadow-sm);
-  }
-
-  /* Navigation enhancements */
-  .nav-active {
-    background: var(--gradient-primary);
-    color: hsl(var(--primary-foreground));
-    box-shadow: var(--shadow);
-  }
-
-  /* Travel theme text visibility classes */
-  .text-high-contrast {
-    color: hsl(218 20% 16%) !important; /* #1a2135 dark blue */
-    font-weight: 700;
-  }
-
-  .text-medium-contrast {
-    color: hsl(210 9% 16%) !important; /* #23272b charcoal */
-    font-weight: 500;
-  }
-
-  .text-travel-blue {
-    color: hsl(209 100% 50%) !important; /* #007cff blue */
-  }
-
-  .text-travel-orange {
-    color: hsl(36 100% 50%) !important; /* #ff9800 orange */
-  }
-
-  .text-travel-teal {
-    color: hsl(175 100% 37%) !important; /* #00bfae teal */
-  }
-
-  /* Menu and dropdown enhancements */
-  .menu-item-active {
-    background: hsl(var(--primary) / 0.1);
-    color: hsl(var(--primary));
-    font-weight: 600;
-  }
-
-  .menu-item-hover:hover {
-    background: hsl(var(--muted));
-    color: hsl(var(--foreground));
-  }
-
-  .nav-item {
-    @apply font-medium transition-colors duration-200;
-    color: hsl(var(--foreground) / 0.8);
-  }
-
-  .nav-item:hover {
-    color: hsl(var(--foreground));
-    background: hsl(var(--primary) / 0.1);
-  }
-
-  /* Accessibility improvements */
-  .focus-visible {
-    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
-  }
-
-  /* Mobile touch targets */
-  @media (max-width: 768px) {
-    .touch-target {
-      min-height: 44px;
-      min-width: 44px;
-    }
-  }
-
-  /* High contrast mode support */
-  @media (prefers-contrast: high) {
-    .premium-card, .neopop-card {
-      border-width: 2px;
-    }
-  }
-
-  /* Travel theme gradient menu bars and action bars */
-  .menu-gradient {
-    background: var(--gradient-menu);
-    color: #ffffff !important; /* Force white text on gradient menus */
-  }
-
-  .menu-gradient * {
-    color: #ffffff !important; /* Ensure all child elements are white */
-  }
-
-  .action-gradient {
-    background: var(--gradient-action);
-    color: #ffffff !important; /* Force white text on gradient action bars */
-  }
-
-  .action-gradient * {
-    color: #ffffff !important; /* Ensure all child elements are white */
-  }
-
-  /* Travel icon styling */
-  .travel-icon-blue {
-    color: hsl(209 100% 50%); /* #007cff */
-  }
-
-  .travel-icon-orange {
-    color: hsl(36 100% 50%); /* #ff9800 */
-  }
-
-  .travel-icon-teal {
-    color: hsl(175 100% 37%); /* #00bfae */
-  }
-
-  /* Travel button styling */
-  .travel-button, .yatra-button {
-    background: var(--gradient-primary);
-    color: #ffffff !important; /* Force white text on gradient buttons */
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    transition: all 0.2s ease;
-  }
-
-  .travel-button *, .yatra-button * {
-    color: #ffffff !important; /* Ensure all child elements are white */
-  }
-
-  .travel-button:hover, .yatra-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 124, 255, 0.3);
-  }
-
-  /* Progress bar styling for better visibility on gradient backgrounds */
-  .progress-bar {
-    background-color: rgba(255, 255, 255, 0.3) !important;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .progress-bar > div {
-    background: var(--gradient-primary) !important;
-    transition: all 0.3s ease;
-  }
-
-  /* Target all progress components */
-  [role="progressbar"] {
-    background-color: rgba(255, 255, 255, 0.3) !important;
-  }
-
-  [role="progressbar"] > div {
-    background: var(--gradient-primary) !important;
-  }
-
-  /* Specific targeting for shadcn progress component */
-  .progress > div {
-    background: var(--gradient-primary) !important;
-  }
-
-  /* Reduced motion support */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
-
-  /* Travel theme text colors for excellent readability */
-  h1, h2, h3, h4, h5, h6, .text-4xl, .text-3xl, .text-2xl, .text-xl, .text-lg {
-    color: #1a2135 !important; /* dark blue for headings */
+  /* Dashboard and main content text */
+  h1, h2, h3, h4, h5, h6 {
+    color: #1a2135 !important;
     font-weight: 700 !important;
   }
-
-  p, span:not([style*="color"]), div:not(.icon):not([style*="color"]), .text-sm, .text-base {
-    color: #23272b !important; /* charcoal for body text */
+  
+  p, span, div {
+    color: #23272b !important;
   }
-
-  .text-muted-foreground {
-    color: #6b7280 !important; /* lighter charcoal for muted text */
+  
+  /* Navigation icons - make them visible */
+  nav svg, .nav-icon {
+    color: white !important;
+    opacity: 1 !important;
   }
-
-  /* Ensure button visibility */
-  button[class*="outline"] {
-    border: 2px solid #007cff !important;
-    background: rgba(255, 255, 255, 0.9) !important;
-    color: #1e40af !important;
+  
+  /* Bottom navigation icons - fix visibility */
+  .bottom-nav svg, .nav-icon-container svg, .mobile-navigation svg {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
+    stroke-width: 1.5 !important;
+  }
+  
+  .bottom-nav .active svg, .nav-icon-container .text-primary svg, .mobile-navigation .text-primary svg {
+    color: #007cff !important;
+    opacity: 1 !important;
+  }
+  
+  /* Specific fixes for navigation icons */
+  .nav-icon-container {
+    opacity: 1 !important;
+  }
+  
+  .nav-icon-container svg {
+    opacity: 1 !important;
+    stroke: currentColor !important;
+    fill: none !important;
+  }
+  
+  /* Card content */
+  .card, [data-component-name="Card"] {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+  }
+  
+  .card *, [data-component-name="Card"] * {
+    color: #1a2135 !important;
+  }
+  
+  /* Button styling */
+  button {
+    color: #1a2135 !important;
+  }
+  
+  .travel-button {
+    background: linear-gradient(135deg, #007cff 0%, #00bfae 100%) !important;
+    color: white !important;
+  }
+  
+  .travel-button * {
+    color: white !important;
+  }
+  
+  /* Badge styling */
+  .badge, [class*="badge"] {
+    background-color: #8b5cf6 !important;
+    color: white !important;
+  }
+  
+  /* Menu gradient */
+  .menu-gradient {
+    background: linear-gradient(90deg, #007cff 0%, #00bfae 100%) !important;
+  }
+  
+  .menu-gradient * {
+    color: white !important;
+  }
+  
+  /* Force icon visibility */
+  svg {
+    opacity: 1 !important;
+  }
+  
+  /* Navigation specific fixes */
+  .mobile-navigation {
+    background: #1e293b !important;
+  }
+  
+  /* Quick action cards and dashboard content */
+  .quick-action-grid > div, .dashboard-card, .space-y-8 .grid > div {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .quick-action-grid h3, .dashboard-card h3, .space-y-8 h3 {
+    color: #1a2135 !important;
     font-weight: 600 !important;
   }
   
-  button[class*="outline"]:hover {
-    background: rgba(0, 124, 255, 0.1) !important;
-    color: #1e40af !important;
-    border-color: #0056b3 !important;
-  }
-
-  /* Quick actions widget visibility */
-  .quick-actions-widget {
-    background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%) !important;
-    border: 1px solid #007cff !important;
-    border-radius: 8px !important;
-    padding: 16px !important;
-    margin: 8px !important;
-  }
-
-  .quick-actions-title {
-    color: #1e40af !important;
-    font-weight: 700 !important;
-    font-size: 11px !important;
-    letter-spacing: 1px !important;
-    text-transform: uppercase !important;
-  }
-
-  .quick-action-item {
-    background: rgba(255, 255, 255, 0.8) !important;
-    border: 1px solid #dbeafe !important;
-    min-height: 80px !important;
-    transition: all 0.2s ease !important;
-  }
-
-  .quick-action-item:hover {
-    background: white !important;
-    box-shadow: 0 4px 12px rgba(0, 124, 255, 0.15) !important;
-    border-color: #007cff !important;
-    transform: translateY(-2px) !important;
-  }
-
-  /* Navigation dropdown menu visibility */
-  [role="menu"] {
-    background: white !important;
-    border: 1px solid #e5e7eb !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
-  }
-
-  [role="menu"] a, [role="menu"] button {
-    color: #1e40af !important;
-    font-weight: 500 !important;
-  }
-
-  [role="menu"] a:hover, [role="menu"] button:hover {
-    background: #f3f4f6 !important;
-    color: #1e40af !important;
-  }
-
-  [role="menu"] span:not([style*="color"]) {
-    color: #1e40af !important;
-  }
-
-  [role="menu"] svg:not([style*="color"]) {
+  .quick-action-grid p, .dashboard-card p, .space-y-8 p {
     color: #6b7280 !important;
   }
-
-  /* Force visibility for all menu items */
-  [role="menuitem"] {
-    color: #1e40af !important;
-    font-weight: 500 !important;
-    display: flex !important;
-    align-items: center !important;
+  
+  /* Dashboard stats cards specific fix */
+  [class*="bg-red-50"], [class*="bg-blue-50"], [class*="bg-yellow-50"] {
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
   }
-
-  [role="menuitem"]:hover {
-    background: #f3f4f6 !important;
-    color: #1e40af !important;
+  
+  .text-red-600, .text-blue-600, .text-yellow-600 {
+    color: #007cff !important;
   }
-
-  /* Navigation header profile and badges */
-  .nav-profile-section {
+  
+  .text-red-900, .text-blue-900, .text-yellow-900 {
+    color: #1a2135 !important;
+  }
+  
+  /* Force all card content to be visible */
+  [data-component-name="Card"] h3, 
+  [data-component-name="Card"] h4,
+  [data-component-name="Card"] .text-2xl,
+  [data-component-name="Card"] .text-lg {
+    color: #1a2135 !important;
+    font-weight: 600 !important;
+  }
+  
+  [data-component-name="Card"] .text-sm,
+  [data-component-name="Card"] .text-xs {
+    color: #6b7280 !important;
+  }
+  
+  /* Ensure all text is visible */
+  * {
+    opacity: 1 !important;
+  }
+  
+  /* Special fixes for TravelQuest branding */
+  .text-white {
     color: white !important;
   }
-
-  .nav-profile-section .text-white {
-    color: white !important;
+  
+  .text-primary {
+    color: #007cff !important;
   }
-
-  .nav-profile-section .text-slate-300 {
-    color: #cbd5e1 !important;
-  }
-
-  .nav-profile-section .text-yellow-400 {
-    color: #facc15 !important;
-  }
-
-  /* Level badge styling */
-  .level-badge {
-    background-color: #eab308 !important;
-    color: white !important;
-    border: 2px solid white !important;
-  }
-
-  /* Profile avatar with gradient */
-  .profile-avatar-gradient {
-    background: linear-gradient(135deg, #007cff 0%, #00bfae 100%) !important;
-  }
-
-  /* XP progress ring colors */
-  .xp-progress-ring {
-    stroke: #007cff !important;
-  }
-
-  .xp-progress-background {
-    stroke: #e5e7eb !important;
-  }
-
-  /* White text for dark backgrounds - comprehensive */
-  .text-on-dark, .text-white, .text-white * {
-    color: #ffffff !important; /* white text on dark backgrounds */
-  }
-
-  /* Force white text on all gradient elements */
-  [style*="background: var(--gradient"], 
-  [class*="gradient"], 
-  [class*="travel-button"],
-  [class*="yatra-button"],
-  [class*="menu-gradient"] {
-    color: #ffffff !important;
-  }
-
-  [style*="background: var(--gradient"] *, 
-  [class*="gradient"] *, 
-  [class*="travel-button"] *,
-  [class*="yatra-button"] *,
-  [class*="menu-gradient"] * {
-    color: #ffffff !important;
-  }
-
-  /* Override all inline styles for travel theme */
-  [style*="color: hsl(var(--foreground))"] {
-    color: hsl(218 20% 16%) !important; /* dark blue headings */
-  }
-
-  [style*="color: hsl(var(--muted-foreground))"] {
-    color: hsl(210 9% 31%) !important; /* lighter charcoal */
-  }
-
-  .neopop-card:before {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-cyan-500/5 pointer-events-none;
-  }
-
-  .glass-card {
-    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-xl;
-  }
-
-  .glow-text {
-    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes glow {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 5px currentColor;
-  }
-  50% {
-    box-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
-  }
-}
-
-/* Utility classes */
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.animate-glow {
-  animation: glow 2s ease-in-out infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-slate-700/20;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-purple-500/40 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-purple-500/60;
-}
-
-/* Focus styles for accessibility */
-.focus-visible {
-  @apply outline-none ring-2 ring-purple-500 ring-offset-2 ring-offset-slate-900;
-}
-
-/* Mobile optimizations */
-@media (max-width: 768px) {
-  .premium-button {
-    @apply py-2 px-4 text-sm;
-  }
-
-  .neopop-card {
-    @apply rounded-lg shadow-[0_4px_16px_rgba(0,0,0,0.3)];
+  
+  .bg-primary {
+    background-color: #007cff !important;
   }
 }

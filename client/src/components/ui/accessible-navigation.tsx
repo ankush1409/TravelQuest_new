@@ -123,10 +123,18 @@ export function MobileNavigation() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <div className={`transition-colors duration-300 ${
-                    isActive ? 'text-white' : 'text-white group-hover:text-purple-300'
-                  }`}>
-                    {item.icon}
+                  <div 
+                    className={`transition-colors duration-300 nav-icon-container ${
+                      isActive ? 'text-primary' : 'text-slate-400 group-hover:text-slate-300'
+                    }`}
+                    style={{ 
+                      color: isActive ? '#007cff' : '#94a3b8',
+                      opacity: 1
+                    }}
+                  >
+                    <div style={{ opacity: 1 }}>
+                      {item.icon}
+                    </div>
                   </div>
                   
                   {/* Notification Badge */}
@@ -157,9 +165,15 @@ export function MobileNavigation() {
                   )}
                 </motion.div>
                 
-                <span className={`text-xs font-semibold mt-1 transition-colors duration-300 ${
-                  isActive ? "text-white" : "text-white group-hover:text-purple-300"
-                }`}>
+                <span 
+                  className={`text-xs font-semibold mt-1 transition-colors duration-300 ${
+                    isActive ? "text-primary" : "text-slate-400 group-hover:text-slate-300"
+                  }`}
+                  style={{ 
+                    color: isActive ? '#007cff' : '#94a3b8',
+                    opacity: 1
+                  }}
+                >
                   {item.label}
                 </span>
                 
