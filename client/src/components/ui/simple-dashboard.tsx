@@ -192,8 +192,8 @@ export function SimpleDashboard() {
             transition={{ delay: 0.5 }}
           >
             <div className="flex justify-between text-sm">
-              <span style={{ color: "hsl(var(--muted-foreground))" }}>Level {userData.level}</span>
-              <span style={{ color: "hsl(var(--muted-foreground))" }}>Level {userData.level + 1}</span>
+              <span className="text-white opacity-80">Level {userData.level}</span>
+              <span className="text-white opacity-80">Level {userData.level + 1}</span>
             </div>
             <Progress 
               value={userData.levelProgress} 
@@ -203,7 +203,7 @@ export function SimpleDashboard() {
               }}
             />
             <div className="text-center">
-              <span className="text-sm font-bold" style={{ color: "hsl(var(--primary))" }}>
+              <span className="text-sm font-bold text-white">
                 {userData.xpToNextLevel} XP to next level
               </span>
             </div>

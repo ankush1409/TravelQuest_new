@@ -238,10 +238,8 @@ export function DesktopNavigation() {
 
   return (
     <motion.nav 
-      className="sticky top-0 z-50 backdrop-blur-xl border-b"
+      className="sticky top-0 z-50 menu-gradient border-b border-blue-200"
       style={{
-        background: "var(--gradient-surface)",
-        borderColor: "hsl(var(--border))",
         boxShadow: "var(--shadow-lg)",
       }}
       role="navigation"
@@ -267,8 +265,7 @@ export function DesktopNavigation() {
               <Zap className="w-6 h-6 text-white" />
             </motion.div>
             <motion.span 
-              className="text-xl font-black ml-3"
-              style={{ color: "hsl(var(--primary))" }}
+              className="text-xl font-black ml-3 text-white"
               whileHover={{ scale: 1.05 }}
             >
               TravelQuest
@@ -289,20 +286,20 @@ export function DesktopNavigation() {
                 >
                   <Link
                     href={item.href}
-                    className={`relative px-4 py-3 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/20 group ${
+                    className={`relative px-4 py-3 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 group ${
                       isActive
-                        ? "text-purple-400 bg-purple-500/20 font-bold"
-                        : "text-white hover:text-purple-300 hover:bg-slate-800"
+                        ? "text-white bg-white/20 font-bold"
+                        : "text-white/80 hover:text-white hover:bg-white/10"
                     }`}
                     role="tab"
                     aria-selected={isActive}
                     aria-label={`${item.label}: ${item.description}`}
                   >
                   <div className="flex items-center space-x-2">
-                    <div className={`transition-colors duration-200 ${isActive ? 'text-purple-400' : 'text-white group-hover:text-purple-300'}`}>
+                    <div className={`transition-colors duration-200 ${isActive ? 'text-white' : 'text-white/80 group-hover:text-white'}`}>
                       {item.icon}
                     </div>
-                    <span className={`font-medium ${isActive ? 'text-purple-400 font-semibold' : 'text-white'}`}>
+                    <span className={`font-medium ${isActive ? 'text-white font-semibold' : 'text-white/80 group-hover:text-white'}`}>
                       {item.label}
                     </span>
                     {item.badge && (
