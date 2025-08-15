@@ -1,12 +1,8 @@
 import { SimpleDashboard } from "@/components/ui/simple-dashboard";
-import { Breadcrumb } from "@/components/ui/accessible-navigation";
 import { motion } from "framer-motion";
 import { Zap, MapPin, Trophy, Users } from "lucide-react";
 
 export default function HomePage() {
-  const breadcrumbItems = [
-    { label: "Dashboard" }
-  ];
 
   return (
     <motion.div
@@ -93,7 +89,6 @@ export default function HomePage() {
 
       {/* Dashboard Content */}
       <div className="container mx-auto px-4">
-        <Breadcrumb items={breadcrumbItems} />
         <SimpleDashboard />
       </div>
     </motion.div>
