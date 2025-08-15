@@ -177,7 +177,10 @@ export function SimpleDashboard() {
                   <Star className="w-4 h-4 text-white" />
                 </motion.div>
               </div>
-              <Badge variant="secondary" className="mt-2 font-semibold">
+              <Badge variant="secondary" className="mt-2 font-semibold" style={{ 
+                color: "hsl(var(--foreground))",
+                backgroundColor: "hsl(var(--muted))"
+              }}>
                 Level {userData.level} Explorer
               </Badge>
             </motion.div>
@@ -196,7 +199,7 @@ export function SimpleDashboard() {
             </div>
             <Progress value={userData.levelProgress} className="h-3 bg-muted" />
             <div className="text-center">
-              <span className="text-sm font-medium text-primary">
+              <span className="text-sm font-bold" style={{ color: "hsl(var(--primary))" }}>
                 {userData.xpToNextLevel} XP to next level
               </span>
             </div>
@@ -238,14 +241,15 @@ export function SimpleDashboard() {
                       {card.title}
                     </h3>
                     <motion.div 
-                      className={`text-4xl font-black mb-1 ${card.textColor || 'text-foreground'}`}
+                      className="text-4xl font-black mb-1"
+                      style={{ color: "hsl(var(--foreground))" }}
                       initial={{ scale: 1 }}
                       whileInView={{ scale: [1, 1.05, 1] }}
                       transition={{ duration: 0.4, delay: 0.7 + index * 0.1 }}
                     >
                       {card.value}
                     </motion.div>
-                    <p className={`text-sm font-medium ${card.textColor ? card.textColor.replace('900', '700') : 'text-muted-foreground'}`}>
+                    <p className="text-sm font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>
                       {card.subtitle}
                     </p>
                   </div>
