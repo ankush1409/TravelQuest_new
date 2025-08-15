@@ -123,18 +123,10 @@ export function MobileNavigation() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <div 
-                    className={`transition-colors duration-300 nav-icon-container ${
-                      isActive ? 'text-primary' : 'text-slate-400 group-hover:text-slate-300'
-                    }`}
-                    style={{ 
-                      color: isActive ? '#007cff' : '#94a3b8',
-                      opacity: 1
-                    }}
-                  >
-                    <div style={{ opacity: 1 }}>
-                      {item.icon}
-                    </div>
+                  <div className={`transition-colors duration-300 ${
+                    isActive ? 'text-white' : 'text-white group-hover:text-purple-300'
+                  }`}>
+                    {item.icon}
                   </div>
                   
                   {/* Notification Badge */}
@@ -165,15 +157,9 @@ export function MobileNavigation() {
                   )}
                 </motion.div>
                 
-                <span 
-                  className={`text-xs font-semibold mt-1 transition-colors duration-300 ${
-                    isActive ? "text-primary" : "text-slate-400 group-hover:text-slate-300"
-                  }`}
-                  style={{ 
-                    color: isActive ? '#007cff' : '#94a3b8',
-                    opacity: 1
-                  }}
-                >
+                <span className={`text-xs font-semibold mt-1 transition-colors duration-300 ${
+                  isActive ? "text-white" : "text-white group-hover:text-purple-300"
+                }`}>
                   {item.label}
                 </span>
                 
@@ -423,21 +409,19 @@ export function DesktopNavigation() {
                   <path
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     fill="none"
-                    stroke="#e5e7eb"
+                    stroke="hsl(var(--muted))"
                     strokeWidth="2"
-                    className="xp-progress-background"
                   />
                   <motion.path
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     fill="none"
-                    stroke="#007cff"
+                    stroke="hsl(var(--primary))"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeDasharray="75, 100" // 75% progress to next level
                     initial={{ strokeDasharray: "0, 100" }}
                     animate={{ strokeDasharray: "75, 100" }}
                     transition={{ duration: 1.5, delay: 0.5 }}
-                    className="xp-progress-ring"
                   />
                 </svg>
                 
@@ -450,55 +434,30 @@ export function DesktopNavigation() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div 
-                      className="w-full h-full flex items-center justify-center profile-avatar-gradient"
-                      style={{ background: "linear-gradient(135deg, #007cff 0%, #00bfae 100%)" }}
-                    >
-                      <User 
-                        className="w-4 h-4" 
-                        style={{ color: "white" }}
-                      />
+                    <div className="w-full h-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                      <User className="w-4 h-4 text-white" />
                     </div>
                   )}
                 </div>
                 
                 {/* Level Badge */}
                 <motion.div
-                  className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center level-badge"
-                  style={{ 
-                    backgroundColor: "#eab308",
-                    border: "2px solid white",
-                    color: "white"
-                  }}
+                  className="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center border-2 border-background"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.8, type: "spring" }}
                 >
-                  <span 
-                    className="text-xs font-bold"
-                    style={{ color: "white" }}
-                  >
-                    8
-                  </span>
+                  <span className="text-xs font-bold text-white">8</span>
                 </motion.div>
               </div>
 
               {/* User Info with Quick Actions Preview */}
-              <div className="hidden sm:block nav-profile-section">
-                <div 
-                  className="text-sm font-medium"
-                  style={{ color: "white" }}
-                >
+              <div className="hidden sm:block">
+                <div className="text-sm font-medium text-white">
                   {user?.displayName || user?.email?.split('@')[0] || "Traveler"}
                 </div>
-                <div 
-                  className="text-xs flex items-center gap-1"
-                  style={{ color: "#cbd5e1" }}
-                >
-                  <Zap 
-                    className="w-3 h-3" 
-                    style={{ color: "#facc15" }}
-                  />
+                <div className="text-xs flex items-center gap-1 text-slate-300">
+                  <Zap className="w-3 h-3 text-yellow-400" />
                   1,250 XP • Level 8
                 </div>
               </div>
@@ -528,79 +487,48 @@ export function DesktopNavigation() {
                           key={`mobile-${item.id}`}
                           href={item.href}
                           onClick={() => setIsMenuOpen(false)}
-                          className={`flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-colors rounded-lg mx-2 ${
-                            isActive ? "bg-blue-100" : ""
+                          className={`flex items-center space-x-3 px-4 py-3 hover:bg-muted/50 transition-colors ${
+                            isActive ? "text-primary bg-primary/10" : "text-foreground"
                           }`}
-                          style={{
-                            color: isActive ? "#007cff" : "#1e40af",
-                            fontWeight: isActive ? "600" : "500"
-                          }}
                           role="menuitem"
                         >
-                          <span style={{ color: isActive ? "#007cff" : "#007cff" }}>
-                            {item.icon}
-                          </span>
+                          {item.icon}
                           <span>{item.label}</span>
                           {item.badge && (
-                            <Badge variant="destructive" className="ml-auto h-5 text-xs bg-red-500 text-white">
+                            <Badge variant="destructive" className="ml-auto h-5 text-xs">
                               {item.badge}
                             </Badge>
                           )}
                         </Link>
                       );
                     })}
-                    <hr className="my-2 border-gray-200 mx-2" />
+                    <hr className="my-2 border-border" />
                   </div>
 
                   {/* Quick Actions Section */}
-                  <div className="px-4 py-3 bg-gradient-to-r from-blue-50 to-cyan-50 mx-2 rounded-lg border border-blue-100">
-                    <p 
-                      className="text-xs font-bold uppercase tracking-wider mb-3"
-                      style={{ 
-                        color: "#1e40af",
-                        fontSize: "11px",
-                        letterSpacing: "1px"
-                      }}
-                    >
+                  <div className="px-4 py-3">
+                    <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "hsl(var(--foreground))" }}>
                       QUICK ACTIONS
                     </p>
                     <div className="grid grid-cols-2 gap-3">
                       <Link
                         href="/profile"
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex flex-col items-center p-3 rounded-lg bg-white/70 hover:bg-white hover:shadow-md transition-all duration-200 group border border-blue-200 hover:border-blue-300"
+                        className="flex flex-col items-center p-4 rounded-lg hover:bg-primary/8 transition-all duration-200 group border border-transparent hover:border-primary/20"
                         role="menuitem"
-                        style={{ minHeight: "80px" }}
                       >
-                        <User 
-                          className="w-6 h-6 group-hover:scale-110 transition-transform mb-1" 
-                          style={{ color: "#007cff" }}
-                        />
-                        <span 
-                          className="text-xs font-medium"
-                          style={{ color: "#1e40af" }}
-                        >
-                          Profile
-                        </span>
+                        <User className="w-6 h-6 text-primary group-hover:scale-110 transition-transform mb-1" />
+                        <span className="text-xs font-medium" style={{ color: "hsl(var(--foreground))" }}>Profile</span>
                       </Link>
                       
                       <Link
                         href="/challenges"
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex flex-col items-center p-3 rounded-lg bg-white/70 hover:bg-white hover:shadow-md transition-all duration-200 group border border-amber-200 hover:border-amber-300"
+                        className="flex flex-col items-center p-4 rounded-lg hover:bg-amber-50 transition-all duration-200 group border border-transparent hover:border-amber-200"
                         role="menuitem"
-                        style={{ minHeight: "80px" }}
                       >
-                        <Trophy 
-                          className="w-6 h-6 group-hover:scale-110 transition-transform mb-1" 
-                          style={{ color: "#f59e0b" }}
-                        />
-                        <span 
-                          className="text-xs font-medium"
-                          style={{ color: "#1e40af" }}
-                        >
-                          Badges
-                        </span>
+                        <Trophy className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform mb-1" />
+                        <span className="text-xs font-medium" style={{ color: "hsl(var(--foreground))" }}>Badges</span>
                       </Link>
                     </div>
                   </div>
@@ -611,53 +539,40 @@ export function DesktopNavigation() {
                   <Link
                     href="/settings"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-4 hover:bg-gray-50 transition-colors group rounded-lg mx-2 border border-transparent hover:border-gray-200"
-                    style={{ color: "#1e40af" }}
+                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors group rounded-lg mx-2"
+                    style={{ color: "hsl(var(--foreground))" }}
                     role="menuitem"
                   >
-                    <Settings 
-                      className="w-5 h-5 group-hover:rotate-90 transition-all duration-300" 
-                      style={{ color: "#6b7280" }}
-                    />
+                    <Settings className="w-5 h-5 text-muted-foreground group-hover:text-foreground group-hover:rotate-90 transition-all duration-300" />
                     <span className="font-medium">Settings</span>
                   </Link>
                   
                   <Link
                     href="/notifications"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-4 hover:bg-gray-50 transition-colors rounded-lg mx-2 border border-transparent hover:border-gray-200"
-                    style={{ color: "#1e40af" }}
+                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors rounded-lg mx-2"
+                    style={{ color: "hsl(var(--foreground))" }}
                     role="menuitem"
                   >
-                    <Bell 
-                      className="w-5 h-5" 
-                      style={{ color: "#6b7280" }}
-                    />
+                    <Bell className="w-5 h-5 text-muted-foreground" />
                     <span className="font-medium">Notifications</span>
                     <Badge 
-                      className="ml-auto h-5 text-xs font-semibold border-0"
-                      style={{ 
-                        backgroundColor: "#ef4444",
-                        color: "white"
-                      }}
+                      className="ml-auto h-5 text-xs font-semibold bg-red-500 hover:bg-red-500 text-white border-0"
                     >
                       3
                     </Badge>
                   </Link>
 
-                  <hr className="my-3 border-gray-200 mx-2" />
+                  <hr className="my-3 border-border mx-2" />
                   
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center space-x-3 px-4 py-4 hover:bg-red-50 transition-colors rounded-lg mx-2 font-medium border border-transparent hover:border-red-200"
-                    style={{ color: "#6b7280" }}
+                    className="w-full flex items-center space-x-3 px-4 py-4 hover:bg-red-50 hover:text-red-600 transition-colors rounded-lg mx-2 font-medium"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
                     role="menuitem"
                   >
-                    <X 
-                      className="w-5 h-5" 
-                      style={{ color: "#ef4444" }}
-                    />
-                    <span className="hover:text-red-600">Sign Out</span>
+                    <X className="w-5 h-5" />
+                    <span>Sign Out</span>
                   </button>
                 </motion.div>
               )}
