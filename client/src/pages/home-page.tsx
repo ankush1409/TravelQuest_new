@@ -2,7 +2,6 @@ import { SimpleDashboard } from "@/components/ui/simple-dashboard";
 import { Breadcrumb } from "@/components/ui/accessible-navigation";
 import { motion } from "framer-motion";
 import { Zap, MapPin, Trophy, Users } from "lucide-react";
-import logoUrl from "@assets/generated_images/TravelQuest_premium_logo_c117bd19.png";
 
 export default function HomePage() {
   const breadcrumbItems = [
@@ -85,32 +84,7 @@ export default function HomePage() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            <div className="flex items-center justify-center mb-6">
-              <motion.div
-                className="w-16 h-16 rounded-3xl flex items-center justify-center mr-4 overflow-hidden"
-                style={{ background: "var(--gradient-primary)" }}
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <img 
-                  src={logoUrl} 
-                  alt="TravelQuest Logo" 
-                  className="w-12 h-12 object-contain"
-                  style={{ filter: 'brightness(1.2) contrast(1.1)' }}
-                />
-              </motion.div>
-              <div className="text-left">
-                <h1 className="text-4xl md:text-6xl font-black leading-tight">
-                  <span 
-                    className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-pulse-slow"
-                  >
-                    Travel
-                  </span>
-                  <span className="text-foreground">Quest</span>
-                </h1>
 
-              </div>
-            </div>
             
 
           </motion.div>
