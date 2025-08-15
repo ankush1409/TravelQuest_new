@@ -1,0 +1,373 @@
+type User 
+  @model 
+  @auth(rules: [
+    { allow: owner },
+    { allow: private, operations: [read] }
+  ]) {
+  id: ID!
+  email: String! @index(name: "byEmail")
+  username: String! @index(name: "byUsername")
+  displayName: String!
+  bio: String
+  profilePicture: String
+  travelStyle: TravelStyle!
+  totalXP: Int!
+  level: Int!
+  isPrivate: Boolean!
+  
+  # Google OAuth fields
+  googleId: String @index(name: "byGoogleId")
+  provider: String
+  
+  # Google Local Guides Integration
+  localGuidesUrl: String
+  localGuidesLevel: Int
+  localGuidesPoints: Int
+  localGuidesReviews: Int
+  localGuidesPhotos: Int
+  localGuidesVideos: Int
+  localGuidesEdits: Int
+  localGuidesQuestions: Int
+  localGuidesFacts: Int
+  localGuidesRoads: Int
+  localGuidesLists: Int
+  localGuidesLastUpdate: AWSDateTime
+  
+  # Referral System
+  referralCode: String @index(name: "byReferralCode")
+  referredBy: String
+  referralCount: Int
+  referralXp: Int
+  
+  # User preferences
+  onboardingCompleted: Boolean
+  preferredTheme: String
+  notificationsEnabled: Boolean
+  privacyMode: Boolean
+  accessibilityMode: Boolean
+  dashboardLayout: AWSJSON
+  
+  # Relationships
+  checkIns: [CheckIn] @hasMany(indexName: "byUser", fields: ["id"])
+  discoveries: [Discovery] @hasMany(indexName: "byUser", fields: ["id"])
+  userBadges: [UserBadge] @hasMany(indexName: "byUser", fields: ["id"])
+  userStreaks: [UserStreak] @hasMany(indexName: "byUser", fields: ["id"])
+  referrals: [Referral] @hasMany(indexName: "byReferrer", fields: ["id"])
+  streakAchievements: [StreakAchievement] @hasMany(indexName: "byUser", fields: ["id"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Location 
+  @model 
+  @auth(rules: [
+    { allow: private }
+  ]) {
+  id: ID!
+  name: String!
+  description: String
+  latitude: Float!
+  longitude: Float!
+  address: String
+  category: String
+  googlePlaceId: String @index(name: "byGooglePlaceId")
+  rating: Float
+  photoUrl: String
+  isActive: Boolean!
+  xpReward: Int!
+  
+  # Relationships
+  checkIns: [CheckIn] @hasMany(indexName: "byLocation", fields: ["id"])
+  discoveries: [Discovery] @hasMany(indexName: "byLocation", fields: ["id"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type CheckIn 
+  @model 
+  @auth(rules: [
+    { allow: owner },
+    { allow: private, operations: [read] }
+  ]) {
+  id: ID!
+  userId: ID! @index(name: "byUser")
+  locationId: ID! @index(name: "byLocation")
+  xpEarned: Int!
+  notes: String
+  photoUrl: String
+  verificationDistance: Float
+  
+  # Relationships
+  user: User @belongsTo(fields: ["userId"])
+  location: Location @belongsTo(fields: ["locationId"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Discovery 
+  @model 
+  @auth(rules: [
+    { allow: owner },
+    { allow: private, operations: [read] }
+  ]) {
+  id: ID!
+  userId: ID! @index(name: "byUser")
+  locationId: ID! @index(name: "byLocation")
+  title: String!
+  description: String!
+  photoUrl: String
+  xpEarned: Int!
+  
+  # Relationships
+  user: User @belongsTo(fields: ["userId"])
+  location: Location @belongsTo(fields: ["locationId"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Badge 
+  @model 
+  @auth(rules: [{ allow: private }]) {
+  id: ID!
+  name: String!
+  description: String!
+  icon: String!
+  category: BadgeCategory!
+  xpRequirement: Int!
+  isActive: Boolean!
+  
+  # Relationships
+  userBadges: [UserBadge] @hasMany(indexName: "byBadge", fields: ["id"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type UserBadge 
+  @model 
+  @auth(rules: [
+    { allow: owner },
+    { allow: private, operations: [read] }
+  ]) {
+  id: ID!
+  userId: ID! @index(name: "byUser")
+  badgeId: ID! @index(name: "byBadge")
+  earnedAt: AWSDateTime!
+  
+  # Relationships
+  user: User @belongsTo(fields: ["userId"])
+  badge: Badge @belongsTo(fields: ["badgeId"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type StreakRegion 
+  @model 
+  @auth(rules: [{ allow: private }]) {
+  id: ID!
+  name: String!
+  countryCode: String! @index(name: "byCountryCode")
+  regionType: RegionType!
+  coordinates: AWSJSON
+  parentRegionId: String
+  isActive: Boolean!
+  
+  # Relationships
+  userStreaks: [UserStreak] @hasMany(indexName: "byRegion", fields: ["id"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type UserStreak 
+  @model 
+  @auth(rules: [
+    { allow: owner },
+    { allow: private, operations: [read] }
+  ]) {
+  id: ID!
+  userId: ID! @index(name: "byUser")
+  regionId: ID! @index(name: "byRegion")
+  streakType: StreakType!
+  count: Int!
+  maxStreak: Int!
+  lastActivity: AWSDateTime
+  metadata: AWSJSON
+  
+  # Relationships
+  user: User @belongsTo(fields: ["userId"])
+  region: StreakRegion @belongsTo(fields: ["regionId"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type StreakAchievement 
+  @model 
+  @auth(rules: [
+    { allow: owner },
+    { allow: private, operations: [read] }
+  ]) {
+  id: ID!
+  userId: ID! @index(name: "byUser")
+  name: String!
+  description: String!
+  xpReward: Int!
+  unlockedAt: AWSDateTime!
+  metadata: AWSJSON
+  
+  # Relationships
+  user: User @belongsTo(fields: ["userId"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Referral 
+  @model 
+  @auth(rules: [
+    { allow: owner },
+    { allow: private, operations: [read] }
+  ]) {
+  id: ID!
+  referrerId: ID! @index(name: "byReferrer")
+  referredUserId: ID! @index(name: "byReferred")
+  xpAwarded: Int
+  status: ReferralStatus!
+  completedAt: AWSDateTime
+  
+  # Relationships
+  referrer: User @belongsTo(fields: ["referrerId"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+# Enums
+enum TravelStyle {
+  SOLO
+  FAMILY
+  COUPLE
+  BUSINESS
+  BACKPACKER
+}
+
+enum BadgeCategory {
+  EXPLORATION
+  SOCIAL
+  MILESTONE
+  SPECIAL
+  SEASONAL
+}
+
+enum RegionType {
+  COUNTRY
+  STATE_PROVINCE
+  CITY
+  LANDMARK
+  CUSTOM
+}
+
+enum StreakType {
+  VISIT
+  CHALLENGE_COMPLETION
+  CHECK_IN
+  DISCOVERY
+  CUSTOM
+}
+
+enum ReferralStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+# Custom types for complex queries
+type StreakMapData {
+  regions: [StreakRegion!]!
+  userStreaks: [UserStreak!]!
+  achievements: [StreakAchievement!]!
+}
+
+type UserStats {
+  totalXP: Int!
+  level: Int!
+  checkInCount: Int!
+  discoveryCount: Int!
+  badgeCount: Int!
+  streakCount: Int!
+  referralCount: Int!
+}
+
+# Queries for complex operations
+type Query {
+  getStreakMapData(userId: ID!): StreakMapData 
+    @function(name: "travelquestStreakProcessor-${env}")
+    @auth(rules: [{ allow: private }])
+  
+  getUserStats(userId: ID!): UserStats 
+    @function(name: "travelquestResolver-${env}")
+    @auth(rules: [{ allow: private }])
+  
+  getNearbyLocations(latitude: Float!, longitude: Float!, radius: Int): [Location!]! 
+    @function(name: "travelquestPlacesService-${env}")
+    @auth(rules: [{ allow: private }])
+  
+  searchPlaces(query: String!, latitude: Float, longitude: Float): [Location!]! 
+    @function(name: "travelquestPlacesService-${env}")
+    @auth(rules: [{ allow: private }])
+}
+
+# Mutations for complex operations
+type Mutation {
+  processCheckIn(input: ProcessCheckInInput!): CheckIn 
+    @function(name: "travelquestResolver-${env}")
+    @auth(rules: [{ allow: private }])
+  
+  processReferral(input: ProcessReferralInput!): Referral 
+    @function(name: "travelquestResolver-${env}")
+    @auth(rules: [{ allow: private }])
+  
+  updateStreakProgress(input: UpdateStreakInput!): UserStreak 
+    @function(name: "travelquestStreakProcessor-${env}")
+    @auth(rules: [{ allow: private }])
+}
+
+# Input types
+input ProcessCheckInInput {
+  locationId: ID!
+  latitude: Float!
+  longitude: Float!
+  notes: String
+  photoUrl: String
+}
+
+input ProcessReferralInput {
+  referralCode: String!
+}
+
+input UpdateStreakInput {
+  regionId: ID!
+  streakType: StreakType!
+  activityData: AWSJSON
+}
+
+# Subscriptions for real-time updates
+type Subscription {
+  onCheckInCreated(userId: ID!): CheckIn 
+    @aws_subscribe(mutations: ["createCheckIn"])
+    @auth(rules: [{ allow: private }])
+  
+  onStreakUpdated(userId: ID!): UserStreak 
+    @aws_subscribe(mutations: ["updateUserStreak"])
+    @auth(rules: [{ allow: private }])
+  
+  onAchievementUnlocked(userId: ID!): StreakAchievement 
+    @aws_subscribe(mutations: ["createStreakAchievement"])
+    @auth(rules: [{ allow: private }])
+}
