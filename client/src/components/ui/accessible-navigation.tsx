@@ -124,7 +124,7 @@ export function MobileNavigation() {
                   whileTap={{ scale: 0.95 }}
                 >
                   <div className={`transition-colors duration-300 ${
-                    isActive ? 'text-white' : 'text-muted-foreground group-hover:text-primary'
+                    isActive ? 'text-white' : 'text-foreground group-hover:text-primary'
                   }`}>
                     {item.icon}
                   </div>
@@ -158,7 +158,7 @@ export function MobileNavigation() {
                 </motion.div>
                 
                 <span className={`text-xs font-semibold mt-1 transition-colors duration-300 ${
-                  isActive ? "text-white" : "text-muted-foreground group-hover:text-primary"
+                  isActive ? "text-white" : "text-foreground group-hover:text-primary"
                 }`}>
                   {item.label}
                 </span>
@@ -291,15 +291,15 @@ export function DesktopNavigation() {
                     href={item.href}
                     className={`relative px-4 py-3 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 group ${
                       isActive
-                        ? "text-primary bg-primary/8"
-                        : "text-foreground/70 hover:text-foreground hover:bg-muted/50"
+                        ? "text-primary bg-primary/12 font-bold"
+                        : "text-foreground hover:text-foreground hover:bg-muted"
                     }`}
                     role="tab"
                     aria-selected={isActive}
                     aria-label={`${item.label}: ${item.description}`}
                   >
                   <div className="flex items-center space-x-2">
-                    <div className={`transition-colors duration-200 ${isActive ? 'text-primary' : 'text-foreground/60 group-hover:text-foreground/80'}`}>
+                    <div className={`transition-colors duration-200 ${isActive ? 'text-primary' : 'text-foreground group-hover:text-primary'}`}>
                       {item.icon}
                     </div>
                     <span className={`font-medium ${isActive ? 'text-primary font-semibold' : ''}`}>
@@ -348,7 +348,7 @@ export function DesktopNavigation() {
                     repeatDelay: 5,
                   }}
                 >
-                  <Bell className="w-5 h-5 text-muted-foreground hover:text-primary transition-colors" />
+                  <Bell className="w-5 h-5 text-foreground hover:text-primary transition-colors" />
                 </motion.div>
                 
                 {/* Notification Badge with Pulse */}
@@ -510,8 +510,8 @@ export function DesktopNavigation() {
 
                   {/* Quick Actions Section */}
                   <div className="px-4 py-3">
-                    <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "hsl(var(--muted-foreground))" }}>
-                      Quick Actions
+                    <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "hsl(var(--foreground))" }}>
+                      QUICK ACTIONS
                     </p>
                     <div className="grid grid-cols-2 gap-3">
                       <Link

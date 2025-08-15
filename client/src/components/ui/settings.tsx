@@ -244,8 +244,8 @@ export function SettingsInterface() {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-black mb-2" style={{ color: "hsl(var(--foreground))" }}>Settings</h1>
-        <p style={{ color: "hsl(var(--muted-foreground))" }}>
+        <h1 className="text-3xl font-black mb-2 text-high-contrast">Settings</h1>
+        <p className="text-medium-contrast">
           Customize your TravelQuest experience and manage your preferences
         </p>
       </div>
@@ -266,13 +266,13 @@ export function SettingsInterface() {
                     className={`w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary ${
                       selectedSection === section.id
                         ? "bg-primary/10 text-primary border border-primary/20"
-                        : "hover:bg-muted/50 text-foreground"
+                        : "hover:bg-muted text-foreground"
                     }`}
                   >
                     <div className={`p-2 rounded-lg ${
                       selectedSection === section.id
                         ? "bg-primary/20 text-primary"
-                        : "bg-muted/50 text-muted-foreground"
+                        : "bg-muted text-foreground"
                     }`}>
                       {section.icon}
                     </div>
