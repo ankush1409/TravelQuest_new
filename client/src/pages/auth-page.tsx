@@ -66,7 +66,7 @@ export default function AuthPage() {
             </p>
           </div>
 
-          <div className="neopop-card p-8">
+          <div className="yatra-card p-8">
             {/* Google OAuth Button */}
             <div className="mb-6">
               <a 
@@ -143,7 +143,7 @@ export default function AuthPage() {
 
                 <button
                   type="submit"
-                  className="neopop-button w-full"
+                  className="yatra-button w-full"
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? (
@@ -259,7 +259,7 @@ export default function AuthPage() {
 
                 <button
                   type="submit"
-                  className="neopop-button w-full"
+                  className="yatra-button w-full"
                   disabled={registerMutation.isPending}
                 >
                   {registerMutation.isPending ? (
@@ -295,7 +295,7 @@ export default function AuthPage() {
       <div className="hidden lg:block lg:w-1/2 relative bg-gradient-to-br from-primary/20 via-accent/20 to-secondary/20">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center px-8 max-w-lg">
-            <div className="neopop-card p-8 mb-8">
+            <div className="yatra-card p-8 mb-8">
               <MapPin className="h-16 w-16 mx-auto mb-6 text-primary" />
               <h1 className="text-4xl font-black mb-6 text-high-contrast">TURN YOUR ADVENTURES INTO ACHIEVEMENTS</h1>
               <p className="text-lg mb-8 font-semibold text-medium-contrast">

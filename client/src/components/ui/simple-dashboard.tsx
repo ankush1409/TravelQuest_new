@@ -42,9 +42,9 @@ export function SimpleDashboard() {
       subtitle: `Level ${userData.level} Explorer`,
       icon: Zap,
       gradient: "xp-badge",
-      bgColor: "bg-purple-50 border-purple-100",
-      iconColor: "text-purple-600",
-      textColor: "text-purple-900"
+      bgColor: "bg-red-50 border-red-100",
+      iconColor: "text-red-600",
+      textColor: "text-red-900"
     },
     {
       title: "Locations",
@@ -62,9 +62,9 @@ export function SimpleDashboard() {
       subtitle: "Completed",
       icon: Trophy,
       gradient: "challenge-badge",
-      bgColor: "bg-amber-50 border-amber-100",
-      iconColor: "text-amber-600",
-      textColor: "text-amber-900"
+      bgColor: "bg-yellow-50 border-yellow-100",
+      iconColor: "text-yellow-600",
+      textColor: "text-yellow-900"
     }
   ];
 
@@ -72,9 +72,9 @@ export function SimpleDashboard() {
     <div className="space-y-8">
       {/* Enhanced Welcome Header with Travel Background */}
       <motion.div 
-        className="relative overflow-hidden rounded-2xl p-8 border"
+        className="relative overflow-hidden rounded-lg p-8 border"
         style={{
-          background: "linear-gradient(135deg, hsl(158 64% 52% / 0.05) 0%, hsl(158 64% 52% / 0.1) 50%, hsl(217 91% 60% / 0.05) 100%)",
+          background: "linear-gradient(135deg, hsl(356 81% 53% / 0.05) 0%, hsl(356 81% 53% / 0.1) 50%, hsl(207 90% 54% / 0.05) 100%)",
           borderColor: "hsl(var(--border))",
           boxShadow: "var(--shadow-md)"
         }}
@@ -332,7 +332,7 @@ export function SimpleDashboard() {
                   <Navigation className="h-8 w-8 text-white" />
                 </motion.div>
               </div>
-              <Button className="w-full premium-button text-base py-4">
+              <Button className="w-full yatra-button text-base py-4">
                 Explore Now
               </Button>
             </CardContent>

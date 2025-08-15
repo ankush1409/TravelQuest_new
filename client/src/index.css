@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* High-contrast accessible light theme */
+    /* Yatra.com inspired theme - clean white backgrounds with red accents */
     --background: 0 0% 100%;
     --foreground: 0 0% 9%;
     --card: 0 0% 100%;
@@ -12,38 +12,39 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
     
-    /* Travel-themed primary colors with high contrast */
-    --primary: 158 64% 52%;
+    /* Yatra brand colors - signature red primary */
+    --primary: 356 81% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-dark: 158 64% 35%;
+    --primary-dark: 356 81% 45%;
+    --primary-light: 356 81% 85%;
     
-    /* Gamification accent colors - unified palette */
-    --xp-color: 262 83% 58%;
-    --location-color: 217 91% 60%;
-    --challenge-color: 43 96% 56%;
-    --streak-color: 120 100% 25%;
-    --level-color: 25 95% 53%;
+    /* Yatra-inspired accent colors for gamification */
+    --xp-color: 356 81% 53%;
+    --location-color: 207 90% 54%;
+    --challenge-color: 45 93% 47%;
+    --streak-color: 142 71% 45%;
+    --level-color: 25 85% 55%;
     
-    /* UI system colors */
-    --secondary: 220 14% 92%;
+    /* Clean UI system colors - Yatra style */
+    --secondary: 210 20% 96%;
     --secondary-foreground: 0 0% 9%;
-    --muted: 220 14% 92%;
-    --muted-foreground: 0 0% 20%;
-    --accent: 220 14% 92%;
+    --muted: 210 20% 94%;
+    --muted-foreground: 0 0% 25%;
+    --accent: 210 20% 96%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 13% 85%;
-    --input: 220 13% 91%;
-    --ring: 158 64% 52%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 356 81% 53%;
     
-    /* Travel theme gradients - vibrant and accessible */
-    --gradient-primary: linear-gradient(135deg, hsl(158 64% 52%) 0%, hsl(158 64% 35%) 100%);
-    --gradient-xp: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(262 83% 48%) 100%);
-    --gradient-location: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 50%) 100%);
-    --gradient-challenge: linear-gradient(135deg, hsl(43 96% 56%) 0%, hsl(43 96% 46%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(220 14% 97%) 100%);
-    --gradient-surface: linear-gradient(135deg, hsla(0 0% 100% / 0.95) 0%, hsla(220 14% 99% / 0.95) 100%);
+    /* Yatra-inspired gradients - clean and modern */
+    --gradient-primary: linear-gradient(135deg, hsl(356 81% 53%) 0%, hsl(356 81% 45%) 100%);
+    --gradient-xp: linear-gradient(135deg, hsl(356 81% 53%) 0%, hsl(356 81% 45%) 100%);
+    --gradient-location: linear-gradient(135deg, hsl(207 90% 54%) 0%, hsl(207 90% 45%) 100%);
+    --gradient-challenge: linear-gradient(135deg, hsl(45 93% 47%) 0%, hsl(45 93% 38%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
+    --gradient-surface: linear-gradient(135deg, hsla(0 0% 100% / 0.98) 0%, hsla(210 20% 99% / 0.98) 100%);
     
     /* Shadow system */
     --shadow-sm: 0 1px 2px 0 hsl(220 13% 18% / 0.05);
@@ -66,46 +67,46 @@
   }
 }
 
-/* Premium UI Components */
+/* Yatra-inspired UI Components */
 @layer components {
-  /* High-contrast buttons */
-  .premium-button {
-    @apply relative overflow-hidden font-semibold py-3 px-6 rounded-xl transition-all duration-200 active:scale-95;
+  /* Yatra-style buttons */
+  .yatra-button {
+    @apply relative overflow-hidden font-semibold py-3 px-6 rounded-lg transition-all duration-200 active:scale-95;
     background: var(--gradient-primary);
     color: hsl(var(--primary-foreground));
     box-shadow: var(--shadow);
   }
   
-  .premium-button:hover {
+  .yatra-button:hover {
     box-shadow: var(--shadow-md);
     background: hsl(var(--primary-dark));
   }
 
-  .premium-button:before {
+  .yatra-button:before {
     content: '';
     @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 transition-opacity duration-300;
     transform: translateX(-100%);
   }
 
-  .premium-button:hover:before {
+  .yatra-button:hover:before {
     @apply opacity-100;
     animation: shimmer 0.6s ease-out;
   }
 
-  /* Accessible cards with high contrast */
-  .premium-card {
-    @apply bg-card border border-border rounded-xl transition-all duration-200;
+  /* Yatra-style cards with clean design */
+  .yatra-card {
+    @apply bg-card border border-border rounded-lg transition-all duration-200;
     background: var(--gradient-card);
     box-shadow: var(--shadow);
     border-color: hsl(var(--border));
   }
   
-  .premium-card:hover {
+  .yatra-card:hover {
     box-shadow: var(--shadow-md);
   }
 
-  .neopop-card {
-    @apply bg-card border-2 rounded-xl transition-all duration-200 relative overflow-hidden;
+  .neopop-card, .yatra-card-accent {
+    @apply bg-card border-2 rounded-lg transition-all duration-200 relative overflow-hidden;
     background: var(--gradient-card);
     box-shadow: var(--shadow);
     border-color: hsl(var(--primary) / 0.15);
@@ -133,7 +134,7 @@
 
   .challenge-badge {
     background: var(--gradient-challenge);
-    color: hsl(220 13% 18%);
+    color: hsl(0 0% 100%);
     @apply font-bold text-sm px-3 py-1 rounded-full;
     box-shadow: var(--shadow-sm);
   }

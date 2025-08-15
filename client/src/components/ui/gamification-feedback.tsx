@@ -62,7 +62,7 @@ export function XPGainFeedback({ amount, reason, onComplete }: XPGainProps) {
       exit={{ opacity: 0, y: -20, scale: 0.9 }}
       className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50"
     >
-      <div className="neopop-card bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-500/30 p-4 shadow-2xl">
+      <div className="yatra-card bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-500/30 p-4 shadow-2xl">
         <div className="flex items-center space-x-3">
           <motion.div
             animate={{ rotate: [0, 360] }}
@@ -208,7 +208,7 @@ export function BadgeUnlockedFeedback({ badge, onComplete }: BadgeUnlockedProps)
       className="fixed top-0 left-0 right-0 z-50 p-4"
     >
       <div className="max-w-md mx-auto">
-        <div className="neopop-card bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 p-6 shadow-2xl">
+        <div className="yatra-card bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 p-6 shadow-2xl">
           <div className="text-center">
             <motion.div
               initial={{ scale: 0, rotate: -180 }}

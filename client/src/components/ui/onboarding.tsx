@@ -103,7 +103,7 @@ export function OnboardingFlow({ onComplete, onSkip }: OnboardingFlowProps) {
         exit={{ opacity: 0, scale: 0.9 }}
         className="w-full max-w-2xl"
       >
-        <Card className="neopop-card border-2">
+        <Card className="yatra-card border-2">
           <CardContent className="p-8">
             {/* Progress Bar */}
             <div className="mb-8">
@@ -134,7 +134,7 @@ export function OnboardingFlow({ onComplete, onSkip }: OnboardingFlowProps) {
               >
                 {/* Icon */}
                 <div className="mb-6 flex justify-center">
-                  <div className="neopop-card p-6 rounded-full bg-gradient-to-br from-accent/10 to-primary/10">
+                  <div className="yatra-card p-6 rounded-full bg-gradient-to-br from-accent/10 to-primary/10">
                     {step.icon}
                   </div>
                 </div>
