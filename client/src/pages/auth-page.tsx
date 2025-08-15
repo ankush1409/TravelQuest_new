@@ -53,15 +53,15 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen menu-gradient flex">
       {/* Left side - Form */}
       <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-black mb-4" style={{ color: "hsl(var(--foreground))" }}>
+            <h2 className="text-3xl font-black mb-4 text-white">
               {isSignUp ? "START YOUR ADVENTURE" : "WELCOME BACK!"}
             </h2>
-            <p className="mt-2 text-lg font-semibold" style={{ color: "hsl(var(--muted-foreground))" }}>
+            <p className="mt-2 text-lg font-semibold text-white">
               {isSignUp ? "Create your account and begin earning XP" : "Sign in to continue your travel quest"}
             </p>
           </div>

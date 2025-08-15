@@ -72,9 +72,8 @@ export function SimpleDashboard() {
     <div className="space-y-8">
       {/* Enhanced Welcome Header with Travel Background */}
       <motion.div 
-        className="relative overflow-hidden rounded-lg p-8 border"
+        className="relative overflow-hidden rounded-lg p-8 border menu-gradient"
         style={{
-          background: "linear-gradient(135deg, hsl(356 81% 53% / 0.05) 0%, hsl(356 81% 53% / 0.1) 50%, hsl(207 90% 54% / 0.05) 100%)",
           borderColor: "hsl(var(--border))",
           boxShadow: "var(--shadow-md)"
         }}
@@ -114,14 +113,13 @@ export function SimpleDashboard() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-2">
               <motion.h1 
-                className="text-3xl md:text-4xl font-black"
-                style={{ color: "hsl(var(--foreground))" }}
+                className="text-3xl md:text-4xl font-black text-white"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
               >
                 Welcome back, {userData.name}! 
-                <Sparkles className="inline-block w-8 h-8 ml-2 text-primary animate-pulse" />
+                <Sparkles className="inline-block w-8 h-8 ml-2 text-yellow-400 animate-pulse" />
               </motion.h1>
               
               {userData.recentXPGain > 0 && (
@@ -138,7 +136,7 @@ export function SimpleDashboard() {
                 </motion.div>
               )}
               
-              <p className="text-lg" style={{ color: "hsl(var(--muted-foreground))" }}>
+              <p className="text-lg text-white opacity-90">
                 Your next adventure awaits. Ready to explore?
               </p>
             </div>
@@ -292,7 +290,7 @@ export function SimpleDashboard() {
                 className="h-3 bg-green-100" 
               />
             </div>
-            <p className="text-sm font-medium" style={{ color: "hsl(var(--muted-foreground))" }}>
+            <p className="text-sm font-medium text-white opacity-90">
               {7 - userData.streak} more days to earn your weekly badge!
             </p>
           </CardContent>
@@ -311,15 +309,15 @@ export function SimpleDashboard() {
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          <Card className="bg-gradient-to-br from-primary/5 via-primary/8 to-blue-50 border-primary/20 group cursor-pointer border-0"
+          <Card className="menu-gradient group cursor-pointer border-0"
                 style={{ boxShadow: "var(--shadow-md)" }}>
             <CardContent className="p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="space-y-3">
-                  <h3 className="text-2xl font-bold" style={{ color: "hsl(var(--foreground))" }}>
+                  <h3 className="text-2xl font-bold text-white">
                     Start a New Journey
                   </h3>
-                  <p className="font-medium text-base" style={{ color: "hsl(var(--muted-foreground))" }}>
+                  <p className="font-medium text-base text-white opacity-90">
                     Discover amazing places nearby and earn XP
                   </p>
                 </div>
