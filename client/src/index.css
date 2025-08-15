@@ -406,6 +406,32 @@
     color: #9ca3af !important;
   }
 
+  /* Enhanced dropdown menu styling */
+  .dropdown-menu {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  
+  .dropdown-menu-item {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .dropdown-menu-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s;
+  }
+  
+  .dropdown-menu-item:hover::before {
+    left: 100%;
+  }
+
   /* White text for dark backgrounds - comprehensive */
   .text-on-dark, .text-white, .text-white * {
     color: #ffffff !important; /* white text on dark backgrounds */

@@ -412,9 +412,12 @@ export function DesktopNavigation() {
                   initial={{ opacity: 0, scale: 0.95, y: -10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-3 w-64 bg-background border border-border rounded-xl py-2 z-50"
-                  style={{ boxShadow: "var(--shadow-xl)" }}
+                  transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 30 }}
+                  className="absolute right-0 mt-3 w-72 bg-white border border-gray-200 rounded-2xl py-3 z-50 backdrop-blur-sm dropdown-menu"
+                  style={{ 
+                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+                    backgroundColor: "rgba(255, 255, 255, 0.98)",
+                  }}
                   role="menu"
                   aria-orientation="vertical"
                 >
@@ -427,8 +430,8 @@ export function DesktopNavigation() {
                           key={`mobile-${item.id}`}
                           href={item.href}
                           onClick={() => setIsMenuOpen(false)}
-                          className={`flex items-center space-x-3 px-4 py-3 hover:bg-muted/50 transition-colors ${
-                            isActive ? "text-primary bg-primary/10" : "text-foreground"
+                          className={`flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-all duration-200 rounded-lg mx-2 ${
+                            isActive ? "text-blue-600 bg-blue-100 font-semibold" : "text-gray-700 hover:text-blue-600"
                           }`}
                           role="menuitem"
                         >
@@ -442,59 +445,57 @@ export function DesktopNavigation() {
                         </Link>
                       );
                     })}
-                    <hr className="my-2 border-border" />
+                    <div className="my-3 mx-4 border-t border-gray-200"></div>
                   </div>
 
                   {/* Quick Actions Section */}
                   <div className="px-4 py-3">
-                    <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "hsl(var(--foreground))" }}>
+                    <p className="text-xs font-bold uppercase tracking-wider mb-3 text-gray-500">
                       QUICK ACTIONS
                     </p>
                     <div className="grid grid-cols-2 gap-3">
                       <Link
                         href="/profile"
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex flex-col items-center p-4 rounded-lg hover:bg-primary/8 transition-all duration-200 group border border-transparent hover:border-primary/20"
+                        className="flex flex-col items-center p-4 rounded-xl hover:bg-blue-50 transition-all duration-200 group border border-gray-100 hover:border-blue-200 hover:shadow-sm"
                         role="menuitem"
                       >
-                        <User className="w-6 h-6 text-primary group-hover:scale-110 transition-transform mb-1" />
-                        <span className="text-xs font-medium" style={{ color: "hsl(var(--foreground))" }}>Profile</span>
+                        <User className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform mb-1" />
+                        <span className="text-xs font-medium text-gray-700 group-hover:text-blue-600">Profile</span>
                       </Link>
                       
                       <Link
                         href="/challenges"
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex flex-col items-center p-4 rounded-lg hover:bg-amber-50 transition-all duration-200 group border border-transparent hover:border-amber-200"
+                        className="flex flex-col items-center p-4 rounded-xl hover:bg-amber-50 transition-all duration-200 group border border-gray-100 hover:border-amber-200 hover:shadow-sm"
                         role="menuitem"
                       >
                         <Trophy className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform mb-1" />
-                        <span className="text-xs font-medium" style={{ color: "hsl(var(--foreground))" }}>Badges</span>
+                        <span className="text-xs font-medium text-gray-700 group-hover:text-amber-600">Badges</span>
                       </Link>
                     </div>
                   </div>
 
-                  <hr className="my-2 border-border" />
+                  <div className="my-3 mx-4 border-t border-gray-200"></div>
 
                   {/* User Menu Items */}
                   <Link
                     href="/settings"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors group rounded-lg mx-2"
-                    style={{ color: "hsl(var(--foreground))" }}
+                    className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-all duration-200 group rounded-lg mx-2 text-gray-700 hover:text-gray-900"
                     role="menuitem"
                   >
-                    <Settings className="w-5 h-5 text-muted-foreground group-hover:text-foreground group-hover:rotate-90 transition-all duration-300" />
+                    <Settings className="w-5 h-5 text-gray-500 group-hover:text-gray-700 group-hover:rotate-90 transition-all duration-300" />
                     <span className="font-medium">Settings</span>
                   </Link>
                   
                   <Link
                     href="/notifications"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors rounded-lg mx-2"
-                    style={{ color: "hsl(var(--foreground))" }}
+                    className="flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-all duration-200 rounded-lg mx-2 text-gray-700 hover:text-blue-600"
                     role="menuitem"
                   >
-                    <Bell className="w-5 h-5 text-muted-foreground" />
+                    <Bell className="w-5 h-5 text-gray-500 group-hover:text-blue-600 transition-colors" />
                     <span className="font-medium">Notifications</span>
                     <Badge 
                       className="ml-auto h-5 text-xs font-semibold bg-red-500 hover:bg-red-500 text-white border-0"
@@ -503,12 +504,11 @@ export function DesktopNavigation() {
                     </Badge>
                   </Link>
 
-                  <hr className="my-3 border-border mx-2" />
+                  <div className="my-3 mx-4 border-t border-gray-200"></div>
                   
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center space-x-3 px-4 py-4 hover:bg-red-50 hover:text-red-600 transition-colors rounded-lg mx-2 font-medium"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
+                    className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-red-50 hover:text-red-600 transition-all duration-200 rounded-lg mx-2 font-medium text-gray-600"
                     role="menuitem"
                   >
                     <X className="w-5 h-5" />
