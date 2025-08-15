@@ -510,7 +510,7 @@ export function DesktopNavigation() {
 
                   {/* Quick Actions Section */}
                   <div className="px-4 py-3">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                    <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "hsl(var(--muted-foreground))" }}>
                       Quick Actions
                     </p>
                     <div className="grid grid-cols-2 gap-3">
@@ -521,7 +521,7 @@ export function DesktopNavigation() {
                         role="menuitem"
                       >
                         <User className="w-6 h-6 text-primary group-hover:scale-110 transition-transform mb-1" />
-                        <span className="text-xs font-medium text-foreground">Profile</span>
+                        <span className="text-xs font-medium" style={{ color: "hsl(var(--foreground))" }}>Profile</span>
                       </Link>
                       
                       <Link
@@ -531,7 +531,7 @@ export function DesktopNavigation() {
                         role="menuitem"
                       >
                         <Trophy className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform mb-1" />
-                        <span className="text-xs font-medium text-foreground">Badges</span>
+                        <span className="text-xs font-medium" style={{ color: "hsl(var(--foreground))" }}>Badges</span>
                       </Link>
                     </div>
                   </div>
@@ -542,7 +542,8 @@ export function DesktopNavigation() {
                   <Link
                     href="/settings"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors text-foreground group rounded-lg mx-2"
+                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors group rounded-lg mx-2"
+                    style={{ color: "hsl(var(--foreground))" }}
                     role="menuitem"
                   >
                     <Settings className="w-5 h-5 text-muted-foreground group-hover:text-foreground group-hover:rotate-90 transition-all duration-300" />
@@ -552,7 +553,8 @@ export function DesktopNavigation() {
                   <Link
                     href="/notifications"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors text-foreground rounded-lg mx-2"
+                    className="flex items-center space-x-3 px-4 py-4 hover:bg-muted/50 transition-colors rounded-lg mx-2"
+                    style={{ color: "hsl(var(--foreground))" }}
                     role="menuitem"
                   >
                     <Bell className="w-5 h-5 text-muted-foreground" />
@@ -568,7 +570,8 @@ export function DesktopNavigation() {
                   
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center space-x-3 px-4 py-4 hover:bg-red-50 hover:text-red-600 transition-colors text-muted-foreground rounded-lg mx-2 font-medium"
+                    className="w-full flex items-center space-x-3 px-4 py-4 hover:bg-red-50 hover:text-red-600 transition-colors rounded-lg mx-2 font-medium"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
                     role="menuitem"
                   >
                     <X className="w-5 h-5" />
