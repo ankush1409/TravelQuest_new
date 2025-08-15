@@ -506,29 +506,54 @@ export function DesktopNavigation() {
                   </div>
 
                   {/* Quick Actions Section */}
-                  <div className="px-4 py-3">
-                    <p className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "hsl(var(--foreground))" }}>
+                  <div className="px-4 py-3 bg-gradient-to-r from-blue-50 to-cyan-50 mx-2 rounded-lg border border-blue-100">
+                    <p 
+                      className="text-xs font-bold uppercase tracking-wider mb-3"
+                      style={{ 
+                        color: "#1e40af",
+                        fontSize: "11px",
+                        letterSpacing: "1px"
+                      }}
+                    >
                       QUICK ACTIONS
                     </p>
                     <div className="grid grid-cols-2 gap-3">
                       <Link
                         href="/profile"
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex flex-col items-center p-4 rounded-lg hover:bg-primary/8 transition-all duration-200 group border border-transparent hover:border-primary/20"
+                        className="flex flex-col items-center p-3 rounded-lg bg-white/70 hover:bg-white hover:shadow-md transition-all duration-200 group border border-blue-200 hover:border-blue-300"
                         role="menuitem"
+                        style={{ minHeight: "80px" }}
                       >
-                        <User className="w-6 h-6 text-primary group-hover:scale-110 transition-transform mb-1" />
-                        <span className="text-xs font-medium" style={{ color: "hsl(var(--foreground))" }}>Profile</span>
+                        <User 
+                          className="w-6 h-6 group-hover:scale-110 transition-transform mb-1" 
+                          style={{ color: "#007cff" }}
+                        />
+                        <span 
+                          className="text-xs font-medium"
+                          style={{ color: "#1e40af" }}
+                        >
+                          Profile
+                        </span>
                       </Link>
                       
                       <Link
                         href="/challenges"
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex flex-col items-center p-4 rounded-lg hover:bg-amber-50 transition-all duration-200 group border border-transparent hover:border-amber-200"
+                        className="flex flex-col items-center p-3 rounded-lg bg-white/70 hover:bg-white hover:shadow-md transition-all duration-200 group border border-amber-200 hover:border-amber-300"
                         role="menuitem"
+                        style={{ minHeight: "80px" }}
                       >
-                        <Trophy className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform mb-1" />
-                        <span className="text-xs font-medium" style={{ color: "hsl(var(--foreground))" }}>Badges</span>
+                        <Trophy 
+                          className="w-6 h-6 group-hover:scale-110 transition-transform mb-1" 
+                          style={{ color: "#f59e0b" }}
+                        />
+                        <span 
+                          className="text-xs font-medium"
+                          style={{ color: "#1e40af" }}
+                        >
+                          Badges
+                        </span>
                       </Link>
                     </div>
                   </div>
