@@ -18,9 +18,11 @@ import {
   Navigation
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { useLocation } from "wouter";
 
 export function SimpleDashboard() {
   const { user } = useAuth();
+  const [location, setLocation] = useLocation();
   
   // Mock user data for demonstration - in production this would come from API
   const userData = {
@@ -339,7 +341,10 @@ export function SimpleDashboard() {
                   <Navigation className="h-8 w-8 text-white" />
                 </motion.div>
               </div>
-              <Button className="w-full travel-button text-base py-4">
+              <Button 
+                className="w-full travel-button text-base py-4"
+                onClick={() => setLocation('/map')}
+              >
                 Explore Now
               </Button>
             </CardContent>
@@ -395,6 +400,7 @@ export function SimpleDashboard() {
                   borderColor: "#007cff",
                   color: "#1e40af"
                 }}
+                onClick={() => setLocation('/profile')}
               >
                 View All Activity
               </Button>
